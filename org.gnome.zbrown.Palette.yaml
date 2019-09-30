@@ -23,7 +23,6 @@ cleanup:
 - "*.a"
 modules:
 - name: palette
-  buildsystem: meson
   sources:
   - type: git
     url: https://gitlab.gnome.org/World/design/palette.git
