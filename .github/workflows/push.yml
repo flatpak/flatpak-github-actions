@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: Lint
+name: Flatpak
 jobs:
   flatpak-builder:
     name: "Flatpak Builder"

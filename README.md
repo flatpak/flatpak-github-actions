@@ -7,7 +7,7 @@ Build your flatpak application using Github Actions?
 Add a new workflow by creating a .yml file under .github/workflows with this content
 ```yaml
 on: [push, pull_request]
-name: Lint
+name: Flatpak
 jobs:
   flatpak-builder:
     name: "Flatpak Builder"
