@@ -1,0 +1,29 @@
+# Flatpak Manifest example
+---
+app-id: org.gnome.zbrown.Palette
+runtime: org.gnome.Platform
+runtime-version: '3.34'
+sdk: org.gnome.Sdk
+command: org.gnome.zbrown.Palette
+finish-args:
+- "--share=ipc"
+- "--device=dri"
+- "--socket=fallback-x11"
+- "--socket=wayland"
+cleanup:
+- "/include"
+- "/lib/pkgconfig"
+- "/man"
+- "/share/doc"
+- "/share/gtk-doc"
+- "/share/man"
+- "/share/pkgconfig"
+- "/share/vala"
+- "*.la"
+- "*.a"
+modules:
+- name: palette
+  buildsystem: meson
+  sources:
+  - type: git
+    url: https://gitlab.gnome.org/World/design/palette.git
