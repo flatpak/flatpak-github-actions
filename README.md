@@ -1,10 +1,11 @@
 # flatpak-github-actions
-Build your flatpak application using Github Actions?
+Build your flatpak application using Github Actions
 
 
 ## How to use?  
 
-Add a new workflow by creating a .yml file under .github/workflows with this content
+Add a new workflow by creating a `.yml` file under `.github/workflows` with this content
+
 ```yaml
 on: [push, pull_request]
 name: Flatpak
@@ -16,7 +17,9 @@ jobs:
     - uses: actions/checkout@master
     - uses: docker://bilelmoussaoui/flatpak-builder-github-actions
       with:
-        args: --manifest-path="org.gnome.zbrown.Palette.yaml" --app-id "org.gnome.zbrown.Palette" --bundle "palette-nightly.flatpak"
+        args:   --manifest-path="org.gnome.zbrown.Palette.yaml" 
+                --app-id "org.gnome.zbrown.Palette" 
+                --bundle "palette-nightly.flatpak"
 ```
 
 
@@ -35,7 +38,8 @@ jobs:
 
 - `--runtime-repo`
 
-    The repository used to fetch the runtime when the user download the Flatpak bundle
+    The repository used to fetch the runtime when the user download the Flatpak bundle.
+    
     By default it's set to https://flathub.org/repo/flathub.flatpakrepo
 
 
