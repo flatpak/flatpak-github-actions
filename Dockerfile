@@ -1,6 +1,7 @@
-FROM fedora:31
+FROM ubuntu:19.04
 
-RUN dnf install -y flatpak-builder flatpak
+RUN apt-get update -y 
+RUN apt-get install -y flatpak-builder flatpak
 
 LABEL "com.github.actions.name"="Flatpak Builder"
 LABEL "com.github.actions.description"="Build your flatpak project"
