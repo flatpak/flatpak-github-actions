@@ -6,6 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - uses: docker://bilelmoussaoui/flatpak-github-actions
-      with:
-        args: --manifest-path "org.gnome.zbrown.Palette.yaml" --app-id "org.gnome.zbrown.Palette" --bundle "palette-nightly.flatpak"
+    - uses: Pull the Docker Image
+      run: docker pull bilelmoussaoui/flatpak-github-actions:latest
+    - uses: Run Docker Image
+      run: docker run --cap-add SYS_ADMIN --device fuse \
+            -v ${{ github.workspace }}:host_mount_dir:container_mount_dir:shared \
+              bilelmoussaoui/flatpak-github-actions:latest \ 
+            --manifest-path "org.gnome.zbrown.Palette.yaml" \
+            --app-id "org.gnome.zbrown.Palette" \ 
+            --bundle "palette-nightly.flatpak"
