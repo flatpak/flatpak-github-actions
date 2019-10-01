@@ -11,6 +11,7 @@ jobs:
     - name: Run Docker Image
       run: |
             docker run --cap-add SYS_ADMIN --device /dev/fuse \
+                 --security-opt apparmor:unconfined \
                 --workdir /github/workspace \
                 --rm -e INPUT_ARGS -e HOME -e GITHUB_REF -e GITHUB_SHA  \
                 -e GITHUB_REPOSITORY -e GITHUB_ACTOR -e GITHUB_WORKFLOW  \
