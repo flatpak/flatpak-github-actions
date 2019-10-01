@@ -1,4 +1,4 @@
-#!/usr/bin bash
+#!/bin/bash
 set -e
 # Arguments Parser
 BUNDLE="app.flatpak"
