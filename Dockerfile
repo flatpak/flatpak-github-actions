@@ -2,7 +2,7 @@ FROM fedora:31
 
 LABEL "com.github.actions.name"="Flatpak Builder"
 LABEL "com.github.actions.description"="Build your flatpak project"
-LABEL "com.github.actions.icon"="anchor"
+LABEL "com.github.actions.icon"="package"
 LABEL "com.github.actions.color"="blue"
 
 LABEL "repository"="https://github.com/bilelmoussaoui/flatpak-github-actions"
