@@ -1,5 +1,6 @@
 FROM fedora:31
 
+LABEL version="0.1"
 LABEL "com.github.actions.name"="Flatpak Builder"
 LABEL "com.github.actions.description"="Build your flatpak project"
 LABEL "com.github.actions.icon"="package"
