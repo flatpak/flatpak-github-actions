@@ -10,7 +10,7 @@ jobs:
       run: docker pull bilelmoussaoui/flatpak-github-actions:latest
     - name: Run Docker Image
       run: |
-            docker run --cap-add SYS_ADMIN --device /dev/fuse \
+            docker run --cap-add SYS_ADMIN --cap-add NET_ADMIN --device /dev/fuse \
                  --security-opt apparmor:unconfined --security-opt seccomp=unconfined \
                 --workdir /github/workspace \
                 --rm -e INPUT_ARGS -e HOME -e GITHUB_REF -e GITHUB_SHA  \
