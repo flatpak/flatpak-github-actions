@@ -8,6 +8,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Pull the Docker Image
       run: docker pull bilelmoussaoui/flatpak-github-actions:latest
+    - name: setenforce
+      run: setenforce 0
     - name: Run Docker Image
       run: |
             docker run --cap-add SYS_ADMIN --device /dev/fuse \
