@@ -11,11 +11,17 @@ jobs:
     - name: Run Docker Image
       run: |
             docker run --cap-add SYS_ADMIN --device /dev/fuse \
-              -v "/var/run/docker.sock":"/var/run/docker.sock" \
-              -v "/home/runner/work/_temp/_github_home":"/github/home" \
-              -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
-              -v ${{ github.workspace }}:"/github/workspace" \
-              bilelmoussaoui/flatpak-github-actions:latest \
-              --manifest-path "org.gnome.zbrown.Palette.yaml" \
-              --app-id "org.gnome.zbrown.Palette" \
-              --bundle "palette-nightly.flatpak"
+                --workdir /github/workspace \
+                --rm -e INPUT_ARGS -e HOME -e GITHUB_REF -e GITHUB_SHA  \
+                  -e GITHUB_REPOSITORY -e GITHUB_ACTOR -e GITHUB_WORKFLOW  \
+                  -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e GITHUB_EVENT_NAME \ 
+                -e GITHUB_WORKSPACE -e GITHUB_ACTION -e GITHUB_EVENT_PATH -e RUNNER_OS  \
+                -e RUNNER_TOOL_CACHE -e RUNNER_TEMP -e RUNNER_WORKSPACE \
+                -v "/var/run/docker.sock":"/var/run/docker.sock" \
+                -v "/home/runner/work/_temp/_github_home":"/github/home" \
+                -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
+                -v /home/runner/work/flatpak-github-actions/flatpak-github-actions:"/github/workspace" \
+                bilelmoussaoui/flatpak-github-actions:latest \
+                --manifest-path "org.gnome.zbrown.Palette.yaml" \
+                --app-id "org.gnome.zbrown.Palette" \
+                --bundle "palette-nightly.flatpak"
