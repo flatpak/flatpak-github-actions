@@ -10,8 +10,7 @@ jobs:
       run: docker pull bilelmoussaoui/flatpak-github-actions:latest
     - name: Run Docker Image
       run: docker run --cap-add SYS_ADMIN --device /dev/fuse \
-            -v ${{ github.workspace }}:host_mount_dir:container_mount_dir:shared \
-              bilelmoussaoui/flatpak-github-actions:latest \ 
+            bilelmoussaoui/flatpak-github-actions:latest \
             --manifest-path "org.gnome.zbrown.Palette.yaml" \
-            --app-id "org.gnome.zbrown.Palette" \ 
+            --app-id "org.gnome.zbrown.Palette" \
             --bundle "palette-nightly.flatpak"
