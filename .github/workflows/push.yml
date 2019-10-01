@@ -8,12 +8,10 @@ jobs:
     - uses: actions/checkout@master
     - name: Pull the Docker Image
       run: docker pull bilelmoussaoui/flatpak-github-actions:latest
-    - name: setenforce
-      run: setenforce 0
     - name: Run Docker Image
       run: |
             docker run --cap-add SYS_ADMIN --device /dev/fuse \
-                 --security-opt apparmor:unconfined \
+                 --security-opt apparmor:unconfined --security-opt seccomp=unconfined \
                 --workdir /github/workspace \
                 --rm -e INPUT_ARGS -e HOME -e GITHUB_REF -e GITHUB_SHA  \
                 -e GITHUB_REPOSITORY -e GITHUB_ACTOR -e GITHUB_WORKFLOW  \
@@ -24,7 +22,7 @@ jobs:
                 -v "/home/runner/work/_temp/_github_home":"/github/home" \
                 -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
                 -v /home/runner/work/flatpak-github-actions/flatpak-github-actions:"/github/workspace" \
-                bilelmoussaoui/flatpak-github-actions:latest \
+                --rm -ti bilelmoussaoui/flatpak-github-actions:latest \
                     --manifest-path "org.gnome.zbrown.Palette.yaml" \
                     --app-id "org.gnome.zbrown.Palette" \
                     --bundle "palette-nightly.flatpak"
