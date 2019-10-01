@@ -1,6 +1,9 @@
 # flatpak-github-actions
 Build your flatpak application using Github Actions
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/15098724/55282117-f8253380-52fa-11e9-95a3-ccae83b23034.png" alt="Flatpak logo" />
+</p>
 
 ## How to use?  
 
