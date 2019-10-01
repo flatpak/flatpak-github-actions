@@ -8,9 +8,13 @@ LABEL "com.github.actions.color"="blue"
 LABEL "repository"="https://github.com/bilelmoussaoui/flatpak-github-actions"
 LABEL "maintainer"="Bilal Elmoussaoui<bil.elmoussaoui@gmail.com>"
 
+
 RUN apt-get update -y 
 RUN apt-get upgrade -y 
 RUN apt-get install -y flatpak-builder flatpak
+
+# Setup Flathub
+RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

@@ -32,6 +32,6 @@ do
 done
 
 
-flatpak-builder flatpak_app ${MANIFEST_PATH}
+flatpak-builder flatpak_app ${MANIFEST_PATH} --install-deps-from=flathub
 flatpak-builder --repo=repo --force-clean flatpak_app ${MANIFEST_PATH}
 flatpak build-bundle repo ${BUNDLE} --runtime-repo=${RUNTIME_REPO} ${APP_ID} master
