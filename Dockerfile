@@ -1,4 +1,6 @@
-FROM registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
+FROM fedora:31
+
+RUN dnf install -y flatpak-builder flatpak
 
 LABEL "com.github.actions.name"="Flatpak Builder"
 LABEL "com.github.actions.description"="Build your flatpak project"
