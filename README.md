@@ -20,7 +20,7 @@ jobs:
     - uses: actions/checkout@master
     - uses: docker://bilelmoussaoui/flatpak-builder-github-actions
       with:
-        args:   --manifest-path="org.gnome.zbrown.Palette.yaml" 
+        args:   --manifest-path "org.gnome.zbrown.Palette.yaml" 
                 --app-id "org.gnome.zbrown.Palette" 
                 --bundle "palette-nightly.flatpak"
 ```
