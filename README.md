@@ -33,7 +33,7 @@ jobs:
                 -v "/var/run/docker.sock":"/var/run/docker.sock" \
                 -v "/home/runner/work/_temp/_github_home":"/github/home" \
                 -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
-                -v /home/runner/work/flatpak-github-actions/flatpak-github-actions:"/github/workspace" \
+                -v ${{ github.workspace }}:"/github/workspace" \
                 --rm -i bilelmoussaoui/flatpak-github-actions:latest \
                     --manifest-path "org.gnome.zbrown.Palette.yaml" \
                     --app-id "org.gnome.zbrown.Palette" \
