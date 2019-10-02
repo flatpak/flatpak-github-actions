@@ -4,4 +4,6 @@ author: 'Bilal Elmoussaoui'
 brading:
   icon: 'package'
   color: 'blue'
-
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
