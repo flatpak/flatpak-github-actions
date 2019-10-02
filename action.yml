@@ -19,4 +19,4 @@ inputs:
     default: "https://flathub.org/repo/flathub.flatpakrepo"
 runs:
   using: 'docker'
-  image: 'docker://bilelmoussaoui/flatpak-github-actions:wip'
+  image: 'docker://bilelmoussaoui/flatpak-github-actions:latest'
