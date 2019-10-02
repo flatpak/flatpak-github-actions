@@ -20,5 +20,3 @@ inputs:
 runs:
   using: 'docker'
   image: 'docker://bilelmoussaoui/flatpak-github-actions:latest'
-  with:
-    args: --manifest-path="org.gnome.zbrown.Palette.yaml" --app-id "org.gnome.zbrown.Palette" --bundle "palette-nightly.flatpak" 
