@@ -1,7 +1,7 @@
 name: 'Flatpak Builder'
 description: 'Flatpak Applications Builder'
 author: 'Bilal Elmoussaoui'
-brading:
+branding:
   icon: 'package'
   color: 'blue'
 runs:
