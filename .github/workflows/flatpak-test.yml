@@ -9,6 +9,5 @@ jobs:
     - uses: bilelmoussaoui/flatpak-github-actions@wip
       with:
         bundle: "palette.flatpak"
-        manifest: "org.gnome.zbrown.Palette.yml"
+        manifest: "org.gnome.zbrown.Palette.yaml"
         app-id: "org.gnome.zbrown.Palette"
-        runtime-repo: "https://flathub.org/repo/flathub.flatpakrepo"
