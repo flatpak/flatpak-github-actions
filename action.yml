@@ -4,6 +4,19 @@ author: 'Bilal Elmoussaoui'
 branding:
   icon: 'package'
   color: 'blue'
+inputs:
+  manifest:
+    description: "The relative path the manifest file in this repository."
+    required: true
+  app-id:
+    description: "The application ID"
+    required: true
+  bundle:
+    description: "The bundle name, by default it's app.flatpak"
+    default: "app.flatpak"
+  runtime-repo:
+    description: "The repository used to fetch the runtime when the user download the Flatpak bundle."
+    default: "https://flathub.org/repo/flathub.flatpakrepo"
 runs:
   using: 'docker'
   image: 'Dockerfile'
