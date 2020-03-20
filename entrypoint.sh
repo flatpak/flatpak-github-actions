@@ -13,6 +13,16 @@ do
       shift
       shift
     ;;
+    --meson-args)
+      MESON_ARGS="$2"
+      shift
+      shift
+    ;;
+    --flatpak-module)
+      FLATPAK_MODULE="$2"
+      shift
+      shift
+    ;;
     --bundle)
       BUNDLE="$2"
       shift
