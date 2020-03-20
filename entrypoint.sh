@@ -42,7 +42,7 @@ do
 done
 
 # Based on https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml
-flatpak-builder --user --stop-at="${FLATPAK_MODULE}" flatpak_app ${MANIFEST_PATH}
+flatpak-builder --user --disable-rofiles-fuse --stop-at="${FLATPAK_MODULE}" flatpak_app ${MANIFEST_PATH}
 
 flatpak build flatpak_app meson --prefix=/app ${MESON_ARGS} _build
 flatpak build flatpak_app ninja -C _build install
@@ -99,7 +99,7 @@ do
   install -m0644 -D \${src} \${dst}
 done"
 
-flatpak-builder --user --finish-only --repo=repo ${BRANCH:+--default-branch=$BRANCH} \
+flatpak-builder --user --disable-rofiles-fuse --finish-only --repo=repo ${BRANCH:+--default-branch=$BRANCH} \
   flatpak_app "${MANIFEST_PATH}"
 
 xvfb-run -a -s "-screen 0 1024x768x24" \
