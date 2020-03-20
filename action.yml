@@ -5,17 +5,31 @@ branding:
   icon: 'package'
   color: 'blue'
 inputs:
-  manifest:
+  manifest-path:
     description: "The relative path the manifest file in this repository."
+    required: true
+  meson-args:
+    description: >
+      The args passed to meson to configure your app. Typically this is
+      -Dprofile=development.
+    required: false
+  flatpak-module:
+    description: >
+      The module name for your app. This is used to know which modules are
+      dependencies and which are not.
     required: true
   app-id:
     description: "The application ID"
     required: true
   bundle:
     description: "The bundle name, by default it's app.flatpak"
+    required: false
     default: "app.flatpak"
   runtime-repo:
-    description: "The repository used to fetch the runtime when the user download the Flatpak bundle."
+    description: >
+      The repository used to fetch the runtime when the user download the
+      Flatpak bundle.
+    required: false
     default: "https://flathub.org/repo/flathub.flatpakrepo"
 runs:
   using: 'docker'
