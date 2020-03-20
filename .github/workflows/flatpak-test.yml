@@ -2,13 +2,14 @@ on: [push, pull_request]
 name: Flatpak
 jobs:
   flatpak-builder:
-    name: "Flatpak Builder"
+    name: Flatpak Builder
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - uses: bilelmoussaoui/flatpak-github-actions@wip
       with:
-        bundle: "palette.flatpak"
-        manifest: "org.gnome.zbrown.Palette.yaml"
-        app-id: "org.gnome.zbrown.Palette"
-        flatpak-module: "palette"
+        bundle: org.example.MyApp.Devel.flatpak
+        manifest: org.example.MyApp.yaml
+        app-id: org.example.MyApp.Devel
+        flatpak-module: testproject
+        meson-args: -Dprofile=development
