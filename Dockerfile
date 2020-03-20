@@ -8,4 +8,4 @@ RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.
 RUN flatpak install -y --noninteractive flathub org.freedesktop.Sdk//19.08 org.freedesktop.Platform//19.08
 
 ADD entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
