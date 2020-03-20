@@ -32,5 +32,5 @@ inputs:
     required: false
     default: "https://flathub.org/repo/flathub.flatpakrepo"
 runs:
-  using: 'docker'
-  image: 'docker://bilelmoussaoui/flatpak-github-actions:latest'
+  using: 'node12'
+  main: 'dist/index.js'

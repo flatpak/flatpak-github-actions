@@ -1,3 +1,4 @@
 .flatpak-builder
 flatpak_app
 repo
+node_modules
