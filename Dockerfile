@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:latest
 # Setup Flatpak
 RUN dnf install -y flatpak flatpak-builder
 
