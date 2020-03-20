@@ -11,3 +11,4 @@ jobs:
         bundle: "palette.flatpak"
         manifest: "org.gnome.zbrown.Palette.yaml"
         app-id: "org.gnome.zbrown.Palette"
+        flatpak-module: "palette"
