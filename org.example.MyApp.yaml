@@ -1,10 +1,10 @@
 # Flatpak Manifest example
 ---
-app-id: org.gnome.zbrown.Palette
+app-id: org.example.MyApp.Devel
 runtime: org.freedesktop.Platform
 runtime-version: '19.08'
 sdk: org.freedesktop.Sdk
-command: org.gnome.zbrown.Palette
+command: test-project
 finish-args:
 - "--share=ipc"
 - "--device=dri"
@@ -22,8 +22,10 @@ cleanup:
 - "*.la"
 - "*.a"
 modules:
-- name: palette
+- name: testproject
   buildsystem: meson
+  config-opts:
+  - -Dprofile=development
   sources:
   - type: git
-    url: https://gitlab.gnome.org/World/design/palette.git
+    url: https://github.com/bilelmoussaoui/flatpak-github-actions.git
