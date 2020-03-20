@@ -1,0 +1,3 @@
+meson.build -linguist-detectable
+*.vala -linguist-detectable
+dist/* linguist-generated
