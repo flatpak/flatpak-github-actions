@@ -33,4 +33,4 @@ inputs:
     default: "https://flathub.org/repo/flathub.flatpakrepo"
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'js/dist/index.js'
