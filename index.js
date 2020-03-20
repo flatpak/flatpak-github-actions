@@ -1,18 +1,17 @@
 const core = require('@actions/core')
 const { spawn } = require('child_process')
 
-const docker_args = ['run', '--cap-add', 'SYS_ADMIN', '--cap-add',
-    'NET_ADMIN', '--device', '/dev/fuse', '--security-opt', 'apparmor:unconfined',
-    '--security-opt', 'seccomp=unconfined', '--workdir', '/github/workspace',
-    '--rm', '-e', 'INPUT_ARGS', '-e', 'HOME', '-e', 'GITHUB_REF', '-e', 'GITHUB_SHA',
-    '-e', 'GITHUB_REPOSITORY', '-e', 'GITHUB_ACTOR', '-e', 'GITHUB_WORKFLOW',
-    '-e', 'GITHUB_HEAD_REF', '-e', 'GITHUB_BASE_REF', '-e', 'GITHUB_EVENT_NAME',
-    '-e', 'GITHUB_WORKSPACE', '-e', 'GITHUB_ACTION', '-e', 'GITHUB_EVENT_PATH',
-    '-e', 'RUNNER_OS', '-e', 'RUNNER_TOOL_CACHE', '-e', 'RUNNER_TEMP', '-e',
-    'RUNNER_WORKSPACE', '-v', '/var/run/docker.sock:/var/run/docker.sock',
-    '-v', '/home/runner/work/_temp/_github_home:/github/home', '-v',
-    '/home/runner/work/_temp/_github_workflow:/github/workflow', '-v',
-    process.env.GITHUB_WORKSPACE + ':/github/workspace', '-i',
+const docker_args = ['run', '--security-opt', 'seccomp=flatpak-docker-seccomp.json',
+    '--workdir', '/github/workspace', '--rm', '-e', 'INPUT_ARGS', '-e', 'HOME',
+    '-e', 'GITHUB_REF', '-e', 'GITHUB_SHA', '-e', 'GITHUB_REPOSITORY', '-e',
+    'GITHUB_ACTOR', '-e', 'GITHUB_WORKFLOW', '-e', 'GITHUB_HEAD_REF', '-e',
+    'GITHUB_BASE_REF', '-e', 'GITHUB_EVENT_NAME', '-e', 'GITHUB_WORKSPACE',
+    '-e', 'GITHUB_ACTION', '-e', 'GITHUB_EVENT_PATH', '-e', 'RUNNER_OS', '-e',
+    'RUNNER_TOOL_CACHE', '-e', 'RUNNER_TEMP', '-e', 'RUNNER_WORKSPACE',
+    '-v', '/var/run/docker.sock:/var/run/docker.sock',
+    '-v', '/home/runner/work/_temp/_github_home:/github/home',
+    '-v', '/home/runner/work/_temp/_github_workflow:/github/workflow',
+    '-v', process.env.GITHUB_WORKSPACE + ':/github/workspace', '-i',
     'nahuelwexd/flatpak-docker:latest']
 
 if (core.getInput('manifest-path') !== '') {
