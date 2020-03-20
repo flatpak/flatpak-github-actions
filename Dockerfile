@@ -1,6 +1,6 @@
 FROM fedora:latest
 # Setup Flatpak
-RUN dnf install -y flatpak flatpak-builder
+RUN dnf install -y flatpak flatpak-builder xorg-x11-server-Xvfb
 
 # Setup Flathub
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
