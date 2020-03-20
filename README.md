@@ -21,14 +21,15 @@ jobs:
     - uses: bilelmoussaoui/flatpak-github-actions@wip
       with:
         bundle: "palette.flatpak"
-        manifest: "org.gnome.zbrown.Palette.yml"
+        manifest-path: "org.gnome.zbrown.Palette.yml"
         app-id: "org.gnome.zbrown.Palette"
         runtime-repo: "https://flathub.org/repo/flathub.flatpakrepo"
+        flatpak-module: "palette"
 ```
 
 
 ### Inputs:
-- `manifest`
+- `manifest-path`
 
     The relative path the manifest file in this repository.
 
@@ -45,6 +46,16 @@ jobs:
     The repository used to fetch the runtime when the user download the Flatpak bundle.
     
     By default it's set to https://flathub.org/repo/flathub.flatpakrepo
+
+- `meson-args`
+
+    The args passed to meson to configure your app. Typically this is
+    `-Dprofile=development`.
+
+- `flatpak-module`
+
+    The module name of your app. This is used to know which modules are dependencies
+    and which are not.
 
 
 
