@@ -9,7 +9,7 @@ jobs:
     - uses: bilelmoussaoui/flatpak-github-actions@wip
       with:
         bundle: org.example.MyApp.Devel.flatpak
-        manifest-path: org.example.MyApp.yaml
+        manifest: org.example.MyApp.yaml
         app-id: org.example.MyApp.Devel
         flatpak-module: testproject
         meson-args: -Dprofile=development
