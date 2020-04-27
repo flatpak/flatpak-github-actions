@@ -25,8 +25,9 @@ RUN flatpak install -y --noninteractive flathub org.freedesktop.Sdk//19.08 org.f
 
 # Create a non-root user
 RUN useradd builduser
-USER builduser
+WORKDIR /home/builduser
 
 ADD entrypoint.sh /entrypoint.sh
+ADD build-flatpak.sh /build-flatpak.sh
 ADD rewrite-flatpak-manifest /usr/local/bin/rewrite-flatpak-manifest
 ENTRYPOINT ["sh", "/entrypoint.sh"]
