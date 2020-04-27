@@ -1,4 +1,20 @@
 FROM fedora:latest
+
+# Install flatpak builder deps
+RUN dnf -y update && dnf install -y git 'dnf-command(builddep)' libtool \
+        automake gettext-devel autoconf && \
+    dnf builddep -y flatpak-builder && \
+    dnf groupinstall -y "Development Tools"
+
+# Clone Flatpak Builder on run-without-fuse branch and build it
+RUN git clone --recursive https://github.com/flatpak/flatpak-builder -b run-without-fuse && \
+    cd flatpak-builder && \
+    ./autogen.sh && make -j$(nproc)
+
+# Install it on a fresh container
+FROM fedora:latest
+COPY --from=0 /flatpak-builder/flatpak-builder /usr/local/bin/flatpak-builder
+
 # Setup Flatpak
 RUN dnf install -y flatpak flatpak-builder xorg-x11-server-Xvfb python3-ruamel-yaml
 
