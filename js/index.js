@@ -12,7 +12,7 @@ const docker_args = ['run', '--security-opt', 'seccomp=flatpak-docker-seccomp.js
     '-v', '/home/runner/work/_temp/_github_home:/github/home',
     '-v', '/home/runner/work/_temp/_github_workflow:/github/workflow',
     '-v', process.env.GITHUB_WORKSPACE + ':/github/workspace', '-i',
-    'nahuelwexd/flatpak-docker:latest']
+    'bilelmoussaoui/flatpak-github-actions:latest']
 
 if (core.getInput('manifest-path') !== '') {
     docker_args.push('--manifest-path', core.getInput('manifest-path'))
