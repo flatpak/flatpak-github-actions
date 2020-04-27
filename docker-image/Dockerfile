@@ -1,6 +1,6 @@
 FROM fedora:latest
 # Setup Flatpak
-RUN dnf install -y flatpak flatpak-builder xorg-x11-server-Xvfb
+RUN dnf install -y flatpak flatpak-builder xorg-x11-server-Xvfb python3-ruamel-yaml
 
 # Setup Flathub
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -12,4 +12,5 @@ RUN useradd builduser
 USER builduser
 
 ADD entrypoint.sh /entrypoint.sh
+ADD rewrite-flatpak-manifest /usr/local/bin/rewrite-flatpak-manifest
 ENTRYPOINT ["sh", "/entrypoint.sh"]
