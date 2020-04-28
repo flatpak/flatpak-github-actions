@@ -37,9 +37,9 @@ done
 
 # Based on https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml
 rewrite-flatpak-manifest "${MANIFEST_PATH}" "${FLATPAK_MODULE}"
-flatpak-builder --user --disable-rofiles-fuse flatpak_app --repo=repo "${BRANCH:+--default-branch=$BRANCH}" "${MANIFEST_PATH}" --install-deps-from=flathub
+flatpak-builder --user --disable-rofiles-fuse flatpak_app --repo=repo ${BRANCH:+--default-branch=$BRANCH} "${MANIFEST_PATH}" --install-deps-from=flathub
 
-flatpak build-bundle repo "${BUNDLE}" --runtime-repo="${RUNTIME_REPO}" "${APP_ID}" "${BRANCH}"
+flatpak build-bundle repo "${BUNDLE}" --runtime-repo="${RUNTIME_REPO}" ${APP_ID} ${BRANCH}
 tar cf repo.tar repo/
 
 rm -rf flatpak_app
