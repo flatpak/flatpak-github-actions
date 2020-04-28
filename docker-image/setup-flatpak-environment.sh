@@ -7,6 +7,6 @@ dnf clean all
 useradd builduser
 
 # Add Flathub and install SDK
-sudo -u devel sh -c \
+sudo -u builduser sh -c \
 "flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install -y --noninteractive --user flathub org.freedesktop.Sdk//19.08 org.freedesktop.Platform//19.08"
