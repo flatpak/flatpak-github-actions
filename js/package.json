@@ -1,0 +1,25 @@
+{
+  "name": "flatpak-github-actions",
+  "version": "1.0.0",
+  "description": "Build your Flatpak application using Github Actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bilelmoussaoui/flatpak-github-actions.git"
+  },
+  "author": "Bilal Elmoussaoui",
+  "contributors": [
+    "Nahuel Gomez Castro <nahual_gomca@outlook.com.ar>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bilelmoussaoui/flatpak-github-actions/issues"
+  },
+  "homepage": "https://github.com/bilelmoussaoui/flatpak-github-actions#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.3"
+  }
+}
