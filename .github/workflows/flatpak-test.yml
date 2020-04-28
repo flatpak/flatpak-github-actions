@@ -12,4 +12,3 @@ jobs:
         manifest-path: org.example.MyApp.yaml
         app-id: org.example.MyApp.Devel
         flatpak-module: testproject
-        meson-args: -Dprofile=development
