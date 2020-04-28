@@ -18,10 +18,6 @@ if (core.getInput('manifest-path') !== '') {
     docker_args.push('--manifest-path', core.getInput('manifest-path'))
 }
 
-if (core.getInput('meson-args') !== '') {
-    docker_args.push('--meson-args', core.getInput('meson-args'))
-}
-
 if (core.getInput('flatpak-module') !== '') {
     docker_args.push('--flatpak-module', core.getInput('flatpak-module'))
 }

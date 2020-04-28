@@ -8,11 +8,6 @@ inputs:
   manifest-path:
     description: "The relative path the manifest file in this repository."
     required: true
-  meson-args:
-    description: >
-      The args passed to meson to configure your app. Typically this is
-      -Dprofile=development.
-    required: false
   flatpak-module:
     description: >
       The module name for your app. This is used to know which modules are
