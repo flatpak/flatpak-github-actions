@@ -1,9 +1,32 @@
 name: 'Flatpak Builder'
 description: 'Flatpak Applications Builder'
 author: 'Bilal Elmoussaoui'
+inputs:
+  manifest-path:
+    description: |
+      This is the path to your application's manifest. It can be YAML or JSON.
+    required: true
+  flatpak-module:
+    description: >
+      The module name for your app. This is used to know which modules are
+      dependencies and which are not.
+    required: true
+  app-id:
+    description: The ID of your application.
+    required: true
+  runtime-repo:
+    description: >
+      The repository that will be used to get the runtimes when the user installs
+      the bundle. Defaults to https://flathub.org/repo/flathub.flatpakrepo.
+    required: false
+    default: https://flathub.org/repo/flathub.flatpakrepo
+  bundle:
+    description: The filename that the bundle will have. Defaults to app.flatpak
+    required: false
+    default: app.flatpak
 branding:
   icon: 'package'
   color: 'blue'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: node12
+  main: js/dist/index.js
