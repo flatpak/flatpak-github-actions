@@ -26,7 +26,12 @@ do
       shift
     ;;
     --app-id)
-      export APP_ID="$2"
+      APP_ID="$2"
+      shift
+      shift
+    ;;
+    --flatpak-module)
+      FLATPAK_MODULE="$2"
       shift
       shift
     ;;
