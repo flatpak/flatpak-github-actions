@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:latest
 
 LABEL version="0.1"
 LABEL "com.github.actions.name"="Flatpak Builder"
