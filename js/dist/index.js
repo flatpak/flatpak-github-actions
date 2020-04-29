@@ -376,7 +376,7 @@ const docker_args = ['run', '--cap-add', 'SYS_ADMIN', '--cap-add', 'NET_ADMIN',
     '-v', '/home/runner/work/_temp/_github_home:/github/home',
     '-v', '/home/runner/work/_temp/_github_workflow:/github/workflow',
     '-v', `${process.env.GITHUB_WORKSPACE}:/github/workspace`, '-i',
-    'bilelmoussaoui/flatpak-github-actions:latest']
+    'nahuelwexd/flatpak-docker:freedesktop-19-08']
 
 if (core.getInput('manifest-path') !== '') {
     docker_args.push('--manifest-path', core.getInput('manifest-path'))
