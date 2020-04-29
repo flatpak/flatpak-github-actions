@@ -6,7 +6,8 @@ LABEL "maintainer"="Bilal Elmoussaoui<bil.elmoussaoui@gmail.com>"
 
 # Update system and install necessary packages
 RUN dnf -y update && \
-    dnf install -y flatpak flatpak-builder xorg-x11-server-Xvfb python3-ruamel-yaml
+    dnf install -y flatpak flatpak-builder xorg-x11-server-Xvfb python3-ruamel-yaml && \
+    dnf clean all
 
 # Setup Flathub
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
