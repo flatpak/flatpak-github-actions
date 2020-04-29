@@ -16,4 +16,5 @@ RUN flatpak remote-add --if-not-exists flathub \
             org.freedesktop.Platform//19.08
 
 ADD entrypoint.sh /entrypoint.sh
+ADD rewrite-flatpak-manifest.py /rewrite-flatpak-manifest.py
 ENTRYPOINT ["sh", "/entrypoint.sh"]
