@@ -4,8 +4,9 @@ LABEL "repository"="https://github.com/bilelmoussaoui/flatpak-github-actions"
 LABEL "homepage"="https://github.com/bilelmoussaoui/flatpak-github-actions"
 LABEL "maintainer"="Bilal Elmoussaoui<bil.elmoussaoui@gmail.com>"
 
-# Setup Flatpak
-RUN dnf install -y flatpak flatpak-builder
+# Update system and install necessary packages
+RUN dnf -y update && \
+    dnf install -y flatpak flatpak-builder
 
 # Setup Flathub
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
