@@ -1,9 +1,11 @@
-#!/bin/bash
+# Exit immediately when an error occurs.
 set -e
-# Arguments Parser
+
+# Set default parameter values
 BUNDLE="app.flatpak"
 RUNTIME_REPO="https://flathub.org/repo/flathub.flatpakrepo"
 
+# Argument parser
 while [[ $# -gt 0 ]]
 do
   key="$1"

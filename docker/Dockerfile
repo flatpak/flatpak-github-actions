@@ -16,4 +16,4 @@ RUN flatpak remote-add --if-not-exists flathub \
             org.freedesktop.Platform//19.08
 
 ADD entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
