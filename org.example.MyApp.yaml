@@ -1,0 +1,31 @@
+# Flatpak Manifest example
+---
+app-id: org.example.MyApp.Devel
+runtime: org.freedesktop.Platform
+runtime-version: '19.08'
+sdk: org.freedesktop.Sdk
+command: test-project
+finish-args:
+- --share=ipc
+- --device=dri
+- --socket=fallback-x11
+- --socket=wayland
+cleanup:
+- /include
+- /lib/pkgconfig
+- /man
+- /share/doc
+- /share/gtk-doc
+- /share/man
+- /share/pkgconfig
+- /share/vala
+- '*.la'
+- '*.a'
+modules:
+- name: testproject
+  buildsystem: meson
+  config-opts:
+  - -Dprofile=development
+  sources:
+  - type: git
+    url: https://github.com/bilemoussaoui/flatpak-github-actions.git
