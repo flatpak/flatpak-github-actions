@@ -1,4 +1,5 @@
 # flatpak-github-actions
+
 Build your flatpak application using Github Actions
 
 <p align="center">
@@ -7,59 +8,31 @@ Build your flatpak application using Github Actions
 
 ## How to use?  
 
-Add a new workflow by creating a `.yml` file under `.github/workflows` with this content
+You only need to add this to your workflow file:
 
 ```yaml
-on: [push, pull_request]
-name: Flatpak
-jobs:
-  flatpak-builder:
-    name: "Flatpak Builder"
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Pull the Docker Image
-      run: docker pull bilelmoussaoui/flatpak-github-actions:latest
-    - name: Run Docker Image
-      run: |
-            docker run --cap-add SYS_ADMIN --cap-add NET_ADMIN --device /dev/fuse \
-                 --security-opt apparmor:unconfined --security-opt seccomp=unconfined \
-                --workdir /github/workspace \
-                --rm -e INPUT_ARGS -e HOME -e GITHUB_REF -e GITHUB_SHA  \
-                -e GITHUB_REPOSITORY -e GITHUB_ACTOR -e GITHUB_WORKFLOW  \
-                -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e GITHUB_EVENT_NAME \
-                -e GITHUB_WORKSPACE -e GITHUB_ACTION -e GITHUB_EVENT_PATH -e RUNNER_OS  \
-                -e RUNNER_TOOL_CACHE -e RUNNER_TEMP -e RUNNER_WORKSPACE \
-                -v "/var/run/docker.sock":"/var/run/docker.sock" \
-                -v "/home/runner/work/_temp/_github_home":"/github/home" \
-                -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" \
-                -v ${{ github.workspace }}:"/github/workspace" \
-                --rm -i bilelmoussaoui/flatpak-github-actions:latest \
-                    --manifest-path "org.gnome.zbrown.Palette.yaml" \
-                    --app-id "org.gnome.zbrown.Palette" \
-                    --bundle "palette-nightly.flatpak"
+uses: bilelmoussaoui/flatpak-builder-action@master
+with:
+  <insert the inputs here>
 ```
 
+### Inputs
 
-### Arguments:
-- `--manifest-path`
+- `manifest-path`  
+  This is the path to your application's manifest. It can be YAML or JSON.
+- `flatpak-module`  
+  The module name for your app. This is used to know which modules are
+  dependencies and which are not.
+- `app-id`  
+  The ID of your application.
+- `runtime-repo`  
+  _(Optional)_ The repository that will be used to get the runtimes when the
+  user installs the bundle. Defaults to https://flathub.org/repo/flathub.flatpakrepo.
+- `bundle`  
+  _(Optional)_ The file name that the bundle will have. Defaults to `app.flatpak`.
 
-    The relative path the manifest file in this repository.
+The Docker Image used can be found [here](docker/Dockerfile).
 
-- `--app-id`
+### Example
 
-    The application ID
-
-- `--bundle`
-
-    The bundle name, by default it's `app.flatpak`
-
-- `--runtime-repo`
-
-    The repository used to fetch the runtime when the user download the Flatpak bundle.
-    
-    By default it's set to https://flathub.org/repo/flathub.flatpakrepo
-
-
-
-The Docker Image used can be found [here](./Dockerfile).
+You can see a working example on this project, [here](.github/workflows/flatpak-test.yml)
