@@ -1,48 +1,111 @@
 const core = require('@actions/core')
 const exec = require('@actions/exec')
 const artifact = require('@actions/artifact')
+const path = require('path')
+const fs = require('fs')
+const yaml = require('js-yaml')
+
+const bundle = core.getInput('bundle') || 'app.flatpak'
+const artifactName = bundle.replace('.flatpak', '')
+const runtimeRepo = core.getInput('runtime-repo')
+const manifestPath = core.getInput('manifest-path') || './docker/com.github.tchx84.Flatseal.json'
+const runTests = ['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
+const branch = 'master'
+const buildDir = 'flatpak_app'
+const repoName = 'repo'
 
 
-const bundle = core.getInput("bundle") || "app.flatpak"
-const artifactName = bundle.replace(".flatpak", "")
-const runtimeRepo = core.getInput("runtime-repo") || "https://flathub.org/repo/flathub.flatpakrepo"
-const manifestPath = core.getInput('manifest-path')
-const flatpakModule = core.getInput('flatpak-module')
-const appId = core.getInput('app-id')
-const branch = "master"
+const parseManifest = (manifestPath, callback) => {
+    fs.readFile(manifestPath, (err, data) => {
+        if (err)
+            core.setFailed(`Failed to parse the manifest ${err}`)
+        let manifest = null
+        switch (path.extname(manifestPath)) {
+            case '.json':
+                manifest = JSON.parse(data)
+                break
+            case '.yaml':
+            case '.yml':
+                manifest = yaml.safeLoad(data)
+                break
+            default:
+                core.setFailed('Unsupported manifest format, please use a YAML or a JSON file')
+        }
+        callback(manifest, manifestPath)
+    })
+}
 
+const saveManifest = (manifestPath, manifest) => {
+    let data = null
+    switch (path.extname(manifestPath)) {
+        case '.json':
+            data = JSON.stringify(manifest)
+            break
+        case '.yaml':
+        case '.yml':
+            data = yaml.safeDump(manifest)
+            break
+    }
+
+    fs.writeFile(manifestPath, data, (err) => {
+        if (err)
+            core.setFailed(`Failed to save the manifest ${err}`)
+    })
+}
+
+const initBuild = (manifestPath, callback) => {
+    parseManifest(manifestPath, (manifest, manifestPath) => {
+        const module = manifest['modules'].slice(-1)[0]
+        module['run-tests'] = runTests
+
+        module.sources = module.sources.map((source) => {
+            if (source.type === 'git') {
+                source = {
+                    type: 'dir',
+                    path: path.resolve('.', path.dirname(manifestPath)),
+                }
+            }
+            return source
+        })
+        saveManifest(manifestPath, manifest)
+        callback(manifest)
+    })
+}
+
+const build = async (manifest) => {
+    const appId = manifest['app-id']
+    core.info('Building the flatpak...')
+
+    await exec.exec(`xvfb-run --auto-servernum flatpak-builder`, [
+        `--repo=${repoName}`,
+        '--disable-rofiles-fuse',
+        '--install-deps-from=flathub',
+        buildDir,
+        manifestPath,
+    ])
+
+    core.info('Creating a bundle...')
+    await exec.exec('flatpak', [
+        'build-bundle',
+        repoName,
+        bundle,
+        `--runtime-repo=${runtimeRepo}`,
+        appId,
+        branch,
+    ])
+
+    core.info('Uploading artifact...')
+    const artifactClient = artifact.create()
+
+    await artifactClient.uploadArtifact(artifactName, [bundle], '.', {
+        continueOnError: false
+    })
+}
 
 const run = async () => {
     try {
-        if (flatpakModule)
-            await exec.exec('rewrite-flatpak-manifest', [manifestPath, flatpakModule])
-
-        core.info('Building the flatpak...')
-        await exec.exec('flatpak-builder', [
-            '--repo=repo',
-            '--disable-rofiles-fuse',
-            "--install-deps-from=flathub",
-            'flatpak_app',
-            manifestPath,
-        ])
-
-
-        core.info('Creating a bundle...')
-        await exec.exec('flatpak', [
-            'build-bundle',
-            'repo',
-            bundle,
-            `--runtime-repo=${runtimeRepo}`,
-            appId,
-            branch,
-        ])
-
-
-        core.info('Uploading artifact...')
-        const artifactClient = artifact.create()
-
-        await artifactClient.uploadArtifact(artifactName, [bundle], '.', {
-            continueOnError: false
+        initBuild(manifestPath, (manifest) => {
+            Promise.resolve(build(manifest))
         })
     } catch (error) {
         core.setFailed(`Build failed: ${error}`)
