@@ -4,7 +4,7 @@ author: "Bilal Elmoussaoui"
 branding:
   icon: "package"
   color: "blue"
-inputs: 
+inputs:
   manifest-path:
     description: "The relative path of the manifest file."
     required: true
@@ -26,6 +26,12 @@ inputs:
       Flatpak bundle.
     required: false
     default: "https://flathub.org/repo/flathub.flatpakrepo"
+  run-tests:
+    description: >
+      Toggles the run-tests config option on the defined flatpak-module.
+      Possible values: true, enabled, yes, y. Or something else to disable them.
+    default: "false"
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
