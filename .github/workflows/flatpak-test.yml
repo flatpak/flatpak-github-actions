@@ -13,7 +13,7 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@master
-      - uses: bilelmoussaoui/flatpak-github-actions@wip
+      - uses: bilelmoussaoui/flatpak-github-actions@master
         with:
           bundle: org.example.MyApp.Devel.flatpak
           manifest-path: org.example.MyApp.yaml
