@@ -11,8 +11,11 @@ Build your flatpak application using Github Actions
 Add a new workflow by creating a `.yml` file under `.github/workflows` with this content
 
 ```yaml
-on: [push, pull_request]
-name: Flatpak
+on:
+  push:
+    branches: [master]
+  pull_request:
+name: CI
 jobs:
   flatpak-builder:
     name: "Flatpak Builder"
@@ -39,6 +42,5 @@ jobs:
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
 | `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
 | `flatpak-module` | The module name of your app. If set the module will be modified to point to the current commit at build time  | Optional | - |
-
 
 The Docker Image used can be found [here](./docker/Dockerfile).

@@ -3,7 +3,7 @@ on:
     branches: [master]
   pull_request:
 
-name: Flatpak
+name: CI
 jobs:
   flatpak-builder:
     name: Flatpak Builder
