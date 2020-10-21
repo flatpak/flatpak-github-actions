@@ -1,14 +1,21 @@
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
+
 name: Flatpak
 jobs:
   flatpak-builder:
     name: Flatpak Builder
     runs-on: ubuntu-latest
+    container:
+      image: docker.io/bilelmoussaoui/flatpak-github-actions
+      options: --privileged
     steps:
-    - uses: actions/checkout@master
-    - uses: bilelmoussaoui/flatpak-github-actions@wip
-      with:
-        bundle: org.example.MyApp.Devel.flatpak
-        manifest-path: org.example.MyApp.yaml
-        app-id: org.example.MyApp.Devel
-        flatpak-module: testproject
+      - uses: actions/checkout@master
+      - uses: bilelmoussaoui/flatpak-github-actions@wip
+        with:
+          bundle: org.example.MyApp.Devel.flatpak
+          manifest-path: org.example.MyApp.yaml
+          app-id: org.example.MyApp.Devel
+          flatpak-module: testproject

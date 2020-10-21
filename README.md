@@ -1,11 +1,12 @@
-# flatpak-github-actions
+# Flatpak Github Actions
+
 Build your flatpak application using Github Actions
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/15098724/55282117-f8253380-52fa-11e9-95a3-ccae83b23034.png" alt="Flatpak logo" />
 </p>
 
-## How to use?  
+## How to use  
 
 Add a new workflow by creating a `.yml` file under `.github/workflows` with this content
 
@@ -16,47 +17,28 @@ jobs:
   flatpak-builder:
     name: "Flatpak Builder"
     runs-on: ubuntu-latest
+    container:
+      image: docker.io/bilelmoussaoui/flatpak-github-actions
+      options: --privileged
     steps:
     - uses: actions/checkout@master
-    - uses: bilelmoussaoui/flatpak-github-actions@wip
+    - uses: bilelmoussaoui/flatpak-github-actions@master
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
         app-id: "org.gnome.zbrown.Palette"
-        runtime-repo: "https://flathub.org/repo/flathub.flatpakrepo"
         flatpak-module: "palette"
 ```
 
+## Inputs
 
-### Inputs:
-- `manifest-path`
-
-    The relative path the manifest file in this repository.
-
-- `app-id`
-
-    The application ID
-
-- `bundle`
-
-    The bundle name, by default it's `app.flatpak`
-
-- `runtime-repo`
-
-    The repository used to fetch the runtime when the user download the Flatpak bundle.
-    
-    By default it's set to https://flathub.org/repo/flathub.flatpakrepo
-
-- `meson-args`
-
-    The args passed to meson to configure your app. Typically this is
-    `-Dprofile=development`.
-
-- `flatpak-module`
-
-    The module name of your app. This is used to know which modules are dependencies
-    and which are not.
+| Name | Description | Required | Default |
+| ---     | ----------- | ----------- |----|
+| `manifest-path` | The relative path of the manifest file  | Required | - |
+| `app-id` | The application identifier  | Required | - |
+| `bundle` | The bundle name  | Optional | `app.flatpak` |
+| `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
+| `flatpak-module` | The module name of your app. If set the module will be modified to point to the current commit at build time  | Optional | - |
 
 
-
-The Docker Image used can be found [here](./Dockerfile).
+The Docker Image used can be found [here](./docker/Dockerfile).

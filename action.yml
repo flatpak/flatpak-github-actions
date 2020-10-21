@@ -1,20 +1,20 @@
-name: 'Flatpak Builder'
-description: 'Flatpak Applications Builder'
-author: 'Bilal Elmoussaoui'
+name: "Flatpak Builder"
+description: "Flatpak Applications Builder"
+author: "Bilal Elmoussaoui"
 branding:
-  icon: 'package'
-  color: 'blue'
-inputs:
+  icon: "package"
+  color: "blue"
+inputs: 
   manifest-path:
-    description: "The relative path the manifest file in this repository."
+    description: "The relative path of the manifest file."
     required: true
   flatpak-module:
     description: >
-      The module name for your app. This is used to know which modules are
-      dependencies and which are not.
-    required: true
+      The module name for your app. This is used to automatically change the source type
+      of the module to a directory to build the current commit/branch.
+    required: false
   app-id:
-    description: "The application ID"
+    description: "The application identifier."
     required: true
   bundle:
     description: "The bundle name, by default it's app.flatpak"
@@ -22,10 +22,10 @@ inputs:
     default: "app.flatpak"
   runtime-repo:
     description: >
-      The repository used to fetch the runtime when the user download the
+      The repository used to fetch the runtime when the user downloads the
       Flatpak bundle.
     required: false
     default: "https://flathub.org/repo/flathub.flatpakrepo"
 runs:
-  using: 'node12'
-  main: 'js/dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
