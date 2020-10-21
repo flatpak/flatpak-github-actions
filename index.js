@@ -17,7 +17,7 @@ const run = async () => {
         if (flatpakModule)
             await exec.exec('rewrite-flatpak-manifest', [manifestPath, flatpakModule])
 
-        process.stdout.write('Building the flatpak...')
+        core.info('Building the flatpak...')
         await exec.exec('flatpak-builder', [
             '--repo=repo',
             '--disable-rofiles-fuse',
@@ -27,7 +27,7 @@ const run = async () => {
         ])
 
 
-        process.stdout.write('Creating a bundle...')
+        core.info('Creating a bundle...')
         await exec.exec('flatpak', [
             'build-bundle',
             'repo',
@@ -38,14 +38,14 @@ const run = async () => {
         ])
 
 
-        process.stdout.write('Uploading artifact...')
+        core.info('Uploading artifact...')
         const artifactClient = artifact.create()
 
         await artifactClient.uploadArtifact(artifactName, [bundle], '.', {
             continueOnError: false
         })
     } catch (error) {
-        core.setFailed(`Something failed ${error}`)
+        core.setFailed(`Build failed: ${error}`)
     }
 }
 
