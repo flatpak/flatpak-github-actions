@@ -8,14 +8,6 @@ inputs:
   manifest-path:
     description: "The relative path of the manifest file."
     required: true
-  flatpak-module:
-    description: >
-      The module name for your app. This is used to automatically change the source type
-      of the module to a directory to build the current commit/branch.
-    required: false
-  app-id:
-    description: "The application identifier."
-    required: true
   bundle:
     description: "The bundle name, by default it's app.flatpak"
     required: false

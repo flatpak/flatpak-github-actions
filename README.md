@@ -38,9 +38,8 @@ jobs:
 | Name | Description | Required | Default |
 | ---     | ----------- | ----------- |----|
 | `manifest-path` | The relative path of the manifest file  | Required | - |
-| `app-id` | The application identifier  | Required | - |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
 | `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
-| `flatpak-module` | The module name of your app. If set the module will be modified to point to the current commit at build time  | Optional | - |
+| `run-tests` | Enable/Disable running tests.  | Optional | `"flase"` |
 
 The Docker Image used can be found [here](./docker/Dockerfile).
