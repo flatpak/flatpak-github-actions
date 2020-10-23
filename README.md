@@ -29,8 +29,6 @@ jobs:
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
-        app-id: "org.gnome.zbrown.Palette"
-        flatpak-module: "palette"
 ```
 
 ## Inputs

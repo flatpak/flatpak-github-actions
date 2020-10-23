@@ -8,8 +8,8 @@ const yaml = require('js-yaml')
 const bundle = core.getInput('bundle') || 'app.flatpak'
 const artifactName = bundle.replace('.flatpak', '')
 const runtimeRepo = core.getInput('runtime-repo')
-const manifestPath = core.getInput('manifest-path') || './docker/com.github.tchx84.Flatseal.json'
-const runTests = true //['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
+const manifestPath = core.getInput('manifest-path')
+const runTests = true ['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
 const branch = 'master'
 const buildDir = 'flatpak_app'
 const repoName = 'repo'
@@ -88,7 +88,6 @@ const initBuild = (manifestPath, callback) => {
 
 const build = async (manifest) => {
     const appId = manifest['app-id']
-    core.info(JSON.stringify(manifest))
     core.info('Building the flatpak...')
 
     await exec.exec(`xvfb-run --auto-servernum flatpak-builder`, [
