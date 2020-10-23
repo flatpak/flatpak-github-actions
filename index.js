@@ -9,7 +9,7 @@ const bundle = core.getInput('bundle') || 'app.flatpak'
 const artifactName = bundle.replace('.flatpak', '')
 const runtimeRepo = core.getInput('runtime-repo')
 const manifestPath = core.getInput('manifest-path') || './docker/com.github.tchx84.Flatseal.json'
-const runTests = ['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
+const runTests = true //['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
 const branch = 'master'
 const buildDir = 'flatpak_app'
 const repoName = 'repo'
@@ -56,12 +56,26 @@ const saveManifest = (manifestPath, manifest, callback) => {
 
 const initBuild = (manifestPath, callback) => {
     parseManifest(manifestPath, (manifest, manifestPath) => {
+        if (runTests) {
+            manifest['build-options'] = {
+                ...manifest['build-options'] || {},
+                ...{
+                    'test-args': [
+                        '--socket=x11',
+                        '--share=network',
+                    ],
+                    'env': {
+                        'DISPLAY': '0:0'
+                    }
+                }
+            }
+        }
         const module = manifest['modules'].slice(-1)[0]
         module['run-tests'] = runTests
 
-        module.sources = module.sources.map((source) => {
+        module['sources'] = module.sources.map((source) => {
             if (source.type === 'git') {
-                source = {
+                return {
                     type: 'dir',
                     path: path.resolve('.', path.dirname(manifestPath)),
                 }
@@ -115,4 +129,4 @@ const run = async () => {
 
 run()
 
-export default run
+//export default run

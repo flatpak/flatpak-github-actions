@@ -3,13 +3,8 @@ module.exports =
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 1441:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ });
 const core = __webpack_require__(2559)
 const exec = __webpack_require__(5860)
 const artifact = __webpack_require__(4847)
@@ -21,7 +16,7 @@ const bundle = core.getInput('bundle') || 'app.flatpak'
 const artifactName = bundle.replace('.flatpak', '')
 const runtimeRepo = core.getInput('runtime-repo')
 const manifestPath = core.getInput('manifest-path') || './docker/com.github.tchx84.Flatseal.json'
-const runTests = ['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
+const runTests = true //['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
 const branch = 'master'
 const buildDir = 'flatpak_app'
 const repoName = 'repo'
@@ -68,12 +63,26 @@ const saveManifest = (manifestPath, manifest, callback) => {
 
 const initBuild = (manifestPath, callback) => {
     parseManifest(manifestPath, (manifest, manifestPath) => {
+        if (runTests) {
+            manifest['build-options'] = {
+                ...manifest['build-options'] || {},
+                ...{
+                    'test-args': [
+                        '--socket=x11',
+                        '--share=network',
+                    ],
+                    'env': {
+                        'DISPLAY': '0:0'
+                    }
+                }
+            }
+        }
         const module = manifest['modules'].slice(-1)[0]
         module['run-tests'] = runTests
 
-        module.sources = module.sources.map((source) => {
+        module['sources'] = module.sources.map((source) => {
             if (source.type === 'git') {
-                source = {
+                return {
                     type: 'dir',
                     path: path.resolve('.', path.dirname(manifestPath)),
                 }
@@ -127,7 +136,7 @@ const run = async () => {
 
 run()
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (run);
+//export default run
 
 /***/ }),
 
@@ -13072,34 +13081,6 @@ module.exports = require("zlib");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
