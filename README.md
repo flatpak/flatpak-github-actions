@@ -25,7 +25,7 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@master
-    - uses: bilelmoussaoui/flatpak-github-actions@master
+    - uses: bilelmoussaoui/flatpak-github-actions@v1
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
