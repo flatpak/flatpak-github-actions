@@ -47,7 +47,7 @@ const parseManifest = (manifestPath, callback) => {
     })
 }
 
-const saveManifest = (manifestPath, manifest) => {
+const saveManifest = (manifestPath, manifest, callback) => {
     let data = null
     switch (path.extname(manifestPath)) {
         case '.json':
@@ -62,6 +62,7 @@ const saveManifest = (manifestPath, manifest) => {
     fs.writeFile(manifestPath, data, (err) => {
         if (err)
             core.setFailed(`Failed to save the manifest ${err}`)
+        callback(manifest)
     })
 }
 
@@ -79,13 +80,13 @@ const initBuild = (manifestPath, callback) => {
             }
             return source
         })
-        saveManifest(manifestPath, manifest)
-        callback(manifest)
+        saveManifest(manifestPath, manifest, callback)
     })
 }
 
 const build = async (manifest) => {
     const appId = manifest['app-id']
+    core.info(JSON.stringify(manifest))
     core.info('Building the flatpak...')
 
     await exec.exec(`xvfb-run --auto-servernum flatpak-builder`, [
