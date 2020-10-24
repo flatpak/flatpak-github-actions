@@ -17,7 +17,6 @@ const artifactName = bundle.replace('.flatpak', '')
 const runtimeRepo = core.getInput('runtime-repo')
 const manifestPath = core.getInput('manifest-path')
 const runTests = ['y', 'yes', 'true', 'enabled'].includes(core.getInput('run-tests'))
-const branch = 'master'
 const buildDir = 'flatpak_app'
 const repoName = 'repo'
 
@@ -95,6 +94,8 @@ const initBuild = (manifestPath, callback) => {
 
 const build = async (manifest) => {
     const appId = manifest['app-id']
+    const branch = manifest['branch'] || core.getInput('branch') || 'master'
+
     core.info('Building the flatpak...')
 
     await exec.exec(`xvfb-run --auto-servernum flatpak-builder`, [

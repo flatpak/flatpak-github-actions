@@ -24,6 +24,10 @@ inputs:
       Possible values: true, enabled, yes, y. Or something else to disable them.
     default: "false"
     required: false
+  branch:
+    description: The flatpak branch
+    default: "master"
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"

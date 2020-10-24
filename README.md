@@ -33,11 +33,19 @@ jobs:
 
 ## Inputs
 
+### V1
+
 | Name | Description | Required | Default |
 | ---     | ----------- | ----------- |----|
 | `manifest-path` | The relative path of the manifest file  | Required | - |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
 | `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
 | `run-tests` | Enable/Disable running tests.  | Optional | `"flase"` |
+
+### Master (not released yet) 
+
+| Name | Description | Required | Default |
+| ---     | ----------- | ----------- |----|
+| `branch` | The default flatpak branch.  | Optional | `master` |
 
 The Docker Image used can be found [here](./docker/Dockerfile).
