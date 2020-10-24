@@ -24,7 +24,7 @@ jobs:
       image: docker.io/bilelmoussaoui/flatpak-github-actions
       options: --privileged
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - uses: bilelmoussaoui/flatpak-github-actions@v1
       with:
         bundle: "palette.flatpak"
