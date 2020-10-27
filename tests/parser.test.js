@@ -38,7 +38,7 @@ test("The manifest should be modified correctly if tests are enabled", async () 
   expect(lastModule.sources).toEqual([
     {
       type: "dir",
-      path: path.resolve("./tests"),
+      path: "tests",
     },
   ])
 })
@@ -67,7 +67,7 @@ test("The manifest should be modified correctly if tests are enabled & has a bui
   expect(lastModule.sources).toEqual([
     {
       type: "dir",
-      path: path.resolve("./tests"),
+      path: "tests",
     },
   ])
 })
@@ -84,7 +84,7 @@ test("The manifest should be modified correctly if in a subdirectory", async () 
   expect(lastModule.sources).toEqual([
     {
       type: "dir",
-      path: path.resolve("./tests/app-test"),
+      path: "tests/app-test",
     },
   ])
 })
