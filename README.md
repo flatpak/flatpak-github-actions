@@ -1,5 +1,7 @@
 # Flatpak Github Actions
 
+![CI](https://github.com/bilelmoussaoui/flatpak-github-actions/workflows/CI/badge.svg)
+
 Build your flatpak application using Github Actions
 
 <p align="center">
@@ -25,7 +27,7 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions@v1
+    - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
@@ -42,7 +44,7 @@ jobs:
 | `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
 | `run-tests` | Enable/Disable running tests.  | Optional | `"flase"` |
 
-### Master (not released yet) 
+### V2
 
 | Name | Description | Required | Default |
 | ---     | ----------- | ----------- |----|
