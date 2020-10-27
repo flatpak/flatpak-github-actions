@@ -1,3 +1,8 @@
+project (
+    'test-project',
+    'c', 'vala'
+)
+
 if get_option ('profile') == 'development'
     add_project_arguments (
         ['-D', 'DEVEL'],
