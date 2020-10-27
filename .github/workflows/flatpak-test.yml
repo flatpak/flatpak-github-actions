@@ -16,7 +16,7 @@ jobs:
       - uses: bilelmoussaoui/flatpak-github-actions@tests
         with:
           bundle: org.example.MyApp.Devel.flatpak
-          manifest-path: org.example.MyApp.yaml
+          manifest-path: ./tests/test-project/org.example.MyApp.yaml
   tests:
     name: Tests
     runs-on: ubuntu-latest
