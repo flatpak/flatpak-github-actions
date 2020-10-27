@@ -16,5 +16,5 @@ modules:
     config-opts:
       - -Dprofile=development
     sources:
-      - type: git
-        url: https://github.com/bilelmoussaoui/flatpak-github-actions.git
+      - type: dir
+        path: .
