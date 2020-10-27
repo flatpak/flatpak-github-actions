@@ -1,4 +1,3 @@
-const path = require("path")
 const { parseManifest, modifyManifest } = require("../index")
 
 test("The manifest should be parsed correctly", async () => {
@@ -35,12 +34,7 @@ test("The manifest should be modified correctly if tests are enabled", async () 
   const lastModule = modifiedManifest["modules"].slice(-1)[0]
   expect(lastModule.name).toBe("testproject")
   expect(lastModule["run-tests"]).toBe(true)
-  expect(lastModule.sources).toEqual([
-    {
-      type: "dir",
-      path: "..",
-    },
-  ])
+
 })
 
 test("The manifest should be modified correctly if tests are enabled & has a build-options", async () => {
@@ -64,12 +58,7 @@ test("The manifest should be modified correctly if tests are enabled & has a bui
   const lastModule = modifiedManifest["modules"].slice(-1)[0]
   expect(lastModule.name).toBe("contrast")
   expect(lastModule["run-tests"]).toBe(true)
-  expect(lastModule.sources).toEqual([
-    {
-      type: "dir",
-      path: "..",
-    },
-  ])
+
 })
 
 test("The manifest should be modified correctly if in a subdirectory", async () => {
@@ -81,10 +70,5 @@ test("The manifest should be modified correctly if in a subdirectory", async () 
   const lastModule = modifiedManifest["modules"].slice(-1)[0]
   expect(lastModule.name).toBe("testproject")
   expect(lastModule["run-tests"]).toBe(false)
-  expect(lastModule.sources).toEqual([
-    {
-      type: "dir",
-      path: "../..",
-    },
-  ])
+
 })

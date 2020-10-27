@@ -95,15 +95,7 @@ const modifyManifest = (manifest, manifestPath, runTests = false) => {
     }
     const module = manifest["modules"].slice(-1)[0]
     module["run-tests"] = runTests
-    module["sources"] = module.sources.map((source) => {
-        if (source.type === "git") {
-            return {
-                type: "dir",
-                path: path.relative(path.dirname(manifestPath), "."),
-            }
-        }
-        return source
-    })
+
     return manifest
 }
 
