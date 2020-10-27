@@ -92,7 +92,7 @@ const modifyManifest = (manifest, manifestPath, runTests = false) => {
         if (source.type === "git") {
             return {
                 type: "dir",
-                path: path.relative(".", path.dirname(manifestPath)),
+                path: path.relative(path.dirname(manifestPath), "."),
             }
         }
         return source
