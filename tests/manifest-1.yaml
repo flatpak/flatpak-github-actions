@@ -1,0 +1,20 @@
+# Flatpak Manifest example
+---
+app-id: org.example.MyApp.Devel
+runtime: org.gnome.Platform
+runtime-version: "3.38"
+sdk: org.gnome.Sdk
+command: test-project
+finish-args:
+  - --share=ipc
+  - --device=dri
+  - --socket=fallback-x11
+  - --socket=wayland
+modules:
+  - name: testproject
+    buildsystem: meson
+    config-opts:
+      - -Dprofile=development
+    sources:
+      - type: git
+        url: https://github.com/bilelmoussaoui/flatpak-github-actions.git

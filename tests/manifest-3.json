@@ -1,0 +1,57 @@
+{
+  "app-id": "org.gnome.design.Contrast.Devel",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "3.36",
+  "sdk": "org.gnome.Sdk",
+  "sdk-extensions": ["org.freedesktop.Sdk.Extension.rust-stable"],
+  "command": "contrast",
+  "tags": ["nightly"],
+  "finish-args": [
+    "--share=ipc",
+    "--socket=fallback-x11",
+    "--socket=wayland",
+    "--device=dri"
+  ],
+  "build-options": {
+    "append-path": "/usr/lib/sdk/rust-stable/bin",
+    "build-args": ["--share=network"],
+    "env": {
+      "CARGO_HOME": "/run/build/contrast/cargo",
+      "RUST_BACKTRACE": "1",
+      "RUST_LOG": "contrast=info"
+    }
+  },
+  "modules": [
+    {
+      "name": "libhandy",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dintrospection=disabled",
+        "-Dgtk_doc=false",
+        "-Dtests=false",
+        "-Dexamples=false",
+        "-Dvapi=false",
+        "-Dglade_catalog=disabled"
+      ],
+      "cleanup": ["/include", "/lib/pkgconfig"],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/GNOME/libhandy.git",
+          "branch": "1.0.0"
+        }
+      ]
+    },
+    {
+      "name": "contrast",
+      "buildsystem": "meson",
+      "config-opts": ["-Dprofile=development"],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.gnome.org/World/design/contrast.git"
+        }
+      ]
+    }
+  ]
+}
