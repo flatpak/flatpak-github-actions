@@ -189,14 +189,16 @@ module.exports = {
     run,
 }
 
-run(
-    core.getInput("manifest-path"),
-    ["y", "yes", "true", "enabled"].includes(core.getInput("run-tests")),
-    core.getInput("bundle") || "app.flatpak",
-    core.getInput("runtime-repo"),
-    "flatpak_app",
-    "repo"
-)
+if (require.main === require.cache[eval('__filename')]) {
+    run(
+        core.getInput("manifest-path"),
+        ["y", "yes", "true", "enabled"].includes(core.getInput("run-tests")),
+        core.getInput("bundle") || "app.flatpak",
+        core.getInput("runtime-repo"),
+        "flatpak_app",
+        "repo"
+    )
+}
 
 
 /***/ }),
