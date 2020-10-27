@@ -3,3 +3,4 @@ flatpak_app
 repo
 node_modules
 .vscode
+package-lock.json
