@@ -15,7 +15,7 @@ Add a new workflow by creating a `.yml` file under `.github/workflows` with this
 ```yaml
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
 name: CI
 jobs:
@@ -23,7 +23,7 @@ jobs:
     name: "Flatpak Builder"
     runs-on: ubuntu-latest
     container:
-      image: docker.io/bilelmoussaoui/flatpak-github-actions
+      image: bilelmoussaoui/flatpak-github-actions:gnome-3-38
       options: --privileged
     steps:
     - uses: actions/checkout@v2
@@ -43,4 +43,16 @@ jobs:
 | `run-tests` | Enable/Disable running tests.  | Optional | `"false"` |
 | `branch` | The default flatpak branch.  | Optional | `master` |
 
-The Docker Image used can be found [here](./docker/Dockerfile).
+## Docker Image
+
+The Docker image used for the action consists of 2 parts: The base image, based on Fedora and which can be found
+[here](docker/Dockerfile), and the specific image of the runtime you choose, which is generated through
+[this](.github/workflows/docker.yml) GitHub Actions workflow.
+
+You can specify the specific runtime you need to use through the image tags:
+
+| Runtime         | Version | Tag                 | Example                                                          |
+| --------------- | ------- | ------------------- | ---------------------------------------------------------------- |
+| Freedesktop SDK | 20.08   | `freedesktop-20.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-20.08` |
+| GNOME           | 3.38    | `gnome-3.38`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-3.38`        |
+| KDE             | 5.15    | `kde-5.15`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15`          |
