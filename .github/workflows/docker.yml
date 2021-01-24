@@ -20,6 +20,9 @@ jobs:
 
           - name: kde-5.15
             packages: org.kde.Platform//5.15 org.kde.Sdk//5.15
+            
+          - name: elementary-juno
+            packages: io.elementary.BaseApp//juno-20.08 org.gnome.Platform//3.38 org.gnome.Sdk//3.38 
 
     services:
       registry:
