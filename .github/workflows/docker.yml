@@ -18,6 +18,9 @@ jobs:
           - name: gnome-3.38
             packages: org.gnome.Platform//3.38 org.gnome.Sdk//3.38
 
+          - name: gnome-40
+            packages: org.gnome.Platform//40 org.gnome.Sdk//40
+
           - name: kde-5.15
             packages: org.kde.Platform//5.15 org.kde.Sdk//5.15
             
