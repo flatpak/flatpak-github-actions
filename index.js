@@ -112,6 +112,7 @@ const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repo
         `--repo=${repoName}`,
         "--disable-rofiles-fuse",
         "--install-deps-from=flathub",
+        "--force-clean",
         buildDir,
         manifestPath,
     ])
