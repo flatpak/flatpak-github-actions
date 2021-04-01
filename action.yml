@@ -30,6 +30,11 @@ inputs:
       Possible values: true, enabled, yes, y. Or something else to disable it.
     default: "true"
     required: false
+  cache-key:
+    description: >
+      Defines the cache-key to use.
+      Defaults to flatpak-builder-${sha256(manifestPath)}
+    required: false
   branch:
     description: The flatpak branch
     default: "master"
