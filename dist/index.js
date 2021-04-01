@@ -155,7 +155,9 @@ const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repo
         await cache.saveCache(
             CACHE_PATH,
             cacheKey,
-        )
+        ).catch((reason) => {
+            core.error(`Failed to save cache: ${reason}`)
+        })
     }
 
     core.info("Creating a bundle...")
@@ -188,12 +190,15 @@ const run = async (
     buildDir,
     repoName,
     cacheBuildDir,
+    cacheKey = undefined,
 ) => {
     const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
-    const cacheKey = `flatpak-builder-${manifestHash}`
+    if(cacheKey === undefined) { 
+        cacheKey = `flatpak-builder-${manifestHash}`
+    }
     // Restore the cache in case caching is enabled
     if (cacheBuildDir) {
-        await cache.restoreCache(
+        const cacheHitKey = await cache.restoreCache(
             CACHE_PATH,
             cacheKey,
             [
@@ -201,6 +206,11 @@ const run = async (
                 'flatpak-',
             ]
         )
+        if (cacheHitKey !== undefined) {
+            core.info(`Restored cache with key: ${cacheHitKey}`)
+        } else {
+            core.info('No cache was found')
+        }
     }
     parseManifest(manifestPath)
         .then((manifest) => {
@@ -241,6 +251,7 @@ if (require.main === require.cache[eval('__filename')]) {
         "flatpak_app",
         "repo",
         ["y", "yes", "true", "enabled", true].includes(core.getInput("cache")),
+        core.getInput("cache-key"),
     )
 }
 
