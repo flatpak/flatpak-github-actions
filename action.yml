@@ -24,6 +24,12 @@ inputs:
       Possible values: true, enabled, yes, y. Or something else to disable them.
     default: "false"
     required: false
+  cache:
+    description: >
+      Toggles caching the flatpak-builder directory. 
+      Possible values: true, enabled, yes, y. Or something else to disable it.
+    default: "true"
+    required: false
   branch:
     description: The flatpak branch
     default: "master"

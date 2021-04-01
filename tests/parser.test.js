@@ -20,11 +20,8 @@ test("The manifest should be parsed correctly", async () => {
 
 test("The manifest should be modified correctly if tests are enabled", async () => {
   const manifest = await parseManifest("./tests/manifest-1.yaml")
-  const modifiedManifest = modifyManifest(
-    manifest,
-    "./tests/manifest-1.yaml",
-    true
-  )
+  const modifiedManifest = modifyManifest(manifest, true)
+
   expect(modifiedManifest["build-options"]).toEqual({
     "test-args": ["--socket=x11", "--share=network"],
     env: {
@@ -39,11 +36,8 @@ test("The manifest should be modified correctly if tests are enabled", async () 
 
 test("The manifest should be modified correctly if tests are enabled & has a build-options", async () => {
   const manifest = await parseManifest("./tests/manifest-3.json")
-  const modifiedManifest = modifyManifest(
-    manifest,
-    "./tests/manifest-3.json",
-    true
-  )
+  const modifiedManifest = modifyManifest(manifest, true)
+
   expect(modifiedManifest["build-options"]).toEqual({
     "append-path": "/usr/lib/sdk/rust-stable/bin",
     "build-args": ["--share=network"],
@@ -63,10 +57,8 @@ test("The manifest should be modified correctly if tests are enabled & has a bui
 
 test("The manifest should be modified correctly if in a subdirectory", async () => {
   const manifest = await parseManifest("./tests/app-test/manifest-2.yaml")
-  const modifiedManifest = modifyManifest(
-    manifest,
-    "./tests/app-test/manifest-2.yaml"
-  )
+  const modifiedManifest = modifyManifest(manifest)
+
   const lastModule = modifiedManifest["modules"].slice(-1)[0]
   expect(lastModule.name).toBe("testproject")
   expect(lastModule["run-tests"]).toBe(false)
