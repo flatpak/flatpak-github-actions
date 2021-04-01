@@ -184,8 +184,8 @@ const run = async (
     cacheBuildDir,
     cacheKey = undefined,
 ) => {
-    const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
     if(cacheKey === undefined) { 
+        const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
         cacheKey = `flatpak-builder-${manifestHash}`
     }
     // Restore the cache in case caching is enabled
