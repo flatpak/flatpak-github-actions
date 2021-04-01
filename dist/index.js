@@ -114,10 +114,9 @@ const modifyManifest = (manifest, runTests = false) => {
             "test-args": testArgs,
             env: env,
         }
+        const module = manifest["modules"].slice(-1)[0]
+        module["run-tests"] = runTests
     }
-    const module = manifest["modules"].slice(-1)[0]
-    module["run-tests"] = runTests
-
     return manifest
 }
 
@@ -192,8 +191,8 @@ const run = async (
     cacheBuildDir,
     cacheKey = undefined,
 ) => {
-    const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
     if(cacheKey === undefined) { 
+        const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
         cacheKey = `flatpak-builder-${manifestHash}`
     }
     // Restore the cache in case caching is enabled

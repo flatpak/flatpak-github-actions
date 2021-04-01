@@ -61,6 +61,6 @@ test("The manifest should be modified correctly if in a subdirectory", async () 
 
   const lastModule = modifiedManifest["modules"].slice(-1)[0]
   expect(lastModule.name).toBe("testproject")
-  expect(lastModule["run-tests"]).toBe(false)
+  expect(lastModule["run-tests"]).toBe(undefined)
 
 })
