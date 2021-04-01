@@ -1,6 +1,6 @@
 on:
   push:
-    # branches: [master]
+  # branches: [master]
   pull_request:
 
 name: CI
@@ -9,7 +9,7 @@ jobs:
     name: Flatpak Builder
     runs-on: ubuntu-latest
     container:
-      image: docker.io/bilelmoussaoui/flatpak-github-actions
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
       options: --privileged
     steps:
       - uses: actions/checkout@v2

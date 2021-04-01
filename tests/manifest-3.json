@@ -1,7 +1,7 @@
 {
   "app-id": "org.gnome.design.Contrast.Devel",
   "runtime": "org.gnome.Platform",
-  "runtime-version": "3.36",
+  "runtime-version": "40",
   "sdk": "org.gnome.Sdk",
   "sdk-extensions": ["org.freedesktop.Sdk.Extension.rust-stable"],
   "command": "contrast",
