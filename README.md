@@ -40,8 +40,9 @@ jobs:
 | `manifest-path` | The relative path of the manifest file  | Required | - |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
 | `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
-| `run-tests` | Enable/Disable running tests.  | Optional | `"false"` |
+| `run-tests` | Enable/Disable running tests.  | Optional | `false` |
 | `branch` | The default flatpak branch.  | Optional | `master` |
+| `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
 
 ## Docker Image
 

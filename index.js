@@ -1,15 +1,39 @@
 const core = require("@actions/core")
 const exec = require("@actions/exec")
 const artifact = require("@actions/artifact")
+const cache = require("@actions/cache")
 const path = require("path")
 const fs = require("fs").promises
 const yaml = require("js-yaml")
+const crypto = require('crypto')
+
+// The various paths to cache
+const CACHE_PATH = [
+    '.flatpak-builder'
+]
+
+/**
+ * Compute a SHA-256 hash of the manifest file. 
+ * @param {PathLike} manifestPath 
+ */
+const computeHash = async(manifestPath) => {
+    const hash = crypto.createHash('sha256')
+    const stream = await fs.readFile(manifestPath)
+ 
+    let buffer = Buffer.alloc(stream.byteLength)
+    for (let i = 0; i < buffer.length; i++) {
+        buffer[i] = stream[i]
+    }
+    hash.update(buffer)
+    
+    return hash.digest('hex')
+}
 
 /**
  * Parses a flatpak manifest and returns it as a JS object
  * It supports both supported file formats by flatpak-builder: JSON & YAML.
  *
- * @param {string} manifestPath the relative/absolute path to the manifest
+ * @param {PathLike} manifestPath the relative/absolute path to the manifest
  */
 const parseManifest = async (manifestPath) => {
     const data = await fs.readFile(manifestPath)
@@ -34,7 +58,7 @@ const parseManifest = async (manifestPath) => {
  * Saves a manifest as a YAML or JSON file
  *
  * @param {object} manifest A flatpak manifest
- * @param {string} dest Where to save the flatpak manifest
+ * @param {PathLike} dest Where to save the flatpak manifest
  * @returns {object} manifest
  */
 const saveManifest = async (manifest, dest) => {
@@ -57,17 +81,15 @@ const saveManifest = async (manifest, dest) => {
 }
 
 /**
- * Applies two changes to the original manifest:
+ * Applies the following changes to the original manifest:
  * 1 - If tests are enabled, proper test-args are added
  *      to enable network & x11 access.
- * 2 - Replaces the source type of the latest module to a dir
- *     this will allow us to build the current commit/change
  *
  * @param {Object} manifest the parsed manifest
- * @param {callback} callback a callback to call on the modified manifest
+ * @param {boolean} runTests whether to run tests or not
  * @returns {object} manifest the modified manifest
  */
-const modifyManifest = (manifest, manifestPath, runTests = false) => {
+const modifyManifest = (manifest, runTests = false) => {
     if (runTests) {
         const buildOptions = manifest["build-options"] || {}
         const env = {
@@ -101,20 +123,33 @@ const modifyManifest = (manifest, manifestPath, runTests = false) => {
  * @param {string} runtimeRepo The repository used to install the runtime from
  * @param {string} buildDir Where to build the application
  * @param {string} repoName The flatpak repository name
+ * @param {boolean} cacheBuildDir Whether to enable caching the build directory
+ * @param {string} cacheKey The key used to cache the build directory
  */
-const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName) => {
+const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName, cacheBuildDir, cacheKey) => {
     const appId = manifest["app-id"] || manifest["id"]
     const branch = manifest["branch"] || core.getInput("branch") || "master"
 
     core.info("Building the flatpak...")
 
-    await exec.exec(`xvfb-run --auto-servernum flatpak-builder`, [
+    let args = [
         `--repo=${repoName}`,
         "--disable-rofiles-fuse",
         "--install-deps-from=flathub",
-        buildDir,
-        manifestPath,
-    ])
+        "--force-clean",
+    ]
+    if (cacheBuildDir) {
+        args.push("--ccache")
+    }
+    args.push(buildDir, manifestPath)
+
+    await exec.exec(`xvfb-run --auto-servernum flatpak-builder`, args)
+    if (cacheBuildDir) {
+        await cache.saveCache(
+            CACHE_PATH,
+            cache_key,
+        )
+    }
 
     core.info("Creating a bundle...")
     await exec.exec("flatpak", [
@@ -136,6 +171,7 @@ const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repo
  * @param {string} runtimeRepo The repository used to install the runtime from
  * @param {string} buildDir Where to build the application
  * @param {string} repoName The flatpak repository name
+ * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  */
 const run = async (
     manifestPath,
@@ -143,15 +179,29 @@ const run = async (
     bundle,
     runtimeRepo,
     buildDir,
-    repoName
+    repoName,
+    cacheBuildDir,
 ) => {
+    const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
+    const cache_key = `flatpak-builder-${manifestHash}`
+    // Restore the cache in case caching is enabled
+    if (cacheBuildDir) {
+        await cache.restoreCache(
+            CACHE_PATH,
+            cache_key,
+            [
+                'flatpak-builder-',
+                'flatpak-',
+            ]
+        )
+    }
     parseManifest(manifestPath)
         .then((manifest) => {
             const modifiedManifest = modifyManifest(manifest, manifestPath, runTests)
             return saveManifest(modifiedManifest, manifestPath)
         })
         .then((manifest) => {
-            return build(manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName)
+            return build(manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName, cacheBuildDir, cache_key)
         })
         .then(() => {
             core.info("Uploading artifact...")
@@ -167,6 +217,7 @@ const run = async (
 }
 
 module.exports = {
+    computeHash,
     parseManifest,
     modifyManifest,
     saveManifest,
@@ -177,10 +228,11 @@ module.exports = {
 if (require.main === module) {
     run(
         core.getInput("manifest-path"),
-        ["y", "yes", "true", "enabled"].includes(core.getInput("run-tests")),
+        ["y", "yes", "true", "enabled", true].includes(core.getInput("run-tests")),
         core.getInput("bundle") || "app.flatpak",
         core.getInput("runtime-repo"),
         "flatpak_app",
-        "repo"
+        "repo",
+        ["y", "yes", "true", "enabled", true].includes(core.getInput("cache")),
     )
 }
