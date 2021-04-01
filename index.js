@@ -206,7 +206,7 @@ const run = async (
     }
     parseManifest(manifestPath)
         .then((manifest) => {
-            const modifiedManifest = modifyManifest(manifest, manifestPath, runTests)
+            const modifiedManifest = modifyManifest(manifest, runTests)
             return saveManifest(modifiedManifest, manifestPath)
         })
         .then((manifest) => {
