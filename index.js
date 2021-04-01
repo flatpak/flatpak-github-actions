@@ -107,10 +107,9 @@ const modifyManifest = (manifest, runTests = false) => {
             "test-args": testArgs,
             env: env,
         }
+        const module = manifest["modules"].slice(-1)[0]
+        module["run-tests"] = runTests
     }
-    const module = manifest["modules"].slice(-1)[0]
-    module["run-tests"] = runTests
-
     return manifest
 }
 
