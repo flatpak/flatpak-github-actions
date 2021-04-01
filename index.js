@@ -147,7 +147,7 @@ const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repo
     if (cacheBuildDir) {
         await cache.saveCache(
             CACHE_PATH,
-            cache_key,
+            cacheKey,
         )
     }
 
@@ -183,12 +183,12 @@ const run = async (
     cacheBuildDir,
 ) => {
     const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
-    const cache_key = `flatpak-builder-${manifestHash}`
+    const cacheKey = `flatpak-builder-${manifestHash}`
     // Restore the cache in case caching is enabled
     if (cacheBuildDir) {
         await cache.restoreCache(
             CACHE_PATH,
-            cache_key,
+            cacheKey,
             [
                 'flatpak-builder-',
                 'flatpak-',
@@ -201,7 +201,7 @@ const run = async (
             return saveManifest(modifiedManifest, manifestPath)
         })
         .then((manifest) => {
-            return build(manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName, cacheBuildDir, cache_key)
+            return build(manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName, cacheBuildDir, cacheKey)
         })
         .then(() => {
             core.info("Uploading artifact...")
