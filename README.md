@@ -39,7 +39,8 @@ jobs:
 | ---     | ----------- | ----------- |----|
 | `manifest-path` | The relative path of the manifest file  | Required | - |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
-| `runtime-repo` | The repository used to fetch the runtime when the user download the Flatpak bundle.  | Optional | Flathub |
+| `repository-name` | The repository name to fetch the runtime when building the application/user installs it.  | Optional | `flathub` |
+| `repository-url` | The repository url used to fetch the runtime when the user download the Flatpak bundle or when building the application.  | Optional | `https://flathub.org/repo/flathub.flatpakrepo` |
 | `run-tests` | Enable/Disable running tests.  | Optional | `false` |
 | `branch` | The default flatpak branch.  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
