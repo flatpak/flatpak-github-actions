@@ -119,22 +119,23 @@ const modifyManifest = (manifest, runTests = false) => {
  * @param {object} manifest A flatpak manifest
  * @param {object} manifestPath The flatpak manifest path
  * @param {string} bundle The bundle's name
- * @param {string} runtimeRepo The repository used to install the runtime from
+ * @param {string} repositoryUrl The repository used to install the runtime from
+ * @param {string} repositoryName The repository name used to install the runtime from
  * @param {string} buildDir Where to build the application
- * @param {string} repoName The flatpak repository name
+ * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string} cacheKey The key used to cache the build directory
  */
-const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName, cacheBuildDir, cacheKey) => {
+const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey) => {
     const appId = manifest["app-id"] || manifest["id"]
     const branch = manifest["branch"] || core.getInput("branch") || "master"
 
     core.info("Building the flatpak...")
 
     let args = [
-        `--repo=${repoName}`,
+        `--repo=${localRepoName}`,
         "--disable-rofiles-fuse",
-        "--install-deps-from=flathub",
+        `--install-deps-from=${repositoryName}`,
         "--force-clean",
     ]
     if (cacheBuildDir) {
@@ -155,9 +156,9 @@ const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repo
     core.info("Creating a bundle...")
     await exec.exec("flatpak", [
         "build-bundle",
-        repoName,
+        localRepoName,
         bundle,
-        `--runtime-repo=${runtimeRepo}`,
+        `--runtime-repo=${repositoryUrl}`,
         appId,
         branch,
     ])
@@ -169,18 +170,19 @@ const build = async (manifest, manifestPath, bundle, runtimeRepo, buildDir, repo
  * @param {object} manifestPath The flatpak manifest path
  * @param {boolean} runTests Whether to run tests or not
  * @param {string} bundle The bundle's name
- * @param {string} runtimeRepo The repository used to install the runtime from
+ * @param {string} repositoryUrl The repository used to install the runtime from
  * @param {string} buildDir Where to build the application
- * @param {string} repoName The flatpak repository name
+ * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  */
 const run = async (
     manifestPath,
     runTests,
     bundle,
-    runtimeRepo,
+    repositoryUrl,
+    repositoryName,
     buildDir,
-    repoName,
+    localRepoName,
     cacheBuildDir,
     cacheKey = undefined,
 ) => {
@@ -188,6 +190,12 @@ const run = async (
         const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
         cacheKey = `flatpak-builder-${manifestHash}`
     }
+
+    /// If the user has set a different runtime source
+    if (repositoryUrl !== "https://flathub.org/repo/flathub.flatpakrepo") {
+        await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
+    }
+
     // Restore the cache in case caching is enabled
     if (cacheBuildDir) {
         const cacheHitKey = await cache.restoreCache(
@@ -210,7 +218,7 @@ const run = async (
             return saveManifest(modifiedManifest, manifestPath)
         })
         .then((manifest) => {
-            return build(manifest, manifestPath, bundle, runtimeRepo, buildDir, repoName, cacheBuildDir, cacheKey)
+            return build(manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey)
         })
         .then(() => {
             core.info("Uploading artifact...")
@@ -239,7 +247,8 @@ if (require.main === module) {
         core.getInput("manifest-path"),
         ["y", "yes", "true", "enabled", true].includes(core.getInput("run-tests")),
         core.getInput("bundle") || "app.flatpak",
-        core.getInput("runtime-repo"),
+        core.getInput("repository-url"),
+        core.getInput("repository-name"),
         "flatpak_app",
         "repo",
         ["y", "yes", "true", "enabled", true].includes(core.getInput("cache")),

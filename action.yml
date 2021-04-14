@@ -12,12 +12,18 @@ inputs:
     description: "The bundle name, by default it's app.flatpak"
     required: false
     default: "app.flatpak"
-  runtime-repo:
+  repository-url:
     description: >
       The repository used to fetch the runtime when the user downloads the
       Flatpak bundle.
     required: false
     default: "https://flathub.org/repo/flathub.flatpakrepo"
+  repository-name:
+    description: >
+      The repository name to install the runtime from at build/install time.
+      Note that the repository name corresponds to the `repository-url` mentioned above.
+    required: false
+    default: "flathub"
   run-tests:
     description: >
       Toggles the run-tests config option on the defined flatpak-module.
