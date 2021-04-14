@@ -193,7 +193,7 @@ const run = async (
 
     /// If the user has set a different runtime source
     if (repositoryUrl !== "https://flathub.org/repo/flathub.flatpakrepo") {
-        await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
+        await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl, '-y'])
     }
 
     // Restore the cache in case caching is enabled
