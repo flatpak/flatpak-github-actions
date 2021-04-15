@@ -18,6 +18,12 @@ jobs:
           bundle: org.example.MyApp.Devel.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           cache-key: flatpak-builder-${{ github.sha }}
+      - uses: ./flat-manager
+        with:
+          repository: elementary
+          flat-manager-url: https://flatpak-api.elementary.io
+          token: some_very_hidden_token
+
   tests:
     name: Tests
     runs-on: ubuntu-latest
