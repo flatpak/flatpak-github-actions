@@ -1,7 +1,7 @@
 FROM fedora:latest
 
 RUN dnf update -y && \
-    dnf install -y flatpak flatpak-builder python3-aiohttp xorg-x11-server-Xvfb ccache zstd && \
+    dnf install -y flatpak flatpak-builder python3-aiohttp python3-tenacity xorg-x11-server-Xvfb ccache zstd && \
     dnf clean all
 
 RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
