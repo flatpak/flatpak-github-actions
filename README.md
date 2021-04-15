@@ -12,7 +12,6 @@ Build and deploy your Flatpak application using Github Actions
 
 ### Building stage
 
-
 Add a new workflow by creating a `.yml` file under `.github/workflows` with this content
 
 ```yaml
@@ -83,9 +82,21 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@master
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@master
       with:
         bundle: "palette.flatpak"
-        remote-url: "org.gnome.zbrown.Palette.yml"
-        token: ${{ secrets.FLAT_MANAGER }}
+        manifest-path: "org.gnome.zbrown.Palette.yml"
+    - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@master
+      with:
+        repository: elementary
+        flat-manager-url: https://flatpak-api.elementary.io
+        token: some_very_hidden_token
 ```
+
+#### Inputs
+
+| Name | Description | Required | Default |
+| ---     | ----------- | ----------- |----|
+| `repository` | The repository to push the build into  | Required | - |
+| `flat-manager-url` | The flat-manager remote URL  | Required | - |
+| `token` | A flat-manager token  | Required | - |
