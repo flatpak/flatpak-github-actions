@@ -1,0 +1,26 @@
+name: "flat-manager"
+description: "Deploy your Flatpak application to a repository"
+author: "Bilal Elmoussaoui"
+branding:
+  icon: "package"
+  color: "blue"
+inputs:
+  bundle:
+    description: "The bundle name, by default it's app.flatpak"
+    required: false
+    default: "app.flatpak"
+  repository-url:
+    description: >
+      The repository used to fetch the runtime when the user downloads the
+      Flatpak bundle.
+    required: false
+    default: "https://flathub.org/repo/flathub.flatpakrepo"
+  repository-name:
+    description: >
+      The repository name to install the runtime from at build/install time.
+      Note that the repository name corresponds to the `repository-url` mentioned above.
+    required: false
+    default: "flathub"
+runs:
+  using: "node12"
+  main: "dist/index.js"

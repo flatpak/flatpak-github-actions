@@ -82,6 +82,6 @@ jobs:
         with:
           allow: security.insecure
           context: docker
-          file: docker/${{ matrix.runtime.name }}.Dockerfile
+          file: flatpak-builder/docker/${{ matrix.runtime.name }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}

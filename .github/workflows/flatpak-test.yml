@@ -13,10 +13,10 @@ jobs:
       options: --privileged
     steps:
       - uses: actions/checkout@v2
-      - uses: bilelmoussaoui/flatpak-github-actions@master
+      - uses: ./flatpak-builder
         with:
           bundle: org.example.MyApp.Devel.flatpak
-          manifest-path: ./tests/test-project/org.example.MyApp.yaml
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           cache-key: flatpak-builder-${{ github.sha }}
   tests:
     name: Tests
@@ -31,4 +31,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install --also=dev
+        working-directory: flatpak-builder
       - run: npm test
+        working-directory: flatpak-builder
