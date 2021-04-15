@@ -12,40 +12,44 @@ const exec = __webpack_require__(922)
 const LOCAL_REPO_NAME = "repo" 
 
 
-const run = async (repository, flatManagerUrl, token) => {
-    await exec.exec('flatpak', [
+const run = (repository, flatManagerUrl, token) => {
+    exec.exec('flatpak', [
         'build-update-repo',
         '--generate-static-deltas',
         LOCAL_REPO_NAME,
     ])
-
-    const buildId = await exec.exec('flat-manager-client', [
-        'create',
-        flatManagerUrl,
-        repository,
-        '--token',
-        token
-    ])
-
-    exec.exec('flat-manager-client', [
-        'push', 
-        '--commit',
-        '--publish',
-        '--wait',
-        '--token',
-        token,        
-        buildId,
-        LOCAL_REPO_NAME,
-    ]).then(() => {
-        core.info(`Build published successfully: ${buildId}`)
-    }).catch((err) => {
-        core.setFailed(`Failed to commit the build: ${err}`)
+    .then(async () => {
+        const buildId = await exec.exec('flat-manager-client', [
+            'create',
+            flatManagerUrl,
+            repository,
+            '--token',
+            token
+        ])
+        return buildId
     })
-    
-    await exec.exec('flat-manager-client', [
-        'purge',
-        buildId,
-    ])
+    .then(async (buildId) => {
+        await exec.exec('flat-manager-client', [
+            'push', 
+            '--commit',
+            '--publish',
+            '--wait',
+            '--token',
+            token,        
+            buildId,
+            LOCAL_REPO_NAME,
+        ])
+        return buildId
+    })
+    .then(async (buildId) => {
+        await exec.exec('flat-manager-client', [
+            'purge',
+            buildId,
+        ])
+    })
+    .catch((err) => {
+        core.setFailed(`Failed to publish the build: ${err}`)
+    })
 }
 
 if (require.main === require.cache[eval('__filename')]) {
