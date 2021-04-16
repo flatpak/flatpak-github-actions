@@ -21,8 +21,8 @@ on:
   pull_request:
 name: CI
 jobs:
-  flatpak-builder:
-    name: "Flatpak Builder"
+  flatpak:
+    name: "Flatpak"
     runs-on: ubuntu-latest
     container:
       image: bilelmoussaoui/flatpak-github-actions:gnome-40
@@ -74,8 +74,8 @@ on:
     branches: [main]
 name: Deploy
 jobs:
-  flat-manager:
-    name: "Flat Manager"
+  flatpak:
+    name: "Flatpak"
     runs-on: ubuntu-latest
     container:
       image: bilelmoussaoui/flatpak-github-actions:gnome-40
@@ -83,10 +83,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@master
+      name: "Build"
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
     - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@master
+      name: "Deploy"
       with:
         repository: elementary
         flat-manager-url: https://flatpak-api.elementary.io
