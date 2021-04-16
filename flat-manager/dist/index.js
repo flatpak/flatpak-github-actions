@@ -20,22 +20,22 @@ const run = (repository, flatManagerUrl, token) => {
     ])
     .then(async () => {
         const buildId = await exec.exec('flat-manager-client', [
+            '--token',
+            token,
             'create',
             flatManagerUrl,
             repository,
-            '--token',
-            token
         ])
         return buildId
     })
     .then(async (buildId) => {
         await exec.exec('flat-manager-client', [
+            '--token',
+            token,
             'push', 
             '--commit',
             '--publish',
-            '--wait',
-            '--token',
-            token,        
+            '--wait', 
             buildId,
             LOCAL_REPO_NAME,
         ])
