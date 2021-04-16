@@ -1,5 +1,5 @@
 name: "Flatpak Builder"
-description: "Flatpak Applications Builder"
+description: "Build and create a bundle from a Flatpak manifest"
 author: "Bilal Elmoussaoui"
 branding:
   icon: "package"
@@ -42,7 +42,7 @@ inputs:
       Defaults to flatpak-builder-${sha256(manifestPath)}
     required: false
   branch:
-    description: The flatpak branch
+    description: The flatpak branch.
     default: "master"
     required: false
 runs:

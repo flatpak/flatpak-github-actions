@@ -1,4 +1,4 @@
-name: "flat-manager"
+name: "Flatpak Manager"
 description: "Deploy your Flatpak application to a repository"
 author: "Bilal Elmoussaoui"
 branding:
@@ -15,7 +15,7 @@ inputs:
     required: true
   token:
     description: >
-      A flat-manager token to publish into the repository
+      A flat-manager token to publish into the repository.
     required: true
 runs:
   using: "node12"
