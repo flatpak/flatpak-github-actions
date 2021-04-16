@@ -90,7 +90,7 @@ jobs:
 ### Docker Image
 
 The Docker image used for the action consists of 2 parts: The base image, based on Fedora and which can be found
-[here](docker/Dockerfile), and the specific image of the runtime you choose, which is generated through
+[here](./Dockerfile), and the specific image of the runtime you choose, which is generated through
 [this](.github/workflows/docker.yml) GitHub Actions workflow.
 
 You can specify the specific runtime you need to use through the image tags:
