@@ -41,28 +41,12 @@ jobs:
 | ---     | ----------- | ----------- |----|
 | `manifest-path` | The relative path of the manifest file  | Required | - |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
-| `repository-name` | The repository name to fetch the runtime when building the application/user installs it.  | Optional | `flathub` |
-| `repository-url` | The repository url used to fetch the runtime when the user download the Flatpak bundle or when building the application.  | Optional | `https://flathub.org/repo/flathub.flatpakrepo` |
-| `run-tests` | Enable/Disable running tests.  | Optional | `false` |
-| `branch` | The default flatpak branch.  | Optional | `master` |
+| `repository-name` | The repository name, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `flathub` |
+| `repository-url` | The repository url, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `https://flathub.org/repo/flathub.flatpakrepo` |
+| `run-tests` | Enable/Disable running tests  | Optional | `false` |
+| `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
 | `cache-key` | Specifies the cache key | Optional | `flatpak-builder-${sha256(manifestPath)}` |
-
-#### Docker Image
-
-The Docker image used for the action consists of 2 parts: The base image, based on Fedora and which can be found
-[here](docker/Dockerfile), and the specific image of the runtime you choose, which is generated through
-[this](.github/workflows/docker.yml) GitHub Actions workflow.
-
-You can specify the specific runtime you need to use through the image tags:
-
-| Runtime         | Version | Tag                 | Example                                                          |
-| --------------- | ------- | ------------------- | ---------------------------------------------------------------- |
-| Freedesktop SDK | 20.08   | `freedesktop-20.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-20.08` |
-| GNOME           | 3.38    | `gnome-3.38`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-3.38`        |
-| GNOME           | 40    | `gnome-40`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-40`        |
-| KDE             | 5.15    | `kde-5.15`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15`          |
-| elementary BaseApp             | juno    | `juno`          | `image: bilelmoussaoui/flatpak-github-actions:elementary-juno`          |
 
 ### Deployment stage
 
@@ -102,3 +86,19 @@ jobs:
 | `repository` | The repository to push the build into  | Required | - |
 | `flat-manager-url` | The flat-manager remote URL  | Required | - |
 | `token` | A flat-manager token  | Required | - |
+
+### Docker Image
+
+The Docker image used for the action consists of 2 parts: The base image, based on Fedora and which can be found
+[here](docker/Dockerfile), and the specific image of the runtime you choose, which is generated through
+[this](.github/workflows/docker.yml) GitHub Actions workflow.
+
+You can specify the specific runtime you need to use through the image tags:
+
+| Runtime         | Version | Tag                 | Example                                                          |
+| --------------- | ------- | ------------------- | ---------------------------------------------------------------- |
+| Freedesktop SDK | 20.08   | `freedesktop-20.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-20.08` |
+| GNOME           | 3.38    | `gnome-3.38`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-3.38`        |
+| GNOME           | 40    | `gnome-40`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-40`        |
+| KDE             | 5.15    | `kde-5.15`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15`          |
+| elementary BaseApp             | juno    | `juno`          | `image: bilelmoussaoui/flatpak-github-actions:elementary-juno`          |
