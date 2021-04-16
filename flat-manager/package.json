@@ -1,10 +1,17 @@
 {
   "name": "flat-manager",
-  "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/exec": "^1.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "jest": "^26.6.1"
   }
 }
