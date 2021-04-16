@@ -18,11 +18,12 @@ jobs:
           bundle: org.example.MyApp.Devel.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           cache-key: flatpak-builder-${{ github.sha }}
-      - uses: ./flat-manager
-        with:
-          repository: elementary
-          flat-manager-url: https://flatpak-api.elementary.io
-          token: some_very_hidden_token
+      # TODO: setup a flat-manager before and use it later here
+      #- uses: ./flat-manager
+      #  with:
+      #    repository: elementary
+      #    flat-manager-url: https://flatpak-api.elementary.io
+      #    token: some_very_hidden_token
 
   tests:
     name: Tests
@@ -36,7 +37,25 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install --also=dev
+      - run: yarn install --also=dev
         working-directory: flatpak-builder
-      - run: npm test
+      - run: yarn test
         working-directory: flatpak-builder
+
+  eslint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+      - run: yarn install --also=dev
+        working-directory: flatpak-builder
+      - run: yarn run eslint .
+        working-directory: flatpak-builder
+      - run: yarn install --also=dev
+        working-directory: flat-manager
+      - run: yarn run eslint .
+        working-directory: flat-manager

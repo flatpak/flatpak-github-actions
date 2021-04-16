@@ -9,56 +9,56 @@ const core = __webpack_require__(699)
 const exec = __webpack_require__(922)
 
 // FIXME: get this from the outputs of the flatpak-builder action
-const LOCAL_REPO_NAME = "repo" 
-
+const LOCAL_REPO_NAME = 'repo'
 
 const run = (repository, flatManagerUrl, token) => {
-    exec.exec('flatpak', [
-        'build-update-repo',
-        '--generate-static-deltas',
-        LOCAL_REPO_NAME,
-    ])
+  exec.exec('flatpak', [
+    'build-update-repo',
+    '--generate-static-deltas',
+    LOCAL_REPO_NAME
+  ])
     .then(async () => {
-        const buildId = await exec.exec('flat-manager-client', [
-            '--token',
-            token,
-            'create',
-            flatManagerUrl,
-            repository,
-        ])
-        return buildId
+      const buildId = await exec.exec('flat-manager-client', [
+        '--token',
+        token,
+        'create',
+        flatManagerUrl,
+        repository
+      ])
+      return buildId
     })
     .then(async (buildId) => {
-        await exec.exec('flat-manager-client', [
-            '--token',
-            token,
-            'push', 
-            '--commit',
-            '--publish',
-            '--wait', 
-            buildId,
-            LOCAL_REPO_NAME,
-        ])
-        return buildId
+      await exec.exec('flat-manager-client', [
+        '--token',
+        token,
+        'push',
+        '--commit',
+        '--publish',
+        '--wait',
+        buildId,
+        LOCAL_REPO_NAME
+      ])
+      return buildId
     })
     .then(async (buildId) => {
-        await exec.exec('flat-manager-client', [
-            'purge',
-            buildId,
-        ])
+      await exec.exec('flat-manager-client', [
+        'purge',
+        buildId
+      ])
     })
     .catch((err) => {
-        core.setFailed(`Failed to publish the build: ${err}`)
+      core.setFailed(`Failed to publish the build: ${err}`)
     })
 }
 
 if (require.main === require.cache[eval('__filename')]) {
-    run(
-        core.getInput('repository'),
-        core.getInput('flat-manager-url'),
-        core.getInput('token')
-    )
+  run(
+    core.getInput('repository'),
+    core.getInput('flat-manager-url'),
+    core.getInput('token')
+  )
 }
+
 
 /***/ }),
 
