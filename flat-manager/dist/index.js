@@ -18,13 +18,23 @@ const run = (repository, flatManagerUrl, token) => {
     LOCAL_REPO_NAME
   ])
     .then(async () => {
-      const buildId = await exec.exec('flat-manager-client', [
+      let buildId = ''
+      const exitCode = await exec.exec('flat-manager-client', [
         '--token',
         token,
         'create',
         flatManagerUrl,
         repository
-      ])
+      ], {
+        listeners: {
+          stdout: (data) => {
+            buildId += data.toString()
+          }
+        }
+      })
+      if (exitCode !== 0) {
+        throw Error('flat-manager-client failed to create a new build')
+      }
       return buildId
     })
     .then(async (buildId) => {
