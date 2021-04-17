@@ -165,32 +165,18 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
 }
 
 /**
- * Run a complete build
+ * Initialize the build
+ * It consists mostly of setting up the flatpak remote if one other than the default is set
+ * along with restoring the cache from the latest build
  *
- * @param {object} manifestPath The flatpak manifest path
- * @param {boolean} runTests Whether to run tests or not
- * @param {string} bundle The bundle's name
- * @param {string} repositoryUrl The repository used to install the runtime from
- * @param {string} buildDir Where to build the application
- * @param {string} localRepoName The flatpak repository name
- * @param {boolean} cacheBuildDir Whether to enable caching the build directory
+ * @param {string} repositoryName the repository name to install the runtime from
+ * @param {string} repositoryUrl the repository url
+ * @param {PathLike} manifestPath the manifest path
+ * @param {Boolean} cacheBuildDir whether to cache the build dir or not
+ * @param {string | undefined} cacheKey the default cache key if there are any
+ * @returns {Promise<String>} the new cacheKey if none was set before
  */
-const run = async (
-  manifestPath,
-  runTests,
-  bundle,
-  repositoryUrl,
-  repositoryName,
-  buildDir,
-  localRepoName,
-  cacheBuildDir,
-  cacheKey = undefined
-) => {
-  if (cacheKey === undefined) {
-    const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
-    cacheKey = `flatpak-builder-${manifestHash}`
-  }
-
+const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey = undefined) => {
   /// If the user has set a different runtime source
   if (repositoryUrl !== 'https://flathub.org/repo/flathub.flatpakrepo') {
     await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
@@ -198,6 +184,11 @@ const run = async (
 
   // Restore the cache in case caching is enabled
   if (cacheBuildDir) {
+    if (cacheKey === undefined) {
+      const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
+      cacheKey = `flatpak-builder-${manifestHash}`
+    }
+
     const cacheHitKey = await cache.restoreCache(
       CACHE_PATH,
       cacheKey,
@@ -212,6 +203,39 @@ const run = async (
       core.info('No cache was found')
     }
   }
+  return cacheKey
+}
+
+/**
+ * Run a complete build
+ *
+ * @param {object} manifestPath The flatpak manifest path
+ * @param {boolean} runTests Whether to run tests or not
+ * @param {string} bundle The bundle's name
+ * @param {string} repositoryUrl The repository used to install the runtime from
+ * @param {string} repositoryName the repository name to install the runtime from
+ * @param {string} buildDir Where to build the application
+ * @param {string} localRepoName The flatpak repository name
+ * @param {boolean} cacheBuildDir Whether to enable caching the build directory
+ * @param {string | undefined} cacheKey the default cache key if there are any
+ */
+const run = async (
+  manifestPath,
+  runTests,
+  bundle,
+  repositoryUrl,
+  repositoryName,
+  buildDir,
+  localRepoName,
+  cacheBuildDir,
+  cacheKey = undefined
+) => {
+  try {
+    cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey)
+  } catch (err) {
+    core.setFailed(`Failed to prepare the build ${err}`)
+  }
+
   parseManifest(manifestPath)
     .then((manifest) => {
       const modifiedManifest = modifyManifest(manifest, runTests)
