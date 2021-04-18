@@ -28,7 +28,7 @@ const run = (repository, flatManagerUrl, token) => {
       ], {
         listeners: {
           stdout: (data) => {
-            buildId += data.toString()
+            buildId += data.toString().trim()
           }
         }
       })
