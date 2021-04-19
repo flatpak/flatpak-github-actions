@@ -52,6 +52,8 @@ const run = (repository, flatManagerUrl, token) => {
     })
     .then(async (buildId) => {
       await exec.exec('flat-manager-client', [
+        '--token',
+        token,
         'purge',
         buildId
       ])
