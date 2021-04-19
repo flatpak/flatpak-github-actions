@@ -29,7 +29,7 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@master
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v3
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
@@ -66,12 +66,12 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@master
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v3
       name: "Build"
       with:
         bundle: "palette.flatpak"
         manifest-path: "org.gnome.zbrown.Palette.yml"
-    - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@master
+    - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@v3
       name: "Deploy"
       with:
         repository: elementary
