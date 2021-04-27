@@ -31,8 +31,9 @@ jobs:
     - uses: actions/checkout@v2
     - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v3
       with:
-        bundle: "palette.flatpak"
-        manifest-path: "org.gnome.zbrown.Palette.yml"
+        bundle: palette.flatpak
+        manifest-path: org.gnome.zbrown.Palette.yml
+        cache-key: flatpak-builder-${{ github.sha }}
 ```
 
 #### Inputs
@@ -69,8 +70,9 @@ jobs:
     - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v3
       name: "Build"
       with:
-        bundle: "palette.flatpak"
-        manifest-path: "org.gnome.zbrown.Palette.yml"
+        bundle: palette.flatpak
+        manifest-path: org.gnome.zbrown.Palette.yml
+        cache-key: flatpak-builder-${{ github.sha }}
     - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@v3
       name: "Deploy"
       with:
