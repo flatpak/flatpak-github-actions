@@ -136,7 +136,8 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
         `--repo=${localRepoName}`,
         '--disable-rofiles-fuse',
         `--install-deps-from=${repositoryName}`,
-        '--force-clean'
+        '--force-clean',
+        `--default-branch=${branch}`
   ]
   if (cacheBuildDir) {
     args.push('--ccache')
