@@ -57,7 +57,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           context: docker
-          file: docker/Dockerfile
+          file: Dockerfile
           pull: true
           push: true
           tags: localhost:5000/fedora-base:latest
