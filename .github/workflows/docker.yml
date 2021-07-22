@@ -69,7 +69,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Write the Dockerfile for the ${{ matrix.runtime.name }} runtime
-        working-directory: docker
         run: |
           cat >> ${{ matrix.runtime.name }}.Dockerfile << EOF
           # syntax = docker/dockerfile:experimental
