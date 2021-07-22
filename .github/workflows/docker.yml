@@ -56,7 +56,6 @@ jobs:
         with:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-          context: docker
           file: Dockerfile
           pull: true
           push: true
@@ -80,7 +79,6 @@ jobs:
         uses: docker/build-push-action@v2.2.2
         with:
           allow: security.insecure
-          context: docker
           file: ${{ matrix.runtime.name }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
