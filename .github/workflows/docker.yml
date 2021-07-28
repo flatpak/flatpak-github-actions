@@ -59,7 +59,7 @@ jobs:
         with:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-          context: docker
+          context: .
           file: Dockerfile
           pull: true
           push: true
@@ -72,7 +72,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Write the Dockerfile for the ${{ matrix.runtime.name }} runtime
-        working-directory: docker
         run: |
           cat >> ${{ matrix.runtime.name }}.Dockerfile << EOF
           # syntax = docker/dockerfile:experimental
@@ -84,7 +83,7 @@ jobs:
         uses: docker/build-push-action@v2.2.2
         with:
           allow: security.insecure
-          context: docker
+          context: .
           file: ${{ matrix.runtime.name }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
