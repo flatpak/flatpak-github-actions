@@ -8,7 +8,7 @@ Build and deploy your Flatpak application using Github Actions
   <img src="https://user-images.githubusercontent.com/15098724/55282117-f8253380-52fa-11e9-95a3-ccae83b23034.png" alt="Flatpak logo" />
 </p>
 
-## How to use  
+## How to use
 
 ### Building stage
 
@@ -48,6 +48,50 @@ jobs:
 | `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
 | `cache-key` | Specifies the cache key | Optional | `flatpak-builder-${sha256(manifestPath)}` |
+| `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
+
+#### Building for multiple CPU architectures
+
+To build for CPU architectures other than `x86_64`, the GitHub Actions workflow has to either natively be running on that architecture (e.g. on an `aarch64` self-hosted GitHub Actions runner), or the container used must be configured to emulate the requested architecture (e.g. with QEMU).
+
+For example, to built a Flatpak for both `x86_64` and `aarch64` using emulation, use the following workflow as a guide:
+
+```yaml
+on:
+  push:
+    branches: [main]
+  pull_request:
+name: CI
+jobs:
+  flatpak:
+    name: "Flatpak"
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
+    strategy:
+      matrix:
+        arch: [x86_64, aarch64]
+      # Don't fail the whole workflow if one architecture fails
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v2
+    # Docker is required by the docker/setup-qemu-action which enables emulation
+    - name: Install deps
+      run: |
+        dnf -y install docker
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+      with:
+        platforms: arm64
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
+      with:
+        bundle: palette.flatpak
+        manifest-path: org.gnome.zbrown.Palette.yml
+        cache-key: flatpak-builder-${{ github.sha }}
+        arch: ${{ matrix.arch }}
+```
 
 ### Deployment stage
 
