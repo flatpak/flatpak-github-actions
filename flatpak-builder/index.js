@@ -125,8 +125,9 @@ const modifyManifest = (manifest, runTests = false) => {
  * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string} cacheKey The key used to cache the build directory
+ * @param {string} arch The CPU architecture to build for
  */
-const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey) => {
+const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || core.getInput('branch') || 'master'
 
@@ -137,7 +138,8 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
         '--disable-rofiles-fuse',
         `--install-deps-from=${repositoryName}`,
         '--force-clean',
-        `--default-branch=${branch}`
+        `--default-branch=${branch}`,
+        `--arch=${arch}`
   ]
   if (cacheBuildDir) {
     args.push('--ccache')
@@ -160,6 +162,7 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
     localRepoName,
     bundle,
         `--runtime-repo=${repositoryUrl}`,
+        `--arch=${arch}`,
         appId,
         branch
   ])
@@ -175,9 +178,10 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
  * @param {PathLike} manifestPath the manifest path
  * @param {Boolean} cacheBuildDir whether to cache the build dir or not
  * @param {string | undefined} cacheKey the default cache key if there are any
+ * @param {string} arch The CPU architecture to build for
  * @returns {Promise<String>} the new cacheKey if none was set before
  */
-const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey = undefined) => {
+const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey = undefined, arch) => {
   /// If the user has set a different runtime source
   if (repositoryUrl !== 'https://flathub.org/repo/flathub.flatpakrepo') {
     await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
@@ -204,7 +208,8 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
       core.info('No cache was found')
     }
   }
-  return cacheKey
+  // Ensure the cache key is unique if we're building multiple architectures in the same job
+  return `${cacheKey}-${arch}`
 }
 
 /**
@@ -219,6 +224,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string | undefined} cacheKey the default cache key if there are any
+ * @param {string} arch The CPU architecture to build for
  */
 const run = async (
   manifestPath,
@@ -229,10 +235,11 @@ const run = async (
   buildDir,
   localRepoName,
   cacheBuildDir,
-  cacheKey = undefined
+  cacheKey = undefined,
+  arch
 ) => {
   try {
-    cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey)
+    cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch)
   } catch (err) {
     core.setFailed(`Failed to prepare the build ${err}`)
   }
@@ -243,13 +250,15 @@ const run = async (
       return saveManifest(modifiedManifest, manifestPath)
     })
     .then((manifest) => {
-      return build(manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey)
+      return build(manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch)
     })
     .then(() => {
       core.info('Uploading artifact...')
       const artifactClient = artifact.create()
 
-      return artifactClient.uploadArtifact(bundle.replace('.flatpak', ''), [bundle], '.', {
+      // Append the arch to the bundle name to prevent conflicts in multi-arch jobs
+      const bundleName = bundle.replace('.flatpak', '') + `-${arch}`
+      return artifactClient.uploadArtifact(bundleName, [bundle], '.', {
         continueOnError: false
       })
     })
@@ -277,6 +286,7 @@ if (require.main === module) {
     'flatpak_app',
     'repo',
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('cache')),
-    core.getInput('cache-key')
+    core.getInput('cache-key'),
+    core.getInput('arch')
   )
 }

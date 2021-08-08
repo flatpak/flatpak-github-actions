@@ -32,7 +32,7 @@ inputs:
     required: false
   cache:
     description: >
-      Toggles caching the flatpak-builder directory. 
+      Toggles caching the flatpak-builder directory.
       Possible values: true, enabled, yes, y. Or something else to disable it.
     default: "true"
     required: false
@@ -44,6 +44,11 @@ inputs:
   branch:
     description: The flatpak branch.
     default: "master"
+    required: false
+  arch:
+    description: >
+      The CPU architecture to build for.
+    default: "x86_64"
     required: false
 runs:
   using: "node12"
