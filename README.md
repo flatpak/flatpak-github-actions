@@ -54,7 +54,7 @@ jobs:
 
 To build for CPU architectures other than `x86_64`, the GitHub Actions workflow has to either natively be running on that architecture (e.g. on an `aarch64` self-hosted GitHub Actions runner), or the container used must be configured to emulate the requested architecture (e.g. with QEMU).
 
-For example, to built a Flatpak for both `x86_64` and `aarch64` using emulation, use the following workflow as a guide:
+For example, to build a Flatpak for both `x86_64` and `aarch64` using emulation, use the following workflow as a guide:
 
 ```yaml
 on:
