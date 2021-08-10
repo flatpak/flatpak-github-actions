@@ -11,13 +11,27 @@ jobs:
     container:
       image: bilelmoussaoui/flatpak-github-actions:gnome-40
       options: --privileged
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64, aarch64]
     steps:
       - uses: actions/checkout@v2
+      - name: Install QEMU deps
+        if: ${{ matrix.arch != 'x86_64' }}
+        run: |
+          dnf -y install docker
+      - name: Set up QEMU
+        if: ${{ matrix.arch != 'x86_64' }}
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: arm64
       - uses: ./flatpak-builder
         with:
           bundle: org.example.MyApp.Devel.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           cache-key: flatpak-builder-${{ github.sha }}
+          arch: ${{ matrix.arch }}
       # TODO: setup a flat-manager before and use it later here
       #- uses: ./flat-manager
       #  with:
