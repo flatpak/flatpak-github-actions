@@ -196,7 +196,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
 
     const cacheHitKey = await cache.restoreCache(
       CACHE_PATH,
-      cacheKey,
+      `${cacheKey}-${arch}`,
       [
         'flatpak-builder-',
         'flatpak-'
