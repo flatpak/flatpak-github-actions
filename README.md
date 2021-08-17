@@ -47,7 +47,7 @@ jobs:
 | `run-tests` | Enable/Disable running tests  | Optional | `false` |
 | `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
-| `cache-key` | Specifies the cache key | Optional | `flatpak-builder-${sha256(manifestPath)}` |
+| `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${sha256(manifestPath)}` |
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 
 #### Building for multiple CPU architectures
