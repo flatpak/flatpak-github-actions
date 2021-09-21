@@ -177,11 +177,11 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
  * @param {string} repositoryUrl the repository url
  * @param {PathLike} manifestPath the manifest path
  * @param {Boolean} cacheBuildDir whether to cache the build dir or not
- * @param {string | undefined} cacheKey the default cache key if there are any
+ * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
  * @returns {Promise<String>} the new cacheKey if none was set before
  */
-const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey = undefined, arch) => {
+const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch) => {
   /// If the user has set a different runtime source
   if (repositoryUrl !== 'https://flathub.org/repo/flathub.flatpakrepo') {
     await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
@@ -189,7 +189,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
 
   // Restore the cache in case caching is enabled
   if (cacheBuildDir) {
-    if (cacheKey === undefined) {
+    if (!cacheKey) {
       const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
       cacheKey = `flatpak-builder-${manifestHash}`
     }
@@ -223,7 +223,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * @param {string} buildDir Where to build the application
  * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
- * @param {string | undefined} cacheKey the default cache key if there are any
+ * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
  */
 const run = async (
@@ -235,7 +235,7 @@ const run = async (
   buildDir,
   localRepoName,
   cacheBuildDir,
-  cacheKey = undefined,
+  cacheKey,
   arch
 ) => {
   try {
