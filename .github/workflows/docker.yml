@@ -28,6 +28,10 @@ jobs:
           - name: gnome-40
             packages: org.gnome.Platform//40 org.gnome.Sdk//40
             remote: flathub
+
+          - name: gnome-41
+            packages: org.gnome.Platform//41 org.gnome.Sdk//41
+            remote: flathub
             
           - name: gnome-nightly
             packages: org.gnome.Platform//master org.gnome.Sdk//master
