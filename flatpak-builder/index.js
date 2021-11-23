@@ -114,6 +114,19 @@ const modifyManifest = (manifest, runTests = false) => {
 }
 
 /**
+ * Gets the modified manifest as a YAML or JSON file
+ *
+ * @param {PathLike} manifestPath Where to save the flatpak manifest
+ * @returns {PathLike} the manifest
+ */
+const getModifiedManifestPath = manifestPath => {
+  return path.join(
+    path.dirname(manifestPath),
+    `flatpak-github-action-modified-${path.basename(manifestPath)}`
+  )
+}
+
+/**
  * Build the flatpak & create a bundle from the build
  *
  * @param {object} manifest A flatpak manifest
@@ -244,13 +257,14 @@ const run = async (
     core.setFailed(`Failed to prepare the build ${err}`)
   }
 
+  const modifiedManifestPath = getModifiedManifestPath(manifestPath)
   parseManifest(manifestPath)
     .then((manifest) => {
       const modifiedManifest = modifyManifest(manifest, runTests)
-      return saveManifest(modifiedManifest, manifestPath)
+      return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch)
+      return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch)
     })
     .then(() => {
       core.info('Uploading artifact...')
