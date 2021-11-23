@@ -4,12 +4,34 @@ const exec = require('@actions/exec')
 // FIXME: get this from the outputs of the flatpak-builder action
 const LOCAL_REPO_NAME = 'repo'
 
-const run = (repository, flatManagerUrl, token) => {
-  exec.exec('flatpak', [
-    'build-update-repo',
-    '--generate-static-deltas',
-    LOCAL_REPO_NAME
-  ])
+const validateFlathubProfile = async (repository, flatManagerUrl, token) => {
+  // TODO
+}
+
+const PROFILES = {
+  'flathub': validateFlathubProfile,
+}
+
+const validateProfile = async (repository, flatManagerUrl, token, profile) => {
+  if (!profile)
+    return Promise.resolve()
+
+  if (!PROFILES[profile])
+    throw Error(`Unknown profile ${profile}`)
+
+  const validateFunc = PROFILES[profile]
+  return validateFunc(repository, flatManagerUrl, token)
+}
+
+const run = (repository, flatManagerUrl, token, profile) => {
+  validateProfile(repository, flatManagerUrl, token, profile)
+    .then(async () => {
+      await exec.exec('flatpak', [
+        'build-update-repo',
+        '--generate-static-deltas',
+        LOCAL_REPO_NAME
+      ])
+    })
     .then(async () => {
       let buildId = ''
       const exitCode = await exec.exec('flat-manager-client', [
@@ -60,6 +82,7 @@ if (require.main === module) {
   run(
     core.getInput('repository'),
     core.getInput('flat-manager-url'),
-    core.getInput('token')
+    core.getInput('token'),
+    core.getInput('profile')
   )
 }

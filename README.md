@@ -126,6 +126,39 @@ jobs:
         token: some_very_hidden_token
 ```
 
+If you want to deploy to repositories that require validation, such as Flathub,
+use the `profile` option:
+
+```yaml
+on:
+  push:
+    branches: [main]
+name: Deploy
+jobs:
+  flatpak:
+    name: "Flatpak"
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
+    steps:
+    - uses: actions/checkout@v2
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
+      name: "Build"
+      with:
+        bundle: palette.flatpak
+        manifest-path: org.gnome.zbrown.Palette.yml
+        cache-key: flatpak-builder-${{ github.sha }}
+        mirror-screenshots-url: https://dl.flathub.org/repo/screenshots
+    - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@v3
+      name: "Deploy"
+      with:
+        repository: beta
+        flat-manager-url: https://hub.flathub.org
+        token: some_very_hidden_token
+        profile: flathub
+```
+
 #### Inputs
 
 | Name | Description | Required | Default |
@@ -133,6 +166,7 @@ jobs:
 | `repository` | The repository to push the build into  | Required | - |
 | `flat-manager-url` | The flat-manager remote URL  | Required | - |
 | `token` | A flat-manager token  | Required | - |
+| `profile` | A profile to validate against. Accepted values: `flathub`  | Optional | - |
 
 ### Docker Image
 
