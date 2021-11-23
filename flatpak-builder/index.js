@@ -139,8 +139,9 @@ const getModifiedManifestPath = manifestPath => {
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string} cacheKey The key used to cache the build directory
  * @param {string} arch The CPU architecture to build for
+ * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
  */
-const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch) => {
+const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || core.getInput('branch') || 'master'
 
@@ -156,6 +157,9 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
   ]
   if (cacheBuildDir) {
     args.push('--ccache')
+  }
+  if (mirrorScreenshotsUrl) {
+    args.push(`--mirror-screenshots-url=${mirrorScreenshotsUrl}`)
   }
   args.push(buildDir, manifestPath)
 
@@ -238,6 +242,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
+ * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
  */
 const run = async (
   manifestPath,
@@ -249,7 +254,8 @@ const run = async (
   localRepoName,
   cacheBuildDir,
   cacheKey,
-  arch
+  arch,
+  mirrorScreenshotsUrl
 ) => {
   try {
     cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch)
@@ -264,7 +270,7 @@ const run = async (
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch)
+      return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
     })
     .then(() => {
       core.info('Uploading artifact...')
@@ -301,6 +307,7 @@ if (require.main === module) {
     'repo',
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('cache')),
     core.getInput('cache-key'),
-    core.getInput('arch')
+    core.getInput('arch'),
+    core.getInput('mirror-screenshots-url')
   )
 }
