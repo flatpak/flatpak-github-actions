@@ -50,6 +50,10 @@ inputs:
       The CPU architecture to build for.
     default: "x86_64"
     required: false
+  mirror-screenshots-url:
+    description: >
+      The URL to mirror screenshots.
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
