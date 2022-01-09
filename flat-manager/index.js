@@ -19,12 +19,14 @@ const run = (repository, flatManagerUrl, token) => {
 
       if (end_of_life) {
         args.push_back(`--end-of-life=${end_of_life}`)
+      }
 
-        if (end_of_life_rebase) {
-          args.push_back(`--end-of-life-rebase=${end_of_life_rebase}`)
-        } else {
+      if (end_of_life_rebase) {
+        if (!end_of_life) {
           throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
         }
+
+        args.push_back(`--end-of-life-rebase=${end_of_life_rebase}`)
       }
 
       args = args.concat([
