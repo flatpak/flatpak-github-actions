@@ -4,7 +4,7 @@ const exec = require('@actions/exec')
 // FIXME: get this from the outputs of the flatpak-builder action
 const LOCAL_REPO_NAME = 'repo'
 
-const run = (repository, flatManagerUrl, token) => {
+const run = (repository, flatManagerUrl, token, endOfLife, endOfLifeRebase) => {
   exec.exec('flatpak', [
     'build-update-repo',
     '--generate-static-deltas',
@@ -17,12 +17,12 @@ const run = (repository, flatManagerUrl, token) => {
         token  
       ]
 
-      if (endOfLive) {
-        args.push_back(`--end-of-life=${endOfLive}`)
+      if (endOfLife) {
+        args.push_back(`--end-of-life=${endOfLife}`)
       }
 
       if (endOfLifeRebase) {
-        if (!endOfLive) {
+        if (!endOfLife) {
           throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
         }
 
