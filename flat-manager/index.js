@@ -12,13 +12,25 @@ const run = (repository, flatManagerUrl, token) => {
   ])
     .then(async () => {
       let buildId = ''
-      const exitCode = await exec.exec('flat-manager-client', [
+      let args = [
         '--token',
-        token,
+        token        
+      ]
+
+      if (end_of_life && end_of_life_rebase) {
+        args = args.concat([
+          `--end-of-life=${end_of_life}`,
+          `--end-of-life-rebase=${end_of_life_rebase}`
+        ])
+      }
+
+      args = args.concat([
         'create',
         flatManagerUrl,
         repository
-      ], {
+      ])
+
+      const exitCode = await exec.exec('flat-manager-client', args, {
         listeners: {
           stdout: (data) => {
             buildId += data.toString().trim()
