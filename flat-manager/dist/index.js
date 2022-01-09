@@ -2983,19 +2983,19 @@ const run = (repository, flatManagerUrl, token) => {
       let buildId = ''
       let args = [
         '--token',
-        token        
+        token  
       ]
 
-      if (end_of_life) {
-        args.push_back(`--end-of-life=${end_of_life}`)
+      if (endOfLive) {
+        args.push_back(`--end-of-life=${endOfLive}`)
       }
 
-      if (end_of_life_rebase) {
-        if (!end_of_life) {
+      if (endOfLifeRebase) {
+        if (!endOfLive) {
           throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
         }
 
-        args.push_back(`--end-of-life-rebase=${end_of_life_rebase}`)
+        args.push_back(`--end-of-life-rebase=${endOfLifeRebase}`)
       }
 
       args = args.concat([
