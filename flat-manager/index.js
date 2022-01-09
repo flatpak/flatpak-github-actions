@@ -75,8 +75,8 @@ if (require.main === module) {
   run(
     core.getInput('repository'),
     core.getInput('flat-manager-url'),
-    core.getInput('token')
-    core.getInput('end-of-life')
+    core.getInput('token'),
+    core.getInput('end-of-life'),
     core.getInput('end-of-life-rebase')
   )
 }
