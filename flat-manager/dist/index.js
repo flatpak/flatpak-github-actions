@@ -2983,7 +2983,7 @@ const run = (repository, flatManagerUrl, token, endOfLife, endOfLifeRebase) => {
       let buildId = ''
       let args = [
         '--token',
-        token  
+        token
       ]
 
       if (endOfLife) {
