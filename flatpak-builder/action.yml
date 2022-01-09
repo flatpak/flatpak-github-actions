@@ -54,6 +54,10 @@ inputs:
     description: >
       The URL to mirror screenshots.
     required: false
+  end-of-life:
+    description: >
+      Mark build as end-of-life
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
