@@ -124,6 +124,8 @@ jobs:
         repository: elementary
         flat-manager-url: https://flatpak-api.elementary.io
         token: some_very_hidden_token
+        end-of-life: "The application has been renamed to..."
+        end-of-life-rebase: "org.gnome.zbrown.Palette=org.gnome.zbrown.NewPalette"
 ```
 
 #### Inputs
@@ -133,6 +135,8 @@ jobs:
 | `repository` | The repository to push the build into  | Required | - |
 | `flat-manager-url` | The flat-manager remote URL  | Required | - |
 | `token` | A flat-manager token  | Required | - |
+| `end-of-life` | Reason for end of life  | Optional | - |
+| `end-of-life-rebase` | A replacement for the repo  | Optional | - |
 
 ### Docker Image
 
