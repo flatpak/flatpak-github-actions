@@ -83,7 +83,7 @@ jobs:
         dnf -y install docker
     - name: Set up QEMU
       id: qemu
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       with:
         platforms: arm64
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
