@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM registry.fedoraproject.org/fedora:latest
 
 RUN dnf update -y && \
     dnf install -y dbus-daemon flatpak flatpak-builder git-lfs python3-aiohttp python3-tenacity python3-gobject xorg-x11-server-Xvfb ccache zstd && \
