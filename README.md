@@ -44,7 +44,7 @@ jobs:
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
 | `repository-name` | The repository name, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `flathub` |
 | `repository-url` | The repository url, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `https://flathub.org/repo/flathub.flatpakrepo` |
-| `run-tests` | Enable/Disable running tests  | Optional | `false` |
+| `run-tests` | Enable/Disable running tests. This overrides the `flatpak-builder` option of the same name, which invokes `make check` or `ninja test`. Network and X11 access is enabled, with a display server provided by `xvfb-run`.  | Optional | `false` |
 | `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
 | `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${sha256(manifestPath)}` |
