@@ -158,4 +158,5 @@ You can specify the specific runtime you need to use through the image tags:
 | KDE             | 5.15    | `kde-5.15`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15`          |
 | KDE             | 5.15-21.08    | `kde-5.15-21.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-21.08`          |
 | KDE             | 6.2     | `kde-6.2`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.2`          |
+| KDE             | 6.3     | `kde-6.3`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.3`          |
 | elementary BaseApp             | juno    | `juno`          | `image: bilelmoussaoui/flatpak-github-actions:elementary-juno`          |
