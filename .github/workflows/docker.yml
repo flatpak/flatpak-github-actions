@@ -12,6 +12,7 @@ jobs:
 
     strategy:
       matrix:
+        arch: [x86_64, aarch64]
         runtime:
           - name: freedesktop-21.08
             packages: org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
@@ -103,13 +104,26 @@ jobs:
           # syntax = docker/dockerfile:experimental
           FROM localhost:5000/fedora-base:latest
 
-          RUN --security=insecure flatpak install -y --noninteractive ${{matrix.runtime.remote}} ${{ matrix.runtime.packages }}
+          RUN --security=insecure flatpak install -y --noninteractive --arch=${{ matrix.arch }} ${{ matrix.runtime.remote }} ${{ matrix.runtime.packages }}
 
-      - name: Build & push the ${{ matrix.runtime.name }} image to Docker Hub
+      - name: Build & push the ${{ matrix.runtime.name }}-x86_64 image to Docker Hub
+        if: ${{ matrix.arch == 'x86_64' }}
         uses: docker/build-push-action@v2.2.2
         with:
           allow: security.insecure
           context: .
           file: ${{ matrix.runtime.name }}.Dockerfile
           push: true
-          tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
+          tags: |
+            bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
+            bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}-x86_64
+      
+      - name: Build & push the ${{ matrix.runtime.name }}-${{ matrix.arch }} image to Docker Hub
+        if: ${{ matrix.arch != 'x86_64' }}
+        uses: docker/build-push-action@v2.2.2
+        with:
+          allow: security.insecure
+          context: .
+          file: ${{ matrix.runtime.name }}.Dockerfile
+          push: true
+          tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}-${{ matrix.arch }}
