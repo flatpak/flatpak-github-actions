@@ -9,7 +9,7 @@ jobs:
     name: Flatpak Builder
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      image: ghcr.io/${{ github.repository }}:gnome-40
       options: --privileged
     strategy:
       fail-fast: false
