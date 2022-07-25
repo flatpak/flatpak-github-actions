@@ -94,6 +94,53 @@ jobs:
         arch: ${{ matrix.arch }}
 ```
 
+#### Building for Automated Tests
+
+As described in the [Inputs](#inputs) documentation, specifying `run-tests: true` will amend the Flatpak manifest to enable Network and X11 access automatically. Any other changes to the manifest must be made manually, such as building the tests (e.g. `-Dtests=true`) or any other options (e.g. `--buildtype=debugoptimized`).
+
+Most developers will want to run tests on pull requests, before merging into the main branch of a repository. To ensure your manifest is building the correct code, you should set the `sources` entry for your project to `"type": "dir"` with the `path` key relative to the manifest's location in the repository.
+
+In the example below, the manifest is located at `/build-aux/flatpak/org.gnome.zbrown.Palette.json`, so the `path` key is set to `../../`. If the manifest were in the project root instead, the correct usage would be `"path": "./"`.
+
+```json
+{
+    "app-id" : "org.gnome.zbrown.Palette",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "org.gnome.zbrown.Palette",
+    "finish-args" : [
+        "--share=ipc",
+        "--device=dri",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "modules" : [
+        {
+            "name" : "palette",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "--prefix=/app",
+                "--buildtype=debugoptimized",
+                "-Dtests=true"
+            ],
+            "sources" : [
+                {
+                    "name" : "palette",
+                    "buildsystem" : "meson",
+                    "type" : "dir",
+                    "path" : "../../"
+                }
+            ]
+        }
+    ]
+}
+```
+
 ### Deployment stage
 
 If you want to deploy the successfully built Flatpak application to a remote repository
