@@ -6,11 +6,33 @@ const path = require('path')
 const fs = require('fs').promises
 const yaml = require('js-yaml')
 const crypto = require('crypto')
+const { spawn } = require('child_process')
 
 // The various paths to cache
 const CACHE_PATH = [
   '.flatpak-builder'
 ]
+
+/**
+ * Start a D-Bus session and return the process and address.
+ * @returns {Promise}
+ */
+const startDBusSession = () => {
+  return new Promise((resolve, reject) => {
+    const dbus = spawn('dbus-daemon', ['--session', '--print-address'])
+    dbus.stdout.on('data', (data) => {
+      try {
+        const decoder = new TextDecoder()
+        dbus.address = decoder.decode(data).trim()
+
+        resolve(dbus)
+      } catch (e) {
+        dbus.kill()
+        reject(e)
+      }
+    })
+  })
+}
 
 /**
  * Compute a SHA-256 hash of the manifest file.
@@ -87,15 +109,16 @@ const saveManifest = async (manifest, dest) => {
  *
  * @param {Object} manifest the parsed manifest
  * @param {boolean} runTests whether to run tests or not
+ * @param {Object} testEnv dictionary of environment variables
  * @returns {object} manifest the modified manifest
  */
-const modifyManifest = (manifest, runTests = false) => {
+const modifyManifest = (manifest, runTests = false, testEnv = {}) => {
   if (runTests) {
     const buildOptions = manifest['build-options'] || {}
-    const env = {
+    const env = Object.assign({
       ...(buildOptions.env || {}),
       DISPLAY: '0:0'
-    }
+    }, testEnv)
     const testArgs = [
       '--socket=x11',
       '--share=network',
@@ -264,15 +287,28 @@ const run = async (
   }
 
   const modifiedManifestPath = getModifiedManifestPath(manifestPath)
+  const testEnv = {}
+  let dbusSession = null
+
+  if (runTests) {
+    dbusSession = await startDBusSession()
+    testEnv.DBUS_SESSION_BUS_ADDRESS = dbusSession.address
+  }
+
   parseManifest(manifestPath)
     .then((manifest) => {
-      const modifiedManifest = modifyManifest(manifest, runTests)
+      const modifiedManifest = modifyManifest(manifest, runTests, testEnv)
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
       return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
     })
     .then(() => {
+      if (dbusSession) {
+        dbusSession.kill()
+        dbusSession = null
+      }
+
       core.info('Uploading artifact...')
       const artifactClient = artifact.create()
 
@@ -283,6 +319,11 @@ const run = async (
       })
     })
     .catch((error) => {
+      if (dbusSession) {
+        dbusSession.kill()
+        dbusSession = null
+      }
+
       core.setFailed(`Build failed: ${error}`)
     })
 }
