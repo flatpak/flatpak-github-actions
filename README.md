@@ -201,6 +201,7 @@ You can specify the specific runtime you need to use through the image tags:
 | GNOME           | 40    | `gnome-40`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-40`        |
 | GNOME           | 41    | `gnome-41`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-41`        |
 | GNOME           | 42    | `gnome-42`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-42`        |
+| GNOME           | 43    | `gnome-43`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-43`        |
 | GNOME           | master    | `gnome-nightly`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-nightly`        |
 | KDE             | 5.15    | `kde-5.15`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15`          |
 | KDE             | 5.15-21.08    | `kde-5.15-21.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-21.08`          |

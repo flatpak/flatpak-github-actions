@@ -37,6 +37,10 @@ jobs:
             packages: org.gnome.Platform//42 org.gnome.Sdk//42
             remote: flathub
 
+          - name: gnome-43
+            packages: org.gnome.Platform//43 org.gnome.Sdk//43
+            remote: flathub
+
           - name: gnome-nightly
             packages: org.gnome.Platform//master org.gnome.Sdk//master
             remote: gnome-nightly
