@@ -197,6 +197,7 @@ You can specify the specific runtime you need to use through the image tags:
 | --------------- | ------- | ------------------- | ---------------------------------------------------------------- |
 | Freedesktop SDK | 20.08   | `freedesktop-20.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-20.08` |
 | Freedesktop SDK | 21.08   | `freedesktop-21.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-21.08` |
+| Freedesktop SDK | 22.08   | `freedesktop-22.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-22.08` |
 | GNOME           | 3.38    | `gnome-3.38`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-3.38`        |
 | GNOME           | 40    | `gnome-40`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-40`        |
 | GNOME           | 41    | `gnome-41`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-41`        |
@@ -204,6 +205,7 @@ You can specify the specific runtime you need to use through the image tags:
 | GNOME           | master    | `gnome-nightly`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-nightly`        |
 | KDE             | 5.15    | `kde-5.15`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15`          |
 | KDE             | 5.15-21.08    | `kde-5.15-21.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-21.08`          |
+| KDE             | 5.15-22.08    | `kde-5.15-22.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-22.08`          |
 | KDE             | 6.2     | `kde-6.2`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.2`          |
 | KDE             | 6.3     | `kde-6.3`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.3`          |
 | elementary BaseApp             | juno    | `juno`          | `image: bilelmoussaoui/flatpak-github-actions:elementary-juno`          |
