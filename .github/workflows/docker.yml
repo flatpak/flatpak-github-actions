@@ -13,12 +13,16 @@ jobs:
     strategy:
       matrix:
         runtime:
+          - name: freedesktop-20.08
+            packages: org.freedesktop.Platform//20.08 org.freedesktop.Sdk//20.08
+            remote: flathub
+
           - name: freedesktop-21.08
             packages: org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
             remote: flathub
 
-          - name: freedesktop-20.08
-            packages: org.freedesktop.Platform//20.08 org.freedesktop.Sdk//20.08
+          - name: freedesktop-22.08
+            packages: org.freedesktop.Platform//22.08 org.freedesktop.Sdk//22.08
             remote: flathub
 
           - name: gnome-3.38
@@ -48,9 +52,13 @@ jobs:
           - name: kde-5.15
             packages: org.kde.Platform//5.15 org.kde.Sdk//5.15
             remote: flathub
-          
+
           - name: kde-5.15-21.08
             packages: org.kde.Platform//5.15-21.08 org.kde.Sdk//5.15-21.08
+            remote: flathub
+
+          - name: kde-5.15-22.08
+            packages: org.kde.Platform//5.15-22.08 org.kde.Sdk//5.15-22.08
             remote: flathub
 
           - name: kde-6.2
