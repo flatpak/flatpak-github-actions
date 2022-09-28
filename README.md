@@ -50,6 +50,8 @@ jobs:
 | `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${sha256(manifestPath)}` |
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
+| `upload-artifact` | Enable/Disable uploading the `.flatpak` as a GitHub Actions artifact | Optional | `true` |
+| `artifact-name` | The GitHub Actions artifact name  | Optional | `${bundle}-${arch}` |
 
 #### Building for multiple CPU architectures
 

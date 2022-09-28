@@ -243,6 +243,8 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
+ * @param {boolean} uploadArtifact Whether to upload the .flatpak as an artifact to GitHub Actions
+ * @param {string} artifactName The artifact name
  */
 const run = async (
   manifestPath,
@@ -255,7 +257,9 @@ const run = async (
   cacheBuildDir,
   cacheKey,
   arch,
-  mirrorScreenshotsUrl
+  mirrorScreenshotsUrl,
+  uploadArtifact,
+  artifactName
 ) => {
   try {
     cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch)
@@ -273,14 +277,19 @@ const run = async (
       return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
     })
     .then(() => {
-      core.info('Uploading artifact...')
-      const artifactClient = artifact.create()
+      if (uploadArtifact) {
+        core.info('Uploading artifact...')
+        const artifactClient = artifact.create()
 
-      // Append the arch to the bundle name to prevent conflicts in multi-arch jobs
-      const bundleName = bundle.replace('.flatpak', '') + `-${arch}`
-      return artifactClient.uploadArtifact(bundleName, [bundle], '.', {
-        continueOnError: false
-      })
+        // Use the supplied artifactName,
+        // or append the arch to the bundle name to prevent conflicts in multi-arch jobs
+        const bundleName = artifactName || bundle.replace('.flatpak', '') + `-${arch}`
+        return artifactClient.uploadArtifact(bundleName, [bundle], '.', {
+          continueOnError: false
+        })
+      } else {
+        core.info('Skipping artifact upload')
+      }
     })
     .catch((error) => {
       core.setFailed(`Build failed: ${error}`)
@@ -308,6 +317,8 @@ if (require.main === module) {
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('cache')),
     core.getInput('cache-key'),
     core.getInput('arch'),
-    core.getInput('mirror-screenshots-url')
+    core.getInput('mirror-screenshots-url'),
+    ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('upload-artifact')),
+    core.getInput('artifact-name')
   )
 }

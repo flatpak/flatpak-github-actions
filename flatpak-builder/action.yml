@@ -54,6 +54,17 @@ inputs:
     description: >
       The URL to mirror screenshots.
     required: false
+  upload-artifact:
+    description: >
+      Toggles uploading the .flatpak as a GitHub Actions artifact.
+      Possible values: true, enabled, yes, y. Or something else to disable it.
+    default: "true"
+    required: false
+  artifact-name:
+    description: >
+      The name to use when uploading a GitHub Actions artifact.
+      Defaults to ${bundle}-${arch}
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
