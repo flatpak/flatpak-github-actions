@@ -113,11 +113,7 @@ In the example below, the manifest is located at `/build-aux/flatpak/org.gnome.z
         "--share=ipc",
         "--device=dri",
         "--socket=fallback-x11",
-        "--socket=wayland",
-        "--filesystem=xdg-run/dconf",
-        "--filesystem=~/.config/dconf:ro",
-        "--talk-name=ca.desrt.dconf",
-        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+        "--socket=wayland"
     ],
     "modules" : [
         {
