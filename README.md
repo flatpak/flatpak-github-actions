@@ -1,6 +1,6 @@
 # Flatpak Github Actions
 
-![CI](https://github.com/bilelmoussaoui/flatpak-github-actions/workflows/CI/badge.svg)
+![CI](https://github.com/flatpak/flatpak-github-actions/workflows/CI/badge.svg)
 
 Build and deploy your Flatpak application using Github Actions
 
@@ -29,7 +29,7 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
@@ -86,7 +86,7 @@ jobs:
       uses: docker/setup-qemu-action@v1
       with:
         platforms: arm64
-    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
@@ -159,13 +159,13 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
       name: "Build"
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
         cache-key: flatpak-builder-${{ github.sha }}
-    - uses: bilelmoussaoui/flatpak-github-actions/flat-manager@v3
+    - uses: flatpak/flatpak-github-actions/flat-manager@v4
       name: "Deploy"
       with:
         repository: elementary
