@@ -355,7 +355,7 @@ if (require.main === module) {
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('cache')),
     core.getInput('cache-key'),
     core.getInput('arch'),
-    core.getInput('mirror-screenshots-url')
+    core.getInput('mirror-screenshots-url'),
     core.getInput('gpg-sign')
   )
 }
