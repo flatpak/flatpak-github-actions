@@ -191,7 +191,7 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
   if (mirrorScreenshotsUrl) {
     args.push(`--mirror-screenshots-url=${mirrorScreenshotsUrl}`)
   }
-  if (gpgKey) {
+  if (gpgSign) {
     args.push(`--gpg-sign=${gpgSign}`)
   }
   args.push(buildDir, manifestPath)
@@ -276,7 +276,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
- * @param {string} gpgKey The key to sign the package
+ * @param {string} gpgSign The key to sign the package
  */
 const run = async (
   manifestPath,
