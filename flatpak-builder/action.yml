@@ -54,6 +54,10 @@ inputs:
     description: >
       The URL to mirror screenshots.
     required: false
+  gpg-sign:
+    description: >
+      The key to sign the package.
+    required: false
 runs:
   using: "node12"
   main: "dist/index.js"
