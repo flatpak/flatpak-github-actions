@@ -42,6 +42,7 @@ jobs:
 | ---     | ----------- | ----------- |----|
 | `manifest-path` | The relative path of the manifest file  | Required | - |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
+| `build-bundle` | Whether to build a bundle or not | Optional | `true` |
 | `repository-name` | The repository name, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `flathub` |
 | `repository-url` | The repository url, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `https://flathub.org/repo/flathub.flatpakrepo` |
 | `run-tests` | Enable/Disable running tests. This overrides the `flatpak-builder` option of the same name, which invokes `make check` or `ninja test`. Network and X11 access is enabled, with a display server provided by `xvfb-run`.  | Optional | `false` |
