@@ -261,6 +261,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * @param {object} manifestPath The flatpak manifest path
  * @param {boolean} runTests Whether to run tests or not
  * @param {string} bundle The bundle's name
+ * @param {boolean} buildBundle Whether to build a bundle or not
  * @param {string} repositoryUrl The repository used to install the runtime from
  * @param {string} repositoryName the repository name to install the runtime from
  * @param {string} buildDir Where to build the application
@@ -274,6 +275,7 @@ const run = async (
   manifestPath,
   runTests,
   bundle,
+  buildBundle,
   repositoryUrl,
   repositoryName,
   buildDir,
@@ -304,12 +306,16 @@ const run = async (
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
+      return build(manifest, modifiedManifestPath, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
     })
     .then(() => {
       if (dbusSession) {
         dbusSession.kill()
         dbusSession = null
+      }
+
+      if (!buildBundle) {
+        return
       }
 
       core.info('Uploading artifact...')
