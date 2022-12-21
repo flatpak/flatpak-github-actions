@@ -85,15 +85,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3.2.0
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.1.1
+        uses: docker/setup-buildx-action@v2.2.1
         with:
           driver-opts: network=host
 
       - name: Cache Docker layers for the base image
-        uses: actions/cache@v2
+        uses: actions/cache@v3.2.0
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -101,7 +101,7 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Build & push the Fedora base image to local registry
-        uses: docker/build-push-action@v2.2.2
+        uses: docker/build-push-action@v3.2.0
         with:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
@@ -112,7 +112,7 @@ jobs:
           tags: localhost:5000/fedora-base:latest
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1.8.0
+        uses: docker/login-action@v2.1.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -126,7 +126,7 @@ jobs:
           RUN --security=insecure flatpak install -y --noninteractive ${{matrix.runtime.remote}} ${{ matrix.runtime.packages }}
 
       - name: Build & push the ${{ matrix.runtime.name }} image to Docker Hub
-        uses: docker/build-push-action@v2.2.2
+        uses: docker/build-push-action@v3.2.0
         with:
           allow: security.insecure
           context: .
