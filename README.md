@@ -67,14 +67,14 @@ jobs:
   flatpak:
     name: "Flatpak"
     runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-40
-      options: --privileged
     strategy:
       matrix:
         arch: [x86_64, aarch64]
       # Don't fail the whole workflow if one architecture fails
       fail-fast: false
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40-${{ matrix.arch }}
+      options: --privileged
     steps:
     - uses: actions/checkout@v2
     # Docker is required by the docker/setup-qemu-action which enables emulation
