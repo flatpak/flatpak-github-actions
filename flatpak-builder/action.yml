@@ -12,6 +12,10 @@ inputs:
     description: "The bundle name, by default it's app.flatpak"
     required: false
     default: "app.flatpak"
+  build-bundle:
+    description: "Whether to build a bundle or not."
+    default: "true"
+    required: false
   repository-url:
     description: >
       The repository used to fetch the runtime when the user downloads the
