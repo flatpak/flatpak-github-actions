@@ -45,6 +45,12 @@ inputs:
       Possible values: true, enabled, yes, y. Or something else to disable it.
     default: "true"
     required: false
+  restore-cache:
+    description: >
+      Toggles restoring the cache.
+      Possible values: true, enabled, yes, y. Or something else to disable it.
+    default: "true"
+    required: false
   cache-key:
     description: >
       Defines the cache-key to use.
