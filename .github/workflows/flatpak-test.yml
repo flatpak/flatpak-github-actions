@@ -16,9 +16,14 @@ jobs:
       matrix:
         arch: [x86_64, aarch64]
         cache: [use-cache, no-cache]
+        restore: [cache-restored, no-cache-restored]
         exclude:
           - arch: aarch64
             cache: no-cache
+          - arch: aarch64
+            restore: no-cache-restored
+          - cache: no-cache
+            restore: cache-restored
     steps:
       - uses: actions/checkout@v3
       - name: Install QEMU deps
@@ -32,10 +37,11 @@ jobs:
           platforms: arm64
       - uses: ./flatpak-builder
         with:
-          bundle: org.example.MyApp.Devel-${{ matrix.cache }}.flatpak
+          bundle: org.example.MyApp.Devel-${{ matrix.cache }}-${{ matrix.restore }}.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           cache: ${{ matrix.cache == 'use-cache' }}
-          cache-key: flatpak-builder-${{ github.sha }}
+          restore-cache: ${{ matrix.restore == 'cache-restored' }}
+          cache-key: flatpak-builder-${{ github.sha }}-${{ matrix.restore }}
           arch: ${{ matrix.arch }}
       # TODO: setup a flat-manager before and use it later here
       #- uses: ./flat-manager
@@ -71,7 +77,7 @@ jobs:
         with:
           bundle: org.example.MyApp.Devel-cache-hit.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
-          cache-key: flatpak-builder-${{ github.sha }}
+          cache-key: flatpak-builder-${{ github.sha }}-no-cache-restored
 
   tests:
     name: Tests
