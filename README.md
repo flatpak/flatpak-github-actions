@@ -49,6 +49,7 @@ jobs:
 | `run-tests` | Enable/Disable running tests. This overrides the `flatpak-builder` option of the same name, which invokes `make check` or `ninja test`. Network and X11 access is enabled, with a display server provided by `xvfb-run`.  | Optional | `false` |
 | `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
+| `restore-cache` | Enable/Disable cache restoring. If caching is enabled. | Optional | `true` |
 | `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${sha256(manifestPath)}` |
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
