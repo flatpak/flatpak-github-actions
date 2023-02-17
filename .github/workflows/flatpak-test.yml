@@ -15,6 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         arch: [x86_64, aarch64]
+        cache: [use-cache, no-cache]
+        exclude:
+          - arch: aarch64
+            cache: no-cache
     steps:
       - uses: actions/checkout@v3
       - name: Install QEMU deps
@@ -28,8 +32,9 @@ jobs:
           platforms: arm64
       - uses: ./flatpak-builder
         with:
-          bundle: org.example.MyApp.Devel.flatpak
+          bundle: org.example.MyApp.Devel-${{ matrix.cache }}.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          cache: ${{ matrix.cache == 'use-cache' }}
           cache-key: flatpak-builder-${{ github.sha }}
           arch: ${{ matrix.arch }}
       # TODO: setup a flat-manager before and use it later here
@@ -52,6 +57,21 @@ jobs:
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           stop-at-module: testproject
           cache: false
+
+  flatpak-builder-cache-hit:
+    name: Flatpak Builder Cache Hit
+    runs-on: ubuntu-latest
+    needs: flatpak-builder
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./flatpak-builder
+        with:
+          bundle: org.example.MyApp.Devel-cache-hit.flatpak
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          cache-key: flatpak-builder-${{ github.sha }}
 
   tests:
     name: Tests
