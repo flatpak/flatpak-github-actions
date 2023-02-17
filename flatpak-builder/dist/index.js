@@ -169,10 +169,11 @@ const getModifiedManifestPath = manifestPath => {
  * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string} cacheKey The key used to cache the build directory
+ * @param {string} cacheHitKey The key used to restore the build directory
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
  */
-const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl) => {
+const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || core.getInput('branch') || 'master'
 
@@ -198,7 +199,7 @@ const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, 
   args.push(buildDir, manifestPath)
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
-  if (cacheBuildDir) {
+  if (cacheBuildDir && (cacheKey !== cacheHitKey)) {
     await cache.saveCache(
       CACHE_PATH,
       cacheKey
@@ -228,28 +229,22 @@ const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, 
  *
  * @param {string} repositoryName the repository name to install the runtime from
  * @param {string} repositoryUrl the repository url
- * @param {PathLike} manifestPath the manifest path
  * @param {Boolean} cacheBuildDir whether to cache the build dir or not
  * @param {string} cacheKey the default cache key if there are any
- * @param {string} arch The CPU architecture to build for
- * @returns {Promise<String>} the new cacheKey if none was set before
+ * @returns {Promise<String>} the cacheHitKey if a cache was hit
  */
-const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch) => {
+const prepareBuild = async (repositoryName, repositoryUrl, cacheBuildDir, cacheKey) => {
   /// If the user has set a different runtime source
   if (repositoryUrl !== 'https://flathub.org/repo/flathub.flatpakrepo') {
     await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
   }
 
   // Restore the cache in case caching is enabled
+  let cacheHitKey
   if (cacheBuildDir) {
-    if (!cacheKey) {
-      const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
-      cacheKey = `flatpak-builder-${manifestHash}`
-    }
-
-    const cacheHitKey = await cache.restoreCache(
+    cacheHitKey = await cache.restoreCache(
       CACHE_PATH,
-      `${cacheKey}-${arch}`,
+      `${cacheKey}`,
       [
         'flatpak-builder-',
         'flatpak-'
@@ -261,8 +256,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
       core.info('No cache was found')
     }
   }
-  // Ensure the cache key is unique if we're building multiple architectures in the same job
-  return `${cacheKey}-${arch}`
+  return cacheHitKey
 }
 
 /**
@@ -297,8 +291,20 @@ const run = async (
   arch,
   mirrorScreenshotsUrl
 ) => {
+  if (cacheBuildDir && !cacheKey) {
+    try {
+      const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
+      cacheKey = `flatpak-builder-${manifestHash}`
+    } catch (err) {
+      core.setFailed(`Fail to create create cache key based on manifest hash: ${err}`)
+    }
+  }
+  // Ensure the cache key is unique if we're building multiple architectures in the same job
+  cacheKey = `${cacheKey}-${arch}`
+
+  let cacheHitKey
   try {
-    cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch)
+    cacheHitKey = await prepareBuild(repositoryName, repositoryUrl, cacheBuildDir, cacheKey)
   } catch (err) {
     core.setFailed(`Failed to prepare the build ${err}`)
   }
@@ -318,7 +324,7 @@ const run = async (
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, modifiedManifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
+      return build(manifest, modifiedManifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl)
     })
     .then(() => {
       if (dbusSession) {
