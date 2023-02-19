@@ -8,6 +8,11 @@ inputs:
   manifest-path:
     description: "The relative path of the manifest file."
     required: true
+  stop-at-module:
+    description: >
+      Stop at the specified module, ignoring it and all the following ones.
+      Using this option enforces `build-bundle` to false.
+    required: false
   bundle:
     description: "The bundle name, by default it's app.flatpak"
     required: false

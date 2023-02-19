@@ -41,6 +41,7 @@ jobs:
 | Name | Description | Required | Default |
 | ---     | ----------- | ----------- |----|
 | `manifest-path` | The relative path of the manifest file  | Required | - |
+| `stop-at-module` | Stop at the specified module, ignoring it and all the following ones. Using this option disables generating bundles. | Optional | Build all modules from the manifest file |
 | `bundle` | The bundle name  | Optional | `app.flatpak` |
 | `build-bundle` | Whether to build a bundle or not | Optional | `true` |
 | `repository-name` | The repository name, used to fetch the runtime when the user download the Flatpak bundle or when building the application  | Optional | `flathub` |
