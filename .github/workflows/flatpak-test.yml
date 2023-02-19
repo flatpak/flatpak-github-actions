@@ -39,6 +39,20 @@ jobs:
       #    flat-manager-url: https://flatpak-api.elementary.io
       #    token: some_very_hidden_token
 
+  flatpak-builder-stop-at:
+    name: Flatpak Builder Stop At
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./flatpak-builder
+        with:
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          stop-at-module: testproject
+          cache: false
+
   tests:
     name: Tests
     runs-on: ubuntu-latest
