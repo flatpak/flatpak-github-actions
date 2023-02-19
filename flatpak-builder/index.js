@@ -154,6 +154,7 @@ const getModifiedManifestPath = manifestPath => {
  *
  * @param {object} manifest A flatpak manifest
  * @param {object} manifestPath The flatpak manifest path
+ * @param {string} stopAtModule The module where the build should stop
  * @param {string} bundle The bundle's name
  * @param {boolean} buildBundle Whether to build a bundle or not
  * @param {string} repositoryUrl The repository used to install the runtime from
@@ -165,7 +166,7 @@ const getModifiedManifestPath = manifestPath => {
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
  */
-const build = async (manifest, manifestPath, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl) => {
+const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || core.getInput('branch') || 'master'
 
@@ -185,6 +186,9 @@ const build = async (manifest, manifestPath, bundle, buildBundle, repositoryUrl,
   if (mirrorScreenshotsUrl) {
     args.push(`--mirror-screenshots-url=${mirrorScreenshotsUrl}`)
   }
+  if (stopAtModule) {
+    args.push(`--stop-at=${stopAtModule}`)
+  }
   args.push(buildDir, manifestPath)
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
@@ -197,7 +201,7 @@ const build = async (manifest, manifestPath, bundle, buildBundle, repositoryUrl,
     })
   }
 
-  if (buildBundle) {
+  if (buildBundle && !stopAtModule) {
     core.info('Creating a bundle...')
     await exec.exec('flatpak', [
       'build-bundle',
@@ -259,6 +263,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  * Run a complete build
  *
  * @param {object} manifestPath The flatpak manifest path
+ * @param {string} stopAtModule The module where the build should stop
  * @param {boolean} runTests Whether to run tests or not
  * @param {string} bundle The bundle's name
  * @param {boolean} buildBundle Whether to build a bundle or not
@@ -273,6 +278,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  */
 const run = async (
   manifestPath,
+  stopAtModule,
   runTests,
   bundle,
   buildBundle,
@@ -306,7 +312,7 @@ const run = async (
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, modifiedManifestPath, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
+      return build(manifest, modifiedManifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl)
     })
     .then(() => {
       if (dbusSession) {
@@ -314,7 +320,7 @@ const run = async (
         dbusSession = null
       }
 
-      if (!buildBundle) {
+      if (!buildBundle || stopAtModule) {
         return
       }
 
@@ -349,6 +355,7 @@ module.exports = {
 if (require.main === module) {
   run(
     core.getInput('manifest-path'),
+    core.getInput('stop-at-module'),
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('run-tests')),
     core.getInput('bundle') || 'app.flatpak',
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('build-bundle')),
