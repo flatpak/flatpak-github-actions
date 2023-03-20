@@ -154,18 +154,21 @@ const getModifiedManifestPath = manifestPath => {
  *
  * @param {object} manifest A flatpak manifest
  * @param {object} manifestPath The flatpak manifest path
+ * @param {string} stopAtModule The module where the build should stop
  * @param {string} bundle The bundle's name
+ * @param {boolean} buildBundle Whether to build a bundle or not
  * @param {string} repositoryUrl The repository used to install the runtime from
  * @param {string} repositoryName The repository name used to install the runtime from
  * @param {string} buildDir Where to build the application
  * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
  * @param {string} cacheKey The key used to cache the build directory
+ * @param {string} cacheHitKey The key used to restore the build directory
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
  * @param {string} gpgSign The key to sign the package
  */
-const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl, gpgSign) => {
+const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl, gpgSign) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || core.getInput('branch') || 'master'
 
@@ -188,10 +191,13 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
   if (gpgSign) {
     args.push(`--gpg-sign=${gpgSign}`)
   }
+  if (stopAtModule) {
+    args.push(`--stop-at=${stopAtModule}`)
+  }
   args.push(buildDir, manifestPath)
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
-  if (cacheBuildDir) {
+  if (cacheBuildDir && (cacheKey !== cacheHitKey)) {
     await cache.saveCache(
       CACHE_PATH,
       cacheKey
@@ -200,16 +206,18 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
     })
   }
 
-  core.info('Creating a bundle...')
-  await exec.exec('flatpak', [
-    'build-bundle',
-    localRepoName,
-    bundle,
-        `--runtime-repo=${repositoryUrl}`,
-        `--arch=${arch}`,
-        appId,
-        branch
-  ])
+  if (buildBundle && !stopAtModule) {
+    core.info('Creating a bundle...')
+    await exec.exec('flatpak', [
+      'build-bundle',
+      localRepoName,
+      bundle,
+      `--runtime-repo=${repositoryUrl}`,
+      `--arch=${arch}`,
+      appId,
+      branch
+    ])
+  }
 }
 
 /**
@@ -219,28 +227,23 @@ const build = async (manifest, manifestPath, bundle, repositoryUrl, repositoryNa
  *
  * @param {string} repositoryName the repository name to install the runtime from
  * @param {string} repositoryUrl the repository url
- * @param {PathLike} manifestPath the manifest path
  * @param {Boolean} cacheBuildDir whether to cache the build dir or not
+ * @param {Boolean} restoreCache whether to restore the cache of the build dir or not
  * @param {string} cacheKey the default cache key if there are any
- * @param {string} arch The CPU architecture to build for
- * @returns {Promise<String>} the new cacheKey if none was set before
+ * @returns {Promise<String>} the cacheHitKey if a cache was hit
  */
-const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch) => {
+const prepareBuild = async (repositoryName, repositoryUrl, cacheBuildDir, restoreCache, cacheKey) => {
   /// If the user has set a different runtime source
   if (repositoryUrl !== 'https://flathub.org/repo/flathub.flatpakrepo') {
     await exec.exec('flatpak', ['remote-add', '--if-not-exists', repositoryName, repositoryUrl])
   }
 
   // Restore the cache in case caching is enabled
-  if (cacheBuildDir) {
-    if (!cacheKey) {
-      const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
-      cacheKey = `flatpak-builder-${manifestHash}`
-    }
-
-    const cacheHitKey = await cache.restoreCache(
+  let cacheHitKey
+  if (cacheBuildDir && restoreCache) {
+    cacheHitKey = await cache.restoreCache(
       CACHE_PATH,
-      `${cacheKey}-${arch}`,
+      `${cacheKey}`,
       [
         'flatpak-builder-',
         'flatpak-'
@@ -252,21 +255,23 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
       core.info('No cache was found')
     }
   }
-  // Ensure the cache key is unique if we're building multiple architectures in the same job
-  return `${cacheKey}-${arch}`
+  return cacheHitKey
 }
 
 /**
  * Run a complete build
  *
  * @param {object} manifestPath The flatpak manifest path
+ * @param {string} stopAtModule The module where the build should stop
  * @param {boolean} runTests Whether to run tests or not
  * @param {string} bundle The bundle's name
+ * @param {boolean} buildBundle Whether to build a bundle or not
  * @param {string} repositoryUrl The repository used to install the runtime from
  * @param {string} repositoryName the repository name to install the runtime from
  * @param {string} buildDir Where to build the application
  * @param {string} localRepoName The flatpak repository name
  * @param {boolean} cacheBuildDir Whether to enable caching the build directory
+ * @param {boolean} restoreCache Whether to restore the cache or not
  * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
@@ -274,20 +279,35 @@ const prepareBuild = async (repositoryName, repositoryUrl, manifestPath, cacheBu
  */
 const run = async (
   manifestPath,
+  stopAtModule,
   runTests,
   bundle,
+  buildBundle,
   repositoryUrl,
   repositoryName,
   buildDir,
   localRepoName,
   cacheBuildDir,
+  restoreCache,
   cacheKey,
   arch,
   mirrorScreenshotsUrl,
   gpgSign
 ) => {
+  if (cacheBuildDir && !cacheKey) {
+    try {
+      const manifestHash = (await computeHash(manifestPath)).substring(0, 20)
+      cacheKey = `flatpak-builder-${manifestHash}`
+    } catch (err) {
+      core.setFailed(`Fail to create create cache key based on manifest hash: ${err}`)
+    }
+  }
+  // Ensure the cache key is unique if we're building multiple architectures in the same job
+  cacheKey = `${cacheKey}-${arch}`
+
+  let cacheHitKey
   try {
-    cacheKey = await prepareBuild(repositoryName, repositoryUrl, manifestPath, cacheBuildDir, cacheKey, arch)
+    cacheHitKey = await prepareBuild(repositoryName, repositoryUrl, cacheBuildDir, restoreCache, cacheKey)
   } catch (err) {
     core.setFailed(`Failed to prepare the build ${err}`)
   }
@@ -307,12 +327,16 @@ const run = async (
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, modifiedManifestPath, bundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, arch, mirrorScreenshotsUrl, gpgSign)
+      return build(manifest, modifiedManifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl, gpgSign)
     })
     .then(() => {
       if (dbusSession) {
         dbusSession.kill()
         dbusSession = null
+      }
+
+      if (!buildBundle || stopAtModule) {
+        return
       }
 
       core.info('Uploading artifact...')
@@ -346,13 +370,16 @@ module.exports = {
 if (require.main === module) {
   run(
     core.getInput('manifest-path'),
+    core.getInput('stop-at-module'),
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('run-tests')),
     core.getInput('bundle') || 'app.flatpak',
+    ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('build-bundle')),
     core.getInput('repository-url'),
     core.getInput('repository-name'),
     'flatpak_app',
     'repo',
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('cache')),
+    ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('restore-cache')),
     core.getInput('cache-key'),
     core.getInput('arch'),
     core.getInput('mirror-screenshots-url'),

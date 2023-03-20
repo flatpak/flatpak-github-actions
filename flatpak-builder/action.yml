@@ -8,10 +8,19 @@ inputs:
   manifest-path:
     description: "The relative path of the manifest file."
     required: true
+  stop-at-module:
+    description: >
+      Stop at the specified module, ignoring it and all the following ones.
+      Using this option enforces `build-bundle` to false.
+    required: false
   bundle:
     description: "The bundle name, by default it's app.flatpak"
     required: false
     default: "app.flatpak"
+  build-bundle:
+    description: "Whether to build a bundle or not."
+    default: "true"
+    required: false
   repository-url:
     description: >
       The repository used to fetch the runtime when the user downloads the
@@ -33,6 +42,12 @@ inputs:
   cache:
     description: >
       Toggles caching the flatpak-builder directory.
+      Possible values: true, enabled, yes, y. Or something else to disable it.
+    default: "true"
+    required: false
+  restore-cache:
+    description: >
+      Toggles restoring the cache.
       Possible values: true, enabled, yes, y. Or something else to disable it.
     default: "true"
     required: false
@@ -59,5 +74,5 @@ inputs:
       The key to sign the package.
     required: false
 runs:
-  using: "node12"
+  using: "node16"
   main: "dist/index.js"

@@ -15,22 +15,33 @@ jobs:
       fail-fast: false
       matrix:
         arch: [x86_64, aarch64]
+        cache: [use-cache, no-cache]
+        restore: [cache-restored, no-cache-restored]
+        exclude:
+          - arch: aarch64
+            cache: no-cache
+          - arch: aarch64
+            restore: no-cache-restored
+          - cache: no-cache
+            restore: cache-restored
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install QEMU deps
         if: ${{ matrix.arch != 'x86_64' }}
         run: |
           dnf -y install docker
       - name: Set up QEMU
         if: ${{ matrix.arch != 'x86_64' }}
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
         with:
           platforms: arm64
       - uses: ./flatpak-builder
         with:
-          bundle: org.example.MyApp.Devel.flatpak
+          bundle: org.example.MyApp.Devel-${{ matrix.cache }}-${{ matrix.restore }}.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
-          cache-key: flatpak-builder-${{ github.sha }}
+          cache: ${{ matrix.cache == 'use-cache' }}
+          restore-cache: ${{ matrix.restore == 'cache-restored' }}
+          cache-key: flatpak-builder-${{ github.sha }}-${{ matrix.restore }}
           arch: ${{ matrix.arch }}
       # TODO: setup a flat-manager before and use it later here
       #- uses: ./flat-manager
@@ -39,16 +50,45 @@ jobs:
       #    flat-manager-url: https://flatpak-api.elementary.io
       #    token: some_very_hidden_token
 
+  flatpak-builder-stop-at:
+    name: Flatpak Builder Stop At
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./flatpak-builder
+        with:
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          stop-at-module: testproject
+          cache: false
+
+  flatpak-builder-cache-hit:
+    name: Flatpak Builder Cache Hit
+    runs-on: ubuntu-latest
+    needs: flatpak-builder
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./flatpak-builder
+        with:
+          bundle: org.example.MyApp.Devel-cache-hit.flatpak
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          cache-key: flatpak-builder-${{ github.sha }}-no-cache-restored
+
   tests:
     name: Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [14.x, 16.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --also=dev
@@ -60,11 +100,11 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "16"
       - run: yarn install --also=dev
         working-directory: flatpak-builder
       - run: yarn run eslint .
