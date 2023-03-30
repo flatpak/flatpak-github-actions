@@ -23,7 +23,7 @@ test('The manifest should be modified correctly if tests are enabled', async () 
   const modifiedManifest = modifyManifest(manifest, true)
 
   expect(modifiedManifest['build-options']).toEqual({
-    'test-args': ['--socket=x11', '--share=network'],
+    'test-args': ['--socket=x11', '--share=network', '--socket=session-bus'],
     env: {
       DISPLAY: '0:0'
     }
@@ -40,7 +40,7 @@ test('The manifest should be modified correctly if tests are enabled & has a bui
   expect(modifiedManifest['build-options']).toEqual({
     'append-path': '/usr/lib/sdk/rust-stable/bin',
     'build-args': ['--share=network'],
-    'test-args': ['--socket=x11', '--share=network'],
+    'test-args': ['--socket=x11', '--share=network', '--socket=session-bus'],
     env: {
       DISPLAY: '0:0',
       CARGO_HOME: '/run/build/contrast/cargo',

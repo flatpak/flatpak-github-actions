@@ -128,6 +128,7 @@ const modifyManifest = (manifest, runTests = false, testEnv = {}) => {
     const testArgs = [
       '--socket=x11',
       '--share=network',
+      '--socket=session-bus',
       ...(buildOptions['test-args'] || [])
     ]
 
