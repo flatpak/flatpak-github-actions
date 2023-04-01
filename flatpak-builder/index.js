@@ -66,7 +66,7 @@ const parseManifest = async (manifestPath) => {
       break
     case '.yaml':
     case '.yml':
-      manifest = yaml.safeLoad(data)
+      manifest = yaml.load(data)
       break
     default:
       core.setFailed(
@@ -91,7 +91,7 @@ const saveManifest = async (manifest, dest) => {
       break
     case '.yaml':
     case '.yml':
-      data = yaml.safeDump(manifest)
+      data = yaml.dump(manifest)
       break
     default:
       core.setFailed(
