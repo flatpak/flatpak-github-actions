@@ -172,8 +172,9 @@ const getModifiedManifestPath = manifestPath => {
  * @param {string} cacheHitKey The key used to restore the build directory
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
+ * @param {string} gpgSign The key to sign the package
  */
-const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl) => {
+const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl, gpgSign) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || core.getInput('branch') || 'master'
 
@@ -192,6 +193,9 @@ const build = async (manifest, manifestPath, stopAtModule, bundle, buildBundle, 
   }
   if (mirrorScreenshotsUrl) {
     args.push(`--mirror-screenshots-url=${mirrorScreenshotsUrl}`)
+  }
+  if (gpgSign) {
+    args.push(`--gpg-sign=${gpgSign}`)
   }
   if (stopAtModule) {
     args.push(`--stop-at=${stopAtModule}`)
@@ -277,6 +281,7 @@ const prepareBuild = async (repositoryName, repositoryUrl, cacheBuildDir, restor
  * @param {string} cacheKey the default cache key if there are any
  * @param {string} arch The CPU architecture to build for
  * @param {string} mirrorScreenshotsUrl The URL to mirror screenshots
+ * @param {string} gpgSign The key to sign the package
  */
 const run = async (
   manifestPath,
@@ -292,7 +297,8 @@ const run = async (
   restoreCache,
   cacheKey,
   arch,
-  mirrorScreenshotsUrl
+  mirrorScreenshotsUrl,
+  gpgSign
 ) => {
   if (cacheBuildDir && !cacheKey) {
     try {
@@ -327,7 +333,7 @@ const run = async (
       return saveManifest(modifiedManifest, modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, modifiedManifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl)
+      return build(manifest, modifiedManifestPath, stopAtModule, bundle, buildBundle, repositoryUrl, repositoryName, buildDir, localRepoName, cacheBuildDir, cacheKey, cacheHitKey, arch, mirrorScreenshotsUrl, gpgSign)
     })
     .then(() => {
       if (dbusSession) {
@@ -382,7 +388,8 @@ if (require.main === require.cache[eval('__filename')]) {
     ['y', 'yes', 'true', 'enabled', true].includes(core.getInput('restore-cache')),
     core.getInput('cache-key'),
     core.getInput('arch'),
-    core.getInput('mirror-screenshots-url')
+    core.getInput('mirror-screenshots-url'),
+    core.getInput('gpg-sign')
   )
 }
 

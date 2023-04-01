@@ -53,6 +53,7 @@ jobs:
 | `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${sha256(manifestPath)}` |
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
+| `gpg-sign` | The key to sign the package | Optional | - |
 
 #### Building for multiple CPU architectures
 
