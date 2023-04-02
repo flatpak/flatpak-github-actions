@@ -74,7 +74,8 @@ class Configuration {
 }
 
 /**
- * Start a D-Bus session and return the process and address.
+ * Start a D-Bus session and return the process and the D-Bus address.
+ * 
  * @returns {Promise}
  */
 const startDBusSession = () => {
@@ -95,12 +96,13 @@ const startDBusSession = () => {
 }
 
 /**
- * Compute a SHA-256 hash of the manifest file.
- * @param {PathLike} manifestPath
+ * Compute a SHA-256 hash of a file.
+ * 
+ * @param {PathLike} path The file path.
  */
-const computeHash = async (manifestPath) => {
+const computeHash = async (path) => {
   const hash = crypto.createHash('sha256')
-  const stream = await fs.readFile(manifestPath)
+  const stream = await fs.readFile(path)
 
   const buffer = Buffer.alloc(stream.byteLength)
   for (let i = 0; i < buffer.length; i++) {
@@ -112,10 +114,10 @@ const computeHash = async (manifestPath) => {
 }
 
 /**
- * Parses a flatpak manifest and returns it as a JS object
- * It supports both supported file formats by flatpak-builder: JSON & YAML.
+ * Parses a Flatpak manifest
  *
- * @param {PathLike} manifestPath the relative/absolute path to the manifest
+ * @param {PathLike} manifestPath The path to the manifest
+ * @returns {object} The manifest
  */
 const parseManifest = async (manifestPath) => {
   const data = await fs.readFile(manifestPath)
@@ -139,9 +141,9 @@ const parseManifest = async (manifestPath) => {
 /**
  * Saves a manifest as a YAML or JSON file
  *
- * @param {object} manifest A flatpak manifest
+ * @param {object} manifest A Flatpak manifest
  * @param {PathLike} dest Where to save the flatpak manifest
- * @returns {object} manifest
+ * @returns {object} The manifest
  */
 const saveManifest = async (manifest, dest) => {
   let data = null
@@ -163,13 +165,14 @@ const saveManifest = async (manifest, dest) => {
 }
 
 /**
+ * Modify the manifest to prepare it for tests.
+ * 
  * Applies the following changes to the original manifest:
- * 1 - If tests are enabled, proper test-args are added
- *      to enable network & x11 access.
+ * - Add test-args are to enable network & x11 access.
  *
- * @param {Object} manifest the parsed manifest
- * @param {boolean} runTests whether to run tests or not
- * @param {Object} testEnv dictionary of environment variables
+ * @param {Object} manifest The parsed manifest
+ * @param {boolean} runTests Whether to run tests or not
+ * @param {Object} testEnv Dictionary of environment variables
  * @returns {object} The modified manifest
  */
 const modifyManifest = (manifest, runTests = false, testEnv = {}) => {
@@ -197,10 +200,10 @@ const modifyManifest = (manifest, runTests = false, testEnv = {}) => {
 }
 
 /**
- * Build the flatpak & create a bundle from the build
+ * Build the Flatpak & create a bundle from the build
  *
- * @param {object} manifest A flatpak manifest
- * @param {PathLike} manifestPath The flatpak manifest path
+ * @param {object} manifest A Flatpak manifest
+ * @param {PathLike} manifestPath The Flatpak manifest path
  * @param {string} cacheHitKey The key used to restore the build directory
  * @param {Configuration} config The build configuration
  */
@@ -261,8 +264,9 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 
 /**
  * Initialize the build
- * It consists mostly of setting up the flatpak remote if one other than the default is set
- * along with restoring the cache from the latest build
+ * 
+ * Consists of setting up the Flatpak remote if one other than the default is set
+ * and restoring the cache from the latest build
  *
  * @param {Configuration} config The build configuration
  * @returns {Promise<String>} The cacheHitKey if a cache was hit
