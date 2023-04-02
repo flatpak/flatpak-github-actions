@@ -322,6 +322,12 @@ const prepareBuild = async (config) => {
  * @param {Configuration} config The build configuration
  */
 const run = async (config) => {
+  if (config.verbose) {
+    await exec.exec('flatpak --version')
+    await exec.exec('flatpak-builder --version')
+    await exec.exec('ostree --version')
+  }
+
   let cacheHitKey
   try {
     cacheHitKey = await prepareBuild(config)

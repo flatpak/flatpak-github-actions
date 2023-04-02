@@ -4104,7 +4104,13 @@ class Configuration {
   }
 }
 
-const run = (config) => {
+const run = async (config) => {
+  if (config.verbose) {
+    await exec.exec('flatpak --version')
+    await exec.exec('flatpak-builder --version')
+    await exec.exec('ostree --version')
+  }
+
   const args = [
     'build-update-repo',
     '--generate-static-deltas',
