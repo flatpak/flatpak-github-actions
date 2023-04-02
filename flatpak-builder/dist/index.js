@@ -63,6 +63,8 @@ class Configuration {
     // The flatpak repository name
     this.localRepoName = 'repo'
     this.branch = 'master'
+    // Verbosity
+    this.verbose = core.getBooleanInput('verbose') || false
   }
 
   async cacheKey () {
@@ -81,7 +83,7 @@ class Configuration {
 
 /**
  * Start a D-Bus session and return the process and the D-Bus address.
- * 
+ *
  * @returns {Promise}
  */
 const startDBusSession = () => {
@@ -103,7 +105,7 @@ const startDBusSession = () => {
 
 /**
  * Compute a SHA-256 hash of a file.
- * 
+ *
  * @param {PathLike} path The file path.
  */
 const computeHash = async (path) => {
@@ -172,7 +174,7 @@ const saveManifest = async (manifest, dest) => {
 
 /**
  * Modify the manifest to prepare it for tests.
- * 
+ *
  * Applies the following changes to the original manifest:
  * - Add test-args are to enable network & x11 access.
  *
@@ -241,6 +243,9 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   if (config.stopAtModule) {
     args.push(`--stop-at=${config.stopAtModule}`)
   }
+  if (config.verbose) {
+    args.push('--verbose')
+  }
   args.push(config.buildDir, manifestPath)
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
@@ -256,7 +261,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 
   if (config.buildBundle && !config.stopAtModule) {
     core.info('Creating a bundle...')
-    await exec.exec('flatpak', [
+    const args = [
       'build-bundle',
       config.localRepoName,
       config.bundle,
@@ -264,13 +269,17 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
       `--arch=${config.arch}`,
       appId,
       branch
-    ])
+    ]
+    if (config.verbose) {
+      args.push('-vv', '--ostree-verbose')
+    }
+    await exec.exec('flatpak', args)
   }
 }
 
 /**
  * Initialize the build
- * 
+ *
  * Consists of setting up the Flatpak remote if one other than the default is set
  * and restoring the cache from the latest build
  *
@@ -280,12 +289,16 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 const prepareBuild = async (config) => {
   /// If the user has set a different runtime source
   if (config.repositoryUrl !== 'https://flathub.org/repo/flathub.flatpakrepo') {
-    await exec.exec('flatpak', [
+    const args = [
       'remote-add',
       '--if-not-exists',
       config.repositoryName,
       config.repositoryUrl
-    ])
+    ]
+    if (config.verbose) {
+      args.push('-vv', '--ostree-verbose')
+    }
+    await exec.exec('flatpak', args)
   }
 
   // Restore the cache in case caching is enabled

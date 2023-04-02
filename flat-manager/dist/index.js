@@ -4099,15 +4099,21 @@ class Configuration {
     this.endOfLifeRebase = core.getInput('end-of-life-rebase')
     // FIXME: get this from the outputs of the flatpak-builder action
     this.localRepoName = 'repo'
+    // Verbosity
+    this.verbose = core.getBooleanInput('verbose') || false
   }
 }
 
 const run = (config) => {
-  exec.exec('flatpak', [
+  const args = [
     'build-update-repo',
     '--generate-static-deltas',
     config.localRepoName
-  ])
+  ]
+  if (config.verbose) {
+    args.push('-vv', '--ostree-verbose')
+  }
+  exec.exec('flatpak', args)
     .then(async () => {
       let buildId = ''
       let args = [
@@ -4133,6 +4139,10 @@ const run = (config) => {
         config.repository
       ])
 
+      if (config.verbose) {
+        args.push('--verbose')
+      }
+
       const exitCode = await exec.exec('flat-manager-client', args, {
         listeners: {
           stdout: (data) => {
@@ -4146,7 +4156,7 @@ const run = (config) => {
       return buildId
     })
     .then(async (buildId) => {
-      await exec.exec('flat-manager-client', [
+      const args = [
         '--token',
         config.token,
         'push',
@@ -4155,16 +4165,25 @@ const run = (config) => {
         '--wait',
         buildId,
         config.localRepoName
-      ])
+      ]
+      if (config.verbose) {
+        args.push('--verbose')
+      }
+      await exec.exec('flat-manager-client', args)
       return buildId
     })
     .then(async (buildId) => {
-      await exec.exec('flat-manager-client', [
+      const args = [
         '--token',
         config.token,
         'purge',
         buildId
-      ])
+      ]
+
+      if (config.verbose) {
+        args.push('--verbose')
+      }
+      await exec.exec('flat-manager-client', args)
     })
     .catch((err) => {
       core.setFailed(`Failed to publish the build: ${err}`)

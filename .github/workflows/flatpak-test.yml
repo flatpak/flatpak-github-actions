@@ -43,6 +43,7 @@ jobs:
           restore-cache: ${{ matrix.restore == 'cache-restored' }}
           cache-key: flatpak-builder-${{ github.sha }}-${{ matrix.restore }}
           arch: ${{ matrix.arch }}
+          verbose: true
       # TODO: setup a flat-manager before and use it later here
       #- uses: ./flat-manager
       #  with:
@@ -63,6 +64,7 @@ jobs:
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           stop-at-module: testproject
           cache: false
+          verbose: true
 
   flatpak-builder-cache-hit:
     name: Flatpak Builder Cache Hit
@@ -78,6 +80,7 @@ jobs:
           bundle: org.example.MyApp.Devel-cache-hit.flatpak
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           cache-key: flatpak-builder-${{ github.sha }}-no-cache-restored
+          verbose: true
 
   tests:
     name: Tests
