@@ -1,12 +1,14 @@
-# Flatpak Github Actions
+<div align="center">
+
+# Flatpak GitHub Actions
+
+Build and deploy your Flatpak application using GitHub Actions
+
+  <img src="https://user-images.githubusercontent.com/15098724/55282117-f8253380-52fa-11e9-95a3-ccae83b23034.png" alt="Flatpak logo" />
 
 ![CI](https://github.com/flatpak/flatpak-github-actions/workflows/CI/badge.svg)
 
-Build and deploy your Flatpak application using Github Actions
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/15098724/55282117-f8253380-52fa-11e9-95a3-ccae83b23034.png" alt="Flatpak logo" />
-</p>
+</div>
 
 ## How to use
 
@@ -28,8 +30,8 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
-    - uses: actions/checkout@v2
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
+    - uses: actions/checkout@v3
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
@@ -81,17 +83,17 @@ jobs:
       # Don't fail the whole workflow if one architecture fails
       fail-fast: false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     # Docker is required by the docker/setup-qemu-action which enables emulation
     - name: Install deps
       run: |
         dnf -y install docker
     - name: Set up QEMU
       id: qemu
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       with:
         platforms: arm64
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
@@ -159,8 +161,8 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
-    - uses: actions/checkout@v2
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v4
+    - uses: actions/checkout@v3
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       name: "Build"
       with:
         bundle: palette.flatpak
