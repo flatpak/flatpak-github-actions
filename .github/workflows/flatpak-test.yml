@@ -9,7 +9,7 @@ jobs:
     name: Flatpak Builder
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     strategy:
       fail-fast: false
@@ -54,7 +54,7 @@ jobs:
     name: Flatpak Builder Stop At
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
       - uses: actions/checkout@v3
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: flatpak-builder
     container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-40
+      image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
       - uses: actions/checkout@v3

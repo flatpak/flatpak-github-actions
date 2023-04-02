@@ -2,7 +2,7 @@
 ---
 app-id: org.example.MyApp.Devel
 runtime: org.gnome.Platform
-runtime-version: "40"
+runtime-version: "44"
 sdk: org.gnome.Sdk
 command: test-project
 finish-args:
