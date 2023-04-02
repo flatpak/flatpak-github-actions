@@ -4090,38 +4090,47 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(699)
 const exec = __nccwpck_require__(922)
 
-// FIXME: get this from the outputs of the flatpak-builder action
-const LOCAL_REPO_NAME = 'repo'
+class Configuration {
+  constructor () {
+    this.repository = core.getInput('repository')
+    this.flatManagerUrl = core.getInput('flat-manager-url')
+    this.token = core.getInput('token')
+    this.endOfLife = core.getInput('end-of-life')
+    this.endOfLifeRebase = core.getInput('end-of-life-rebase')
+    // FIXME: get this from the outputs of the flatpak-builder action
+    this.localRepoName = 'repo'
+  }
+}
 
-const run = (repository, flatManagerUrl, token, endOfLife, endOfLifeRebase) => {
+const run = (config) => {
   exec.exec('flatpak', [
     'build-update-repo',
     '--generate-static-deltas',
-    LOCAL_REPO_NAME
+    config.localRepoName
   ])
     .then(async () => {
       let buildId = ''
       let args = [
         '--token',
-        token
+        config.token
       ]
 
-      if (endOfLife) {
-        args.push_back(`--end-of-life=${endOfLife}`)
+      if (config.endOfLife) {
+        args.push_back(`--end-of-life=${config.endOfLife}`)
       }
 
-      if (endOfLifeRebase) {
-        if (!endOfLife) {
+      if (config.endOfLifeRebase) {
+        if (!config.endOfLife) {
           throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
         }
 
-        args.push_back(`--end-of-life-rebase=${endOfLifeRebase}`)
+        args.push_back(`--end-of-life-rebase=${config.endOfLifeRebase}`)
       }
 
       args = args.concat([
         'create',
-        flatManagerUrl,
-        repository
+        config.flatManagerUrl,
+        config.repository
       ])
 
       const exitCode = await exec.exec('flat-manager-client', args, {
@@ -4139,20 +4148,20 @@ const run = (repository, flatManagerUrl, token, endOfLife, endOfLifeRebase) => {
     .then(async (buildId) => {
       await exec.exec('flat-manager-client', [
         '--token',
-        token,
+        config.token,
         'push',
         '--commit',
         '--publish',
         '--wait',
         buildId,
-        LOCAL_REPO_NAME
+        config.localRepoName
       ])
       return buildId
     })
     .then(async (buildId) => {
       await exec.exec('flat-manager-client', [
         '--token',
-        token,
+        config.token,
         'purge',
         buildId
       ])
@@ -4163,13 +4172,8 @@ const run = (repository, flatManagerUrl, token, endOfLife, endOfLifeRebase) => {
 }
 
 if (require.main === require.cache[eval('__filename')]) {
-  run(
-    core.getInput('repository'),
-    core.getInput('flat-manager-url'),
-    core.getInput('token'),
-    core.getInput('end-of-life'),
-    core.getInput('end-of-life-rebase')
-  )
+  const config = new Configuration()
+  run(config)
 }
 
 })();
