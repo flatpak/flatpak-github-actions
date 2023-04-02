@@ -73,6 +73,11 @@ inputs:
     description: >
       The key to sign the package.
     required: false
+  verbose:
+    description: >
+      "Enable verbosity"
+    required: false
+    default: "false"
 runs:
   using: "node16"
   main: "dist/index.js"

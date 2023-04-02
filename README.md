@@ -54,6 +54,7 @@ jobs:
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
 | `gpg-sign` | The key to sign the package | Optional | - |
+| `verbose` | Enable verbosity | Optional | `false` |
 
 #### Building for multiple CPU architectures
 
@@ -184,6 +185,7 @@ jobs:
 | `token` | A flat-manager token  | Required | - |
 | `end-of-life` | Reason for end of life  | Optional | - |
 | `end-of-life-rebase` | The new app-id  | Optional | - |
+| `verbose` | Enable verbosity | Optional | `false` |
 
 ### Docker Image
 
