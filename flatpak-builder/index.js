@@ -26,7 +26,7 @@ class Configuration {
     this.runTests = core.getBooleanInput('run-tests') || false
     // The bundle name
     this.bundle = core.getInput('bundle') || 'app.flatpak'
-    this.branch = core.getInput('branch')
+    this.branch = core.getInput('branch') || 'master'
     // Whether to build a bundle or not
     this.buildBundle = core.getBooleanInput('build-bundle') || true
     // Whether to restore the cache or not
@@ -56,7 +56,6 @@ class Configuration {
     this.buildDir = 'flatpak_app'
     // The flatpak repository name
     this.localRepoName = 'repo'
-    this.branch = 'master'
     // Verbosity
     this.verbose = core.getBooleanInput('verbose') || false
   }
