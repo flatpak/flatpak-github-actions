@@ -1,10 +1,12 @@
 # Contributing
+
 If you plan to contribute to flatpak-github-actions, here's a couple of things that could help you get started.
 
 ## Prerequisites
+
 - NodeJS 16.x or newer
 - Yarn
-- `vercel/ncc` you can install it with `yarn global add vercel/ncc` 
+- `@vercel/ncc` you can install it with `yarn global add @vercel/ncc`
 
 For more details, we recommend looking the extensive guide at [Creating a JavaScript action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action#prerequisites)
 
