@@ -86,9 +86,11 @@ jobs:
     - uses: actions/checkout@v3
     # Docker is required by the docker/setup-qemu-action which enables emulation
     - name: Install deps
+      if: ${{ matrix.arch != 'x86_64' }}
       run: |
         dnf -y install docker
     - name: Set up QEMU
+      if: ${{ matrix.arch != 'x86_64' }}
       id: qemu
       uses: docker/setup-qemu-action@v2
       with:
