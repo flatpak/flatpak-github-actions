@@ -268,6 +268,18 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     }
     await exec.exec('flatpak', args)
   }
+
+  if (config.mirrorScreenshotsUrl) {
+    core.info('Committing screenshots...')
+    exec.exec(
+      'ostree',
+      'commit',
+      `--repo=${config.localRepoName}`,
+      '--canonical-permissions',
+      `--branch=screenshots/${config.arch}`,
+      `${config.buildDir}/screenshots`
+    )
+  }
 }
 
 /**
