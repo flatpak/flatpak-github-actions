@@ -56,6 +56,7 @@ jobs:
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
 | `gpg-sign` | The key to sign the package | Optional | - |
+| `local-repository` | The path to the local OSTree repository used to export the built artifacts to and build the bundle from. If the path exists, it must point to a valid OSTree repository, otherwise a new repository will be created. | Optional | `repo` |
 | `verbose` | Enable verbosity | Optional | `false` |
 
 #### Building for multiple CPU architectures

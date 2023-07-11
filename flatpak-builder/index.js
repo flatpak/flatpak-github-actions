@@ -54,8 +54,8 @@ class Configuration {
     this._manifestHash = null
     // Where to build the application
     this.buildDir = 'flatpak_app'
-    // The flatpak repository name
-    this.localRepoName = 'repo'
+    // The flatpak repository path
+    this.localRepoPath = core.getInput('local-repository')
     // Verbosity
     this.verbose = core.getBooleanInput('verbose') || false
   }
@@ -217,7 +217,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   core.info('Building the flatpak...')
 
   const args = [
-    `--repo=${config.localRepoName}`,
+    `--repo=${config.localRepoPath}`,
     '--disable-rofiles-fuse',
     `--install-deps-from=${config.repositoryName}`,
     '--force-clean',
@@ -256,7 +256,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     core.info('Creating a bundle...')
     const args = [
       'build-bundle',
-      config.localRepoName,
+      config.localRepoPath,
       config.bundle,
       `--runtime-repo=${config.repositoryUrl}`,
       `--arch=${config.arch}`,

@@ -9,7 +9,7 @@ class Configuration {
     this.endOfLife = core.getInput('end-of-life')
     this.endOfLifeRebase = core.getInput('end-of-life-rebase')
     // FIXME: get this from the outputs of the flatpak-builder action
-    this.localRepoName = 'repo'
+    this.localRepoPath = 'repo'
     // Verbosity
     this.verbose = core.getBooleanInput('verbose') || false
   }
@@ -25,7 +25,7 @@ const run = async (config) => {
   const args = [
     'build-update-repo',
     '--generate-static-deltas',
-    config.localRepoName
+    config.localRepoPath
   ]
   if (config.verbose) {
     args.push('-vv', '--ostree-verbose')
@@ -81,7 +81,7 @@ const run = async (config) => {
         '--publish',
         '--wait',
         buildId,
-        config.localRepoName
+        config.localRepoPath
       ]
       if (config.verbose) {
         args.push('--verbose')
