@@ -263,6 +263,9 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
       appId,
       branch
     ]
+    if (manifest['build-runtime'] || manifest['build-extension']) {
+      args.push('--runtime')
+    }
     if (config.verbose) {
       args.push('-vv', '--ostree-verbose')
     }
