@@ -245,7 +245,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 
   if (config.cacheBuildDir && (cacheKey !== cacheHitKey)) {
     await cache.saveCache(
-      CACHE_PATH,
+      [...CACHE_PATH], // TODO: drop once https://github.com/actions/toolkit/pull/1378 is merged
       cacheKey
     ).catch((reason) => {
       core.error(`Failed to save cache: ${reason}`)
@@ -320,7 +320,7 @@ const prepareBuild = async (config) => {
   if (config.cacheBuildDir && config.restoreCache) {
     const cacheKey = await config.cacheKey()
     cacheHitKey = await cache.restoreCache(
-      CACHE_PATH,
+      [...CACHE_PATH], // TODO: drop once https://github.com/actions/toolkit/pull/1378 is merged
       `${cacheKey}`,
       [
         'flatpak-builder-',
