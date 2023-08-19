@@ -11,7 +11,7 @@ class Configuration {
     // FIXME: get this from the outputs of the flatpak-builder action
     this.localRepoName = 'repo'
     // Verbosity
-    this.verbose = core.getBooleanInput('verbose') || false
+    this.verbose = core.getBooleanInput('verbose')
   }
 }
 

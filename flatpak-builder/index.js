@@ -23,12 +23,12 @@ class Configuration {
     // The module where the build should stop
     this.stopAtModule = core.getInput('stop-at-module') || null
     // Whether to run tests or not
-    this.runTests = core.getBooleanInput('run-tests') || false
+    this.runTests = core.getBooleanInput('run-tests')
     // The bundle name
     this.bundle = core.getInput('bundle') || 'app.flatpak'
     this.branch = core.getInput('branch') || 'master'
     // Whether to build a bundle or not
-    this.buildBundle = core.getBooleanInput('build-bundle') || true
+    this.buildBundle = core.getBooleanInput('build-bundle')
     // Whether to restore the cache or not
     this.restoreCache = core.getBooleanInput('restore-cache')
     // Whether to enable caching the build directory
@@ -57,7 +57,7 @@ class Configuration {
     // The flatpak repository name
     this.localRepoName = 'repo'
     // Verbosity
-    this.verbose = core.getBooleanInput('verbose') || false
+    this.verbose = core.getBooleanInput('verbose')
   }
 
   async cacheKey () {
