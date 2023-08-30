@@ -78,7 +78,7 @@ jobs:
             remote: flathub
 
           - name: kde-6.5
-            packages: org.kde.Platform//6.4 org.kde.Sdk//6.5
+            packages: org.kde.Platform//6.5 org.kde.Sdk//6.5
             remote: flathub
 
           - name: elementary-juno
