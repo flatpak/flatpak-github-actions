@@ -30,7 +30,7 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.1
       with:
         bundle: palette.flatpak
@@ -83,7 +83,7 @@ jobs:
       # Don't fail the whole workflow if one architecture fails
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     # Docker is required by the docker/setup-qemu-action which enables emulation
     - name: Install deps
       if: ${{ matrix.arch != 'x86_64' }}
@@ -163,7 +163,7 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.1
       name: "Build"
       with:

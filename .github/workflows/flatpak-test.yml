@@ -25,7 +25,7 @@ jobs:
           - cache: no-cache
             restore: cache-restored
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install QEMU deps
         if: ${{ matrix.arch != 'x86_64' }}
         run: |
@@ -58,7 +58,7 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./flatpak-builder
         with:
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
@@ -74,7 +74,7 @@ jobs:
       image: bilelmoussaoui/flatpak-github-actions:gnome-44
       options: --privileged
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./flatpak-builder
         with:
           bundle: org.example.MyApp.Devel-cache-hit.flatpak
@@ -89,7 +89,7 @@ jobs:
       matrix:
         node-version: [14.x, 16.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -103,7 +103,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 16
         uses: actions/setup-node@v3
         with:
