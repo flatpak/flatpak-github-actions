@@ -31,7 +31,7 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v4
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.1
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
@@ -95,7 +95,7 @@ jobs:
       uses: docker/setup-qemu-action@v2
       with:
         platforms: arm64
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.1
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
@@ -164,7 +164,7 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v4
-    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6.1
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       name: "Build"
       with:
         bundle: palette.flatpak
