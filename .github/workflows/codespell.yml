@@ -1,18 +1,15 @@
+name: Typos
 on:
-  push:
-    branches: [master]
   pull_request:
-
-name: Codespell
-
+  push:
+    branches:
+      - "master"
 jobs:
-  codespell:
-    runs-on: ubuntu-22.04
+  typos:
+    name: Spell Check with Typos
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: codespell-project/actions-codespell@master
-        with:
-          check_filenames: true
-          skip: "./.git/**,./flat-manager/dist/index.js,./flatpak-builder/dist/index.js,**/yarn.lock"
-          builtin: "clear,rare,informal,usage,code"
-          ignore_words_list: "master" # can't do much about it, flatpak uses it by default
+      - name: Checkout Actions Repository
+        uses: actions/checkout@v4
+      - name: Check spelling
+        uses: crate-ci/typos@master
