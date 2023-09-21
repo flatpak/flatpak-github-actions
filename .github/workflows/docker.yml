@@ -49,6 +49,10 @@ jobs:
             packages: org.gnome.Platform//44 org.gnome.Sdk//44
             remote: flathub
 
+          - name: gnome-45
+            packages: org.gnome.Platform//45 org.gnome.Sdk//45
+            remote: flathub
+
           - name: gnome-nightly
             packages: org.gnome.Platform//master org.gnome.Sdk//master
             remote: gnome-nightly
