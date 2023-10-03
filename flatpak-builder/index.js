@@ -304,7 +304,6 @@ const runCommand = async (manifest, manifestPath, cacheHitKey, config) => {
   core.info('Running a command in flatpak...')
 
   const args = [
-    `--repo=${config.localRepoName}`,
     '--disable-rofiles-fuse',
     `--install-deps-from=${config.repositoryName}`,
     '--force-clean',
