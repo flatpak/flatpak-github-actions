@@ -296,6 +296,8 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 }
 
 const runCommand = async (manifest, manifestPath, cacheHitKey, config) => {
+  const branch = manifest.branch || config.branch
+
   let cacheKey
   if (config.cacheBuildDir) { cacheKey = await config.cacheKey() }
 
