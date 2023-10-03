@@ -405,11 +405,10 @@ const run = async (config) => {
     })
     .then((manifest) => {
       if (config.runCommand) {
-        runCommand(manifest, config.modifiedManifestPath, cacheHitKey, config)
+        return runCommand(manifest, config.modifiedManifestPath, cacheHitKey, config)
       } else {
-        build(manifest, config.modifiedManifestPath, cacheHitKey, config)
+        return build(manifest, config.modifiedManifestPath, cacheHitKey, config)
       }
-      return 
     })
     .then(() => {
       if (dbusSession) {
