@@ -321,8 +321,7 @@ const runCommand = async (manifest, manifestPath, cacheHitKey, config) => {
   if (config.verbose) {
     args.push('--verbose')
   }
-  args.push(config.buildDir, manifestPath)
-  args.push(config.runCommand)
+  args.push('--run', config.buildDir, manifestPath, config.runCommand)
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
 }
