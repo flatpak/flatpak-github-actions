@@ -24,6 +24,7 @@ class Configuration {
     this.stopAtModule = core.getInput('stop-at-module') || null
     // Whether to run tests or not
     this.runTests = core.getBooleanInput('run-tests')
+    this.runCommand = core.getInput('run-command') || null
     // The bundle name
     this.bundle = core.getInput('bundle') || 'app.flatpak'
     this.branch = core.getInput('branch') || 'master'
@@ -294,6 +295,38 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   }
 }
 
+const runCommand = async (manifest, manifestPath, cacheHitKey, config) => {
+  let cacheKey
+  if (config.cacheBuildDir) { cacheKey = await config.cacheKey() }
+
+  core.info('Running a command in flatpak...')
+
+  const args = [
+    `--repo=${config.localRepoName}`,
+    '--disable-rofiles-fuse',
+    `--install-deps-from=${config.repositoryName}`,
+    '--force-clean',
+    `--default-branch=${branch}`,
+    `--arch=${config.arch}`
+  ]
+  if (config.cacheBuildDir) {
+    args.push('--ccache')
+  }
+  if (config.mirrorScreenshotsUrl) {
+    args.push(`--mirror-screenshots-url=${config.mirrorScreenshotsUrl}`)
+  }
+  if (config.gpgSign) {
+    args.push(`--gpg-sign=${config.gpgSign}`)
+  }
+  if (config.verbose) {
+    args.push('--verbose')
+  }
+  args.push(config.buildDir, manifestPath)
+  args.push(config.runCommand)
+
+  await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
+}
+
 /**
  * Initialize the build
  *
@@ -372,7 +405,12 @@ const run = async (config) => {
       return saveManifest(modifiedManifest, config.modifiedManifestPath)
     })
     .then((manifest) => {
-      return build(manifest, config.modifiedManifestPath, cacheHitKey, config)
+      if (config.runCommand) {
+        runCommand(manifest, config.modifiedManifestPath, cacheHitKey, config)
+      } else {
+        build(manifest, config.modifiedManifestPath, cacheHitKey, config)
+      }
+      return 
     })
     .then(() => {
       if (dbusSession) {
