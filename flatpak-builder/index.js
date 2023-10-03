@@ -404,6 +404,8 @@ const run = async (config) => {
       return saveManifest(modifiedManifest, config.modifiedManifestPath)
     })
     .then((manifest) => {
+      core.info('Yes this code is running...')
+      core.info(config.runCommand)
       if (config.runCommand) {
         return runCommand(manifest, config.modifiedManifestPath, cacheHitKey, config)
       } else {
