@@ -39,6 +39,12 @@ inputs:
       Possible values: true, enabled, yes, y. Or something else to disable them.
     default: "false"
     required: false
+  run-command:
+    description: >
+      Command to be run inside the flatpak container. When using this parameter in a step
+      flatpak building is disabled.
+    default: "false"
+    required: false
   cache:
     description: >
       Toggles caching the flatpak-builder directory.
