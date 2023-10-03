@@ -416,7 +416,7 @@ const run = async (config) => {
         dbusSession = null
       }
 
-      if (!config.buildBundle || config.stopAtModule) {
+      if (!config.buildBundle || config.stopAtModule || config.runCommand) {
         return
       }
 
