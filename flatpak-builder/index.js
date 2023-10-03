@@ -304,20 +304,10 @@ const runCommand = async (manifest, manifestPath, cacheHitKey, config) => {
   core.info('Running a command in flatpak...')
 
   const args = [
-    '--disable-rofiles-fuse',
-    `--install-deps-from=${config.repositoryName}`,
-    '--force-clean',
-    `--default-branch=${branch}`,
     `--arch=${config.arch}`
   ]
   if (config.cacheBuildDir) {
     args.push('--ccache')
-  }
-  if (config.mirrorScreenshotsUrl) {
-    args.push(`--mirror-screenshots-url=${config.mirrorScreenshotsUrl}`)
-  }
-  if (config.gpgSign) {
-    args.push(`--gpg-sign=${config.gpgSign}`)
   }
   if (config.verbose) {
     args.push('--verbose')
