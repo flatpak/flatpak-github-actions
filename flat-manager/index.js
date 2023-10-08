@@ -39,7 +39,7 @@ const run = async (config) => {
       ]
 
       if (config.endOfLife) {
-        args.push_back(`--end-of-life=${config.endOfLife}`)
+        args.push(`--end-of-life=${config.endOfLife}`)
       }
 
       if (config.endOfLifeRebase) {
@@ -47,7 +47,7 @@ const run = async (config) => {
           throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
         }
 
-        args.push_back(`--end-of-life-rebase=${config.endOfLifeRebase}`)
+        args.push(`--end-of-life-rebase=${config.endOfLifeRebase}`)
       }
 
       args = args.concat([
