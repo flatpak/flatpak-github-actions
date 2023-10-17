@@ -25,6 +25,10 @@ inputs:
     description: >
       "Mark new refs as end-of-life. This one takes an ID that supersedes the current one. By the user's request, the application data may be preserved for the new application. Note, this is actually a prefix match, so if you say org.the.app=org.new.app, then something like org.the.app.Locale will be rebased to org.new.app.Locale."
     required: false
+  build-log-url:
+    description: >
+      Set URL to the build log that created Flatpak build
+    required: false
   verbose:
     description: >
       "Enable verbosity"

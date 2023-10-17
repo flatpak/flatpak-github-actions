@@ -8,6 +8,7 @@ class Configuration {
     this.token = core.getInput('token')
     this.endOfLife = core.getInput('end-of-life')
     this.endOfLifeRebase = core.getInput('end-of-life-rebase')
+    this.buildLogUrl = core.getInput('build-log-url')
     // FIXME: get this from the outputs of the flatpak-builder action
     this.localRepoName = 'repo'
     // Verbosity
@@ -58,6 +59,10 @@ const run = async (config) => {
 
       if (config.verbose) {
         args.push('--verbose')
+      }
+
+      if (config.buildLogUrl) {
+        args.push(`--build-log-url=${config.buildLogUrl}`)
       }
 
       const exitCode = await exec.exec('flat-manager-client', args, {

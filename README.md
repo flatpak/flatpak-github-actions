@@ -189,6 +189,7 @@ jobs:
 | `token` | A flat-manager token  | Required | - |
 | `end-of-life` | Reason for end of life  | Optional | - |
 | `end-of-life-rebase` | The new app-id  | Optional | - |
+| `build-log-url` | URL to Flatpak build log | Optional | - |
 | `verbose` | Enable verbosity | Optional | `false` |
 
 ### Docker Image
