@@ -8,4 +8,4 @@ RUN flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.
 RUN flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 RUN flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
 
-ADD --chmod=755 https://raw.githubusercontent.com/flatpak/flat-manager/9401efbdc0d6bd489507d8401c567ba219d735d5/flat-manager-client /usr/bin
+ADD --chmod=755 https://raw.githubusercontent.com/flatpak/flat-manager/b07fe8652357ce16d9625f72f9acceaca94d860a/flat-manager-client /usr/bin
