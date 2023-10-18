@@ -17,6 +17,12 @@ class Configuration {
 }
 
 const run = async (config) => {
+  if (config.endOfLifeRebase) {
+    if (!config.endOfLife) {
+      throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
+    }
+  }
+
   if (config.verbose) {
     await exec.exec('flatpak --version')
     await exec.exec('flatpak-builder --version')
@@ -39,16 +45,8 @@ const run = async (config) => {
         config.token
       ]
 
-      if (config.endOfLife) {
-        args.push(`--end-of-life=${config.endOfLife}`)
-      }
-
-      if (config.endOfLifeRebase) {
-        if (!config.endOfLife) {
-          throw Error('end-of-life has to be set if you want to use end-of-life-rebase')
-        }
-
-        args.push(`--end-of-life-rebase=${config.endOfLifeRebase}`)
+      if (config.verbose) {
+        args.push('--verbose')
       }
 
       args = args.concat([
@@ -56,10 +54,6 @@ const run = async (config) => {
         config.flatManagerUrl,
         config.repository
       ])
-
-      if (config.verbose) {
-        args.push('--verbose')
-      }
 
       if (config.buildLogUrl) {
         args.push(`--build-log-url=${config.buildLogUrl}`)
@@ -78,33 +72,53 @@ const run = async (config) => {
       return buildId
     })
     .then(async (buildId) => {
-      const args = [
+      let args = [
         '--token',
-        config.token,
-        'push',
-        '--commit',
-        '--publish',
-        '--wait',
-        buildId,
-        config.localRepoName
-      ]
-      if (config.verbose) {
-        args.push('--verbose')
-      }
-      await exec.exec('flat-manager-client', args)
-      return buildId
-    })
-    .then(async (buildId) => {
-      const args = [
-        '--token',
-        config.token,
-        'purge',
-        buildId
+        config.token
       ]
 
       if (config.verbose) {
         args.push('--verbose')
       }
+
+      args = args.concat([
+        'push',
+        '--commit',
+        '--publish',
+        '--wait'
+      ])
+
+      if (config.endOfLife) {
+        args.push(`--end-of-life=${config.endOfLife}`)
+      }
+
+      if (config.endOfLifeRebase) {
+        args.push(`--end-of-life-rebase=${config.endOfLifeRebase}`)
+      }
+
+      args = args.concat([
+        buildId,
+        config.localRepoName
+      ])
+
+      await exec.exec('flat-manager-client', args)
+      return buildId
+    })
+    .then(async (buildId) => {
+      let args = [
+        '--token',
+        config.token
+      ]
+
+      if (config.verbose) {
+        args.push('--verbose')
+      }
+
+      args = args.concat([
+        'purge',
+        buildId
+      ])
+
       await exec.exec('flat-manager-client', args)
     })
     .catch((err) => {
