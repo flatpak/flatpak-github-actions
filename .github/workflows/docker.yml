@@ -25,6 +25,10 @@ jobs:
             packages: org.freedesktop.Platform//22.08 org.freedesktop.Sdk//22.08
             remote: flathub
 
+          - name: freedesktop-23.08
+            packages: org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08
+            remote: flathub
+
           - name: gnome-3.38
             packages: org.gnome.Platform//3.38 org.gnome.Sdk//3.38
             remote: flathub
