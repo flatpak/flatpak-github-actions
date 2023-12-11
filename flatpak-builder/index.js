@@ -280,7 +280,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
       `--repo=${config.localRepoName}`,
       '--canonical-permissions',
       `--branch=screenshots/${config.arch}`,
-      `${config.buildDir}/screenshots`
+      `${config.buildDir}/files/share/app-info/media`
     ]
 
     if (config.verbose) {
