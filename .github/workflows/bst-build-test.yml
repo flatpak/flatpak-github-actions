@@ -1,0 +1,63 @@
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/bst-build-test.yml'
+      - 'buildstream/**'
+    branches:
+      - master
+  push:
+    paths:
+      - '.github/workflows/bst-build-test.yml'
+      - 'buildstream/**'
+    branches-ignore:
+      - master
+
+name: BuildStream Build Test
+jobs:
+  buildstream:
+    name: Build
+    runs-on: ubuntu-22.04
+
+    steps:
+      # This action maximize the space provided by the runner which makes it more viable for BuildStream
+      # As a volume mounted to the GitHub workspace directory
+      - uses: easimon/maximize-build-space@v10
+        with:
+          remove-dotnet: true
+          remove-android: true
+          remove-haskell: true
+          remove-codeql: true
+          remove-docker-images: true
+          # Keep 10 GiB to have the same environment as bst-push-image.yml
+          root-reserve-mb: 10240
+
+      - name: Install BuildStream
+        run: |
+          mkdir ~/.local/bin
+          wget https://gitlab.com/BuildGrid/buildbox/buildbox-integration/-/releases/1.1.0/downloads/buildbox-x86_64-linux-gnu.tgz
+          tar -xvzf buildbox-x86_64-linux-gnu.tgz -C ~/.local/bin
+          rm -rf buildbox-x86_64-linux-gnu.tgz
+
+          sudo apt-get install bubblewrap fuse3 git lzip patch python3
+          sudo apt-get install g++ python3-dev python3-pip
+
+          sudo apt-get install python3-{arpy,dulwich,requests,tomli}
+
+          pip3 install --user BuildStream==2.1.0
+
+      - name: Write BuildStream config
+        # Make BuildStream use the workspace volume
+        run: |
+          mkdir -p ~/.config
+          cat >> ~/.config/buildstream2.conf << EOF
+          sourcedir: ${GITHUB_WORKSPACE}/.bst/sources
+          cachedir: ${GITHUB_WORKSPACE}/.bst
+          logdir: ${GITHUB_WORKSPACE}/.bst/logs
+          EOF
+
+      - uses: actions/checkout@v4
+
+      - name: Build Image
+        working-directory: ./buildstream
+        run: |
+          bst --on-error continue build oci/tooling-ghcr-flatpak.bst
