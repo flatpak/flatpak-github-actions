@@ -1,0 +1,16 @@
+# Source aliases.
+#
+# These are used in the individual element.bst files in
+# place of specifying full uris.
+#
+# The location from where source code is downloaded can
+# be changed without triggering a rebuild.
+#
+aliases:
+  # file aliases (e.g. tarballs)
+  pypi: https://files.pythonhosted.org/packages/
+
+  # git aliases go here
+  github: https://github.com/
+  gitlab: https://gitlab.com/
+  gnome: https://gitlab.gnome.org/GNOME/
