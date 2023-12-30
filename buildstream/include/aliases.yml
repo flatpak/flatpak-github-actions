@@ -8,6 +8,7 @@
 #
 aliases:
   # file aliases (e.g. tarballs)
+  crates: https://static.crates.io/
   flathub: https://flathub.org/repo/
   flathub_beta: https://flathub.org/beta-repo/
   gnome_nightly: https://nightly.gnome.org/

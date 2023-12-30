@@ -10,6 +10,14 @@ bst build tooling.bst
 bst build oci/tooling-ghcr-flatpak.bst
 ```
 
+## Update an element with Rust crates
+
+Update the first elements source that have not cargo as kind then do following command, crates will then be updated.
+
+```
+bst source track components/NAME_OF_THE_ELEMENT.bst
+```
+
 ## Update junctions
 
 ```
@@ -18,6 +26,9 @@ bst source track gnome-build-meta.bst
 ```
 
 Both junctions are now update to the latest commit of their release branch
+
+### Note for future update
+- Freedesktop SDK can't be updated until flatpak-builder-lint supports lxml 5
 
 ## Upgrade junctions
 

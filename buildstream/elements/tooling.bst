@@ -10,6 +10,7 @@ depends:
 - freedesktop-sdk.bst:components/appstream-glib.bst
 - gnome-build-meta.bst:vm/git-lfs.bst
 - gnome-build-meta.bst:core-deps/xvfb.bst
+- components/flatpak-builder-lint.bst
 - gnome-build-meta.bst:vm/flathub-config.bst
 - flatpakrepo/flathub-beta.bst
 - gnome-build-meta.bst:vm/gnome-nightly-config.bst
