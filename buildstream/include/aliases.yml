@@ -14,6 +14,7 @@ aliases:
   github_files: https://github.com/
   gnome_nightly: https://nightly.gnome.org/
   pypi: https://files.pythonhosted.org/packages/
+  qemu: https://download.qemu.org/
 
   # git aliases go here
   github: https://github.com/
