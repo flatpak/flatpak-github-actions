@@ -11,6 +11,7 @@ aliases:
   crates: https://static.crates.io/
   flathub: https://flathub.org/repo/
   flathub_beta: https://flathub.org/beta-repo/
+  github_files: https://github.com/
   gnome_nightly: https://nightly.gnome.org/
   pypi: https://files.pythonhosted.org/packages/
 
