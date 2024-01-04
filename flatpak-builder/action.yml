@@ -78,6 +78,11 @@ inputs:
       "Enable verbosity"
     required: false
     default: "false"
+  upload-artifact:
+    description: >
+      "Whether to upload the resulting bundle or not as an artifact"
+    required: false
+    default: "true"
 runs:
   using: "node20"
   main: "dist/index.js"

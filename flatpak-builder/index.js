@@ -58,6 +58,8 @@ class Configuration {
     this.localRepoName = 'repo'
     // Verbosity
     this.verbose = core.getBooleanInput('verbose')
+    // Upload the artifact
+    this.uploadArtifact = core.getBooleanInput('upload-artifact')
   }
 
   async cacheKey () {
@@ -384,9 +386,13 @@ const run = async (config) => {
         return
       }
 
-      core.info('Uploading artifact...')
-      const artifactClient = artifact.create()
+      if (!config.uploadArtifact) {
+        core.info('Skipping artifact upload!')
+        return
+      }
 
+      const artifactClient = artifact.create()
+      core.info('Uploading artifact...')
       // Append the arch to the bundle name to prevent conflicts in multi-arch jobs
       const bundleName = config.bundle.replace('.flatpak', '') + `-${config.arch}`
       return artifactClient.uploadArtifact(bundleName, [config.bundle], '.', {

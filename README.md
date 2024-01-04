@@ -57,6 +57,7 @@ jobs:
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
 | `gpg-sign` | The key to sign the package | Optional | - |
 | `verbose` | Enable verbosity | Optional | `false` |
+| `upload-artifact` | Whether to upload the resulting bundle or not as an artifact | Optional | `true` |
 
 #### Building for multiple CPU architectures
 
