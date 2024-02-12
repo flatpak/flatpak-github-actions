@@ -116,3 +116,7 @@ jobs:
         working-directory: flat-manager
       - run: yarn run eslint .
         working-directory: flat-manager
+      - run: yarn install --also=dev
+        working-directory: update-binfmts
+      - run: yarn run eslint .
+        working-directory: update-binfmts
