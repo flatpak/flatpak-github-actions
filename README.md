@@ -171,7 +171,7 @@ jobs:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
         cache-key: flatpak-builder-${{ github.sha }}
-    - uses: flatpak/flatpak-github-actions/flat-manager@v4
+    - uses: flatpak/flatpak-github-actions/flat-manager@v6
       name: "Deploy"
       with:
         repository: elementary
