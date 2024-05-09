@@ -17,7 +17,7 @@ const CACHE_PATH = [
  * The options the action can take
  */
 class Configuration {
-  constructor () {
+  constructor() {
     // The flatpak manifest path
     this.manifestPath = core.getInput('manifest-path')
     // The module where the build should stop
@@ -62,11 +62,11 @@ class Configuration {
     this.uploadArtifact = core.getBooleanInput('upload-artifact')
   }
 
-  async cacheKey () {
+  async cacheKey() {
     if (!this._cacheKey) {
       try {
         if (!this._manifestHash) { this._manifestHash = (await computeHash(this.manifestPath)).substring(0, 20) }
-        return `flatpak-builder-${this._manifestHash}-${this.arch}`
+        return `flatpak-builder-${this.arch}-${this._manifestHash}`
       } catch (err) {
         core.setFailed(`Fail to create create cache key based on manifest hash: ${err}`)
       }
@@ -328,8 +328,7 @@ const prepareBuild = async (config) => {
       [...CACHE_PATH], // TODO: drop once https://github.com/actions/toolkit/pull/1378 is merged
       `${cacheKey}`,
       [
-        'flatpak-builder-',
-        'flatpak-'
+        `flatpak-builder-${this.arch}`,
       ]
     )
     if (cacheHitKey !== undefined) {

@@ -54,7 +54,7 @@ inputs:
   cache-key:
     description: >
       Defines the cache-key to use.
-      Defaults to flatpak-builder-${sha256(manifestPath)}
+      Defaults to flatpak-builder-${arch}-${sha256(manifestPath)}
     required: false
   branch:
     description: The flatpak branch.
