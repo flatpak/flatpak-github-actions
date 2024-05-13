@@ -5,3 +5,5 @@ node_modules
 .vscode
 package-lock.json
 .flatpak
+__pycache__
+.bst

@@ -1,2 +1,5 @@
+[default.extend-identifiers]
+flate2 = "flate2"
+
 [files]
 extend-exclude = ["**/dist/index.js"]

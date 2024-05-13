@@ -1,0 +1,22 @@
+# Source aliases.
+#
+# These are used in the individual element.bst files in
+# place of specifying full uris.
+#
+# The location from where source code is downloaded can
+# be changed without triggering a rebuild.
+#
+aliases:
+  # file aliases (e.g. tarballs)
+  crates: https://static.crates.io/
+  flathub: https://flathub.org/repo/
+  flathub_beta: https://flathub.org/beta-repo/
+  github_files: https://github.com/
+  gnome_nightly: https://nightly.gnome.org/
+  pypi: https://files.pythonhosted.org/packages/
+  qemu: https://download.qemu.org/
+
+  # git aliases go here
+  github: https://github.com/
+  gitlab: https://gitlab.com/
+  gnome: https://gitlab.gnome.org/GNOME/
