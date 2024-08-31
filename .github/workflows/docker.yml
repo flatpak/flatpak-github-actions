@@ -119,6 +119,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up QEMU for cross-compilation
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: aarch64
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2.2.1
         with:
@@ -142,6 +147,7 @@ jobs:
           pull: true
           push: true
           tags: localhost:5000/fedora-base:latest
+          platforms: linux/amd64,linux/arm64
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2.1.0
@@ -158,10 +164,11 @@ jobs:
           RUN --security=insecure flatpak install -y --noninteractive ${{matrix.runtime.remote}} ${{ matrix.runtime.packages }}
 
       - name: Build & push the ${{ matrix.runtime.name }} image to Docker Hub
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v6
         with:
           allow: security.insecure
           context: .
           file: ${{ matrix.runtime.name }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
+          platforms: linux/amd64,linux/arm64
