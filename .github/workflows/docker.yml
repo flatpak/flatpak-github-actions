@@ -165,3 +165,4 @@ jobs:
           file: ${{ matrix.runtime.name }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
+          platforms: linux/amd64,linux/arm64
