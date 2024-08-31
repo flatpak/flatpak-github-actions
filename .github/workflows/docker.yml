@@ -158,7 +158,7 @@ jobs:
           RUN --security=insecure flatpak install -y --noninteractive ${{matrix.runtime.remote}} ${{ matrix.runtime.packages }}
 
       - name: Build & push the ${{ matrix.runtime.name }} image to Docker Hub
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v6
         with:
           allow: security.insecure
           context: .
