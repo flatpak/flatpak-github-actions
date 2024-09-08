@@ -207,6 +207,7 @@ You can specify the specific runtime you need to use through the image tags:
 | Freedesktop SDK | 21.08   | `freedesktop-21.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-21.08` |
 | Freedesktop SDK | 22.08   | `freedesktop-22.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-22.08` |
 | Freedesktop SDK | 23.08   | `freedesktop-23.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08` |
+| Freedesktop SDK | 24.08   | `freedesktop-24.08` | `image: bilelmoussaoui/flatpak-github-actions:freedesktop-24.08` |
 | GNOME           | 3.38    | `gnome-3.38`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-3.38`        |
 | GNOME           | 40    | `gnome-40`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-40`        |
 | GNOME           | 41    | `gnome-41`        | `image: bilelmoussaoui/flatpak-github-actions:gnome-41`        |
