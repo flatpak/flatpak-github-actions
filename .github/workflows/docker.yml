@@ -92,7 +92,7 @@ jobs:
           - name: kde-6.2
             packages: org.kde.Platform//6.2 org.kde.Sdk//6.2
             remote: flathub
-          
+
           - name: kde-6.3
             packages: org.kde.Platform//6.3 org.kde.Sdk//6.3
             remote: flathub
@@ -127,6 +127,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2.2.1
         with:
@@ -147,6 +150,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           context: .
           file: Dockerfile
+          platforms: linux/amd64,linux/arm64
           pull: true
           push: true
           tags: localhost:5000/fedora-base:latest
@@ -171,5 +175,6 @@ jobs:
           allow: security.insecure
           context: .
           file: ${{ matrix.runtime.name }}.Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
