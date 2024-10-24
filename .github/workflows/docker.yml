@@ -12,109 +12,113 @@ jobs:
 
     strategy:
       matrix:
+        arch:
+          - value: x86_64
+          - value: aarch64
+            suffix: -aarch64
         runtime:
           - name: freedesktop-20.08
-            packages: org.freedesktop.Platform//20.08 org.freedesktop.Sdk//20.08
+            packages: org.freedesktop.Platform/<ARCH>/20.08 org.freedesktop.Sdk/<ARCH>/20.08
             remote: flathub
 
           - name: freedesktop-21.08
-            packages: org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
+            packages: org.freedesktop.Platform/<ARCH>/21.08 org.freedesktop.Sdk/<ARCH>/21.08
             remote: flathub
 
           - name: freedesktop-22.08
-            packages: org.freedesktop.Platform//22.08 org.freedesktop.Sdk//22.08
+            packages: org.freedesktop.Platform/<ARCH>/22.08 org.freedesktop.Sdk/<ARCH>/22.08
             remote: flathub
 
           - name: freedesktop-23.08
-            packages: org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08
+            packages: org.freedesktop.Platform/<ARCH>/23.08 org.freedesktop.Sdk/<ARCH>/23.08
             remote: flathub
 
           - name: freedesktop-24.08
-            packages: org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08
+            packages: org.freedesktop.Platform/<ARCH>/24.08 org.freedesktop.Sdk/<ARCH>/24.08
             remote: flathub
 
           - name: gnome-3.38
-            packages: org.gnome.Platform//3.38 org.gnome.Sdk//3.38
+            packages: org.gnome.Platform/<ARCH>/3.38 org.gnome.Sdk/<ARCH>/3.38
             remote: flathub
 
           - name: gnome-40
-            packages: org.gnome.Platform//40 org.gnome.Sdk//40
+            packages: org.gnome.Platform/<ARCH>/40 org.gnome.Sdk/<ARCH>/40
             remote: flathub
 
           - name: gnome-41
-            packages: org.gnome.Platform//41 org.gnome.Sdk//41
+            packages: org.gnome.Platform/<ARCH>/41 org.gnome.Sdk/<ARCH>/41
             remote: flathub
 
           - name: gnome-42
-            packages: org.gnome.Platform//42 org.gnome.Sdk//42
+            packages: org.gnome.Platform/<ARCH>/42 org.gnome.Sdk/<ARCH>/42
             remote: flathub
 
           - name: gnome-43
-            packages: org.gnome.Platform//43 org.gnome.Sdk//43
+            packages: org.gnome.Platform/<ARCH>/43 org.gnome.Sdk/<ARCH>/43
             remote: flathub
 
           - name: gnome-44
-            packages: org.gnome.Platform//44 org.gnome.Sdk//44
+            packages: org.gnome.Platform/<ARCH>/44 org.gnome.Sdk/<ARCH>/44
             remote: flathub
 
           - name: gnome-45
-            packages: org.gnome.Platform//45 org.gnome.Sdk//45
+            packages: org.gnome.Platform/<ARCH>/45 org.gnome.Sdk/<ARCH>/45
             remote: flathub
 
           - name: gnome-46
-            packages: org.gnome.Platform//46 org.gnome.Sdk//46
+            packages: org.gnome.Platform/<ARCH>/46 org.gnome.Sdk/<ARCH>/46
             remote: flathub
 
           - name: gnome-47
-            packages: org.gnome.Platform//47 org.gnome.Sdk//47
+            packages: org.gnome.Platform/<ARCH>/47 org.gnome.Sdk/<ARCH>/47
             remote: flathub
 
           - name: gnome-nightly
-            packages: org.gnome.Platform//master org.gnome.Sdk//master
+            packages: org.gnome.Platform/<ARCH>/master org.gnome.Sdk/<ARCH>/master
             remote: gnome-nightly
 
           - name: kde-5.15
-            packages: org.kde.Platform//5.15 org.kde.Sdk//5.15
+            packages: org.kde.Platform/<ARCH>/5.15 org.kde.Sdk/<ARCH>/5.15
             remote: flathub
 
           - name: kde-5.15-21.08
-            packages: org.kde.Platform//5.15-21.08 org.kde.Sdk//5.15-21.08
+            packages: org.kde.Platform/<ARCH>/5.15-21.08 org.kde.Sdk/<ARCH>/5.15-21.08
             remote: flathub
 
           - name: kde-5.15-22.08
-            packages: org.kde.Platform//5.15-22.08 org.kde.Sdk//5.15-22.08
+            packages: org.kde.Platform/<ARCH>/5.15-22.08 org.kde.Sdk/<ARCH>/5.15-22.08
             remote: flathub
 
           - name: kde-5.15-23.08
-            packages: org.kde.Platform//5.15-23.08 org.kde.Sdk//5.15-23.08
+            packages: org.kde.Platform/<ARCH>/5.15-23.08 org.kde.Sdk/<ARCH>/5.15-23.08
             remote: flathub
 
           - name: kde-6.2
-            packages: org.kde.Platform//6.2 org.kde.Sdk//6.2
+            packages: org.kde.Platform/<ARCH>/6.2 org.kde.Sdk/<ARCH>/6.2
             remote: flathub
-          
+
           - name: kde-6.3
-            packages: org.kde.Platform//6.3 org.kde.Sdk//6.3
+            packages: org.kde.Platform/<ARCH>/6.3 org.kde.Sdk/<ARCH>/6.3
             remote: flathub
 
           - name: kde-6.4
-            packages: org.kde.Platform//6.4 org.kde.Sdk//6.4
+            packages: org.kde.Platform/<ARCH>/6.4 org.kde.Sdk/<ARCH>/6.4
             remote: flathub
 
           - name: kde-6.5
-            packages: org.kde.Platform//6.5 org.kde.Sdk//6.5
+            packages: org.kde.Platform/<ARCH>/6.5 org.kde.Sdk/<ARCH>/6.5
             remote: flathub
 
           - name: kde-6.6
-            packages: org.kde.Platform//6.6 org.kde.Sdk//6.6
+            packages: org.kde.Platform/<ARCH>/6.6 org.kde.Sdk/<ARCH>/6.6
             remote: flathub
 
           - name: kde-6.7
-            packages: org.kde.Platform//6.7 org.kde.Sdk//6.7
+            packages: org.kde.Platform/<ARCH>/6.7 org.kde.Sdk/<ARCH>/6.7
             remote: flathub
 
           - name: elementary-juno
-            packages: io.elementary.BaseApp//juno-20.08 org.gnome.Platform//3.38 org.gnome.Sdk//3.38
+            packages: io.elementary.BaseApp/<ARCH>/juno-20.08 org.gnome.Platform/<ARCH>/3.38 org.gnome.Sdk/<ARCH>/3.38
             remote: flathub
 
     services:
@@ -157,19 +161,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Write the Dockerfile for the ${{ matrix.runtime.name }} runtime
+      - name: Write the Dockerfile for the ${{ matrix.runtime.name }}${{ matrix.arch.suffix }} runtime
         run: |
-          cat >> ${{ matrix.runtime.name }}.Dockerfile << EOF
+          packages=$(echo '${{ matrix.runtime.packages }}' | sed 's/<ARCH>/${{ matrix.arch.value }}/g')
+          cat >> ${{ matrix.runtime.name }}${{ matrix.arch.suffix }}.Dockerfile << EOF
           # syntax = docker/dockerfile:experimental
           FROM localhost:5000/fedora-base:latest
 
-          RUN --security=insecure flatpak install -y --noninteractive ${{matrix.runtime.remote}} ${{ matrix.runtime.packages }}
+          RUN --security=insecure flatpak install -y --noninteractive ${{matrix.runtime.remote}} $packages
 
-      - name: Build & push the ${{ matrix.runtime.name }} image to Docker Hub
+      - name: Build & push the ${{ matrix.runtime.name }}${{ matrix.arch.suffix }} image to Docker Hub
         uses: docker/build-push-action@v3.2.0
         with:
           allow: security.insecure
           context: .
-          file: ${{ matrix.runtime.name }}.Dockerfile
+          file: ${{ matrix.runtime.name }}${{ matrix.arch.suffix }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}

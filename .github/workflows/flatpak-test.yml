@@ -8,30 +8,37 @@ jobs:
   flatpak-builder:
     name: Flatpak Builder
     runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-44
-      options: --privileged
     strategy:
       fail-fast: false
       matrix:
-        arch: [x86_64, aarch64]
+        arch:
+          - value: x86_64
+          - value: aarch64
+            imageSuffix: -aarch64
         cache: [use-cache, no-cache]
         restore: [cache-restored, no-cache-restored]
         exclude:
-          - arch: aarch64
+          - arch:
+              value: aarch64
+              imageSuffix: -aarch64
             cache: no-cache
-          - arch: aarch64
+          - arch:
+              value: aarch64
+              imageSuffix: -aarch64
             restore: no-cache-restored
           - cache: no-cache
             restore: cache-restored
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:gnome-44${{ matrix.arch.imageSuffix }}
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
       - name: Install QEMU deps
-        if: ${{ matrix.arch != 'x86_64' }}
+        if: ${{ matrix.arch.value != 'x86_64' }}
         run: |
           dnf -y install docker
       - name: Set up QEMU
-        if: ${{ matrix.arch != 'x86_64' }}
+        if: ${{ matrix.arch.value != 'x86_64' }}
         uses: docker/setup-qemu-action@v2
         with:
           platforms: arm64
@@ -42,7 +49,7 @@ jobs:
           cache: ${{ matrix.cache == 'use-cache' }}
           restore-cache: ${{ matrix.restore == 'cache-restored' }}
           cache-key: flatpak-builder-${{ github.sha }}-${{ matrix.restore }}
-          arch: ${{ matrix.arch }}
+          arch: ${{ matrix.arch.value }}
           verbose: true
       # TODO: setup a flat-manager before and use it later here
       #- uses: ./flat-manager
