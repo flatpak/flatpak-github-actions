@@ -83,6 +83,12 @@ inputs:
       "Whether to upload the resulting bundle or not as an artifact"
     required: false
     default: "true"
+  github-tag:
+    description: >
+      "If this value is set, the flatpak bundle will be uploaded 
+      to this tag of current GitHub repository"
+    required: false
+    default: ""
 runs:
   using: "node20"
   main: "dist/index.js"
