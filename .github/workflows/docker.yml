@@ -117,6 +117,10 @@ jobs:
             packages: org.kde.Platform//6.7 org.kde.Sdk//6.7
             remote: flathub
 
+          - name: kde-6.8
+            packages: org.kde.Platform//6.8 org.kde.Sdk//6.8
+            remote: flathub
+
           - name: elementary-juno
             packages: io.elementary.BaseApp//juno-20.08 org.gnome.Platform//3.38 org.gnome.Sdk//3.38
             remote: flathub
