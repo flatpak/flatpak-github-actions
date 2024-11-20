@@ -60,6 +60,8 @@ class Configuration {
     this.verbose = core.getBooleanInput('verbose')
     // Upload the artifact
     this.uploadArtifact = core.getBooleanInput('upload-artifact')
+    // Upload to which tag of GitHub 
+    this.gitHubTag = core.getInput('github-tag')
   }
 
   async cacheKey () {
@@ -213,6 +215,7 @@ const modifyManifest = (manifest, runTests = false, testEnv = {}) => {
 const build = async (manifest, manifestPath, cacheHitKey, config) => {
   const appId = manifest['app-id'] || manifest.id
   const branch = manifest.branch || config.branch
+  let retUploadToGithub = ''
   let cacheKey
   if (config.cacheBuildDir) { cacheKey = await config.cacheKey() }
 
@@ -252,6 +255,30 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     ).catch((reason) => {
       core.error(`Failed to save cache: ${reason}`)
     })
+  }
+
+  if ((config.gitHubTag !== "") && config.buildBundle) {
+    core.info(`Upload .flatpak file to GitHub(TAG: ${config.gitHubTag}, BUNDLE: ${config.bundle})...`)
+    const ghArgs = [
+      `release`,
+      `upload`,
+      config.gitHubTag,
+      config.bundle,
+      `--repo`,
+      `$GITHUB_REPOSITORY`
+    ]
+        
+    const exitCodeUploadToGithub = await exec.exec('gh', ghArgs, {
+      listeners: {
+        stdout: (data) => {
+          retUploadToGithub += data.toString().trim()
+          core.info(retUploadToGithub)
+        }
+      }
+    })
+    if (exitCodeUploadToGithub !== 0) {
+      throw Error('flat-manager-client failed to upload to GitHub')
+    }
   }
 
   if (config.buildBundle && !config.stopAtModule) {
