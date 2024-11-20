@@ -222,6 +222,7 @@ You can specify the specific runtime you need to use through the image tags:
 | KDE             | 5.15-21.08    | `kde-5.15-21.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-21.08`          |
 | KDE             | 5.15-22.08    | `kde-5.15-22.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-22.08`          |
 | KDE             | 5.15-23.08    | `kde-5.15-23.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-23.08`          |
+| KDE             | 5.15-24.08    | `kde-5.15-24.08`          | `image: bilelmoussaoui/flatpak-github-actions:kde-5.15-24.08`          |
 | KDE             | 6.2     | `kde-6.2`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.2`          |
 | KDE             | 6.3     | `kde-6.3`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.3`          |
 | KDE             | 6.4     | `kde-6.4`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.4`          |
