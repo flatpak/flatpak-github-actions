@@ -7,7 +7,7 @@ name: Docker images
 
 jobs:
   build-images:
-    name: Build & push Docker images
+    name: Build & push Docker images (${{ matrix.runtime.name}}, ${{ matrix.config.arch }})
     runs-on: ubuntu-${{ matrix.config.run-version }}
 
     strategy:
