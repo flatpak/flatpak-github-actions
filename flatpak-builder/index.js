@@ -391,11 +391,11 @@ const run = async (config) => {
         return
       }
 
-      const artifact = new DefaultArtifactClient()
+      const artifactClient = new DefaultArtifactClient()
       core.info('Uploading artifact...')
       // Append the arch to the bundle name to prevent conflicts in multi-arch jobs
       const bundleName = config.bundle.replace('.flatpak', '') + `-${config.arch}`
-      return artifact.uploadArtifact(bundleName, [config.bundle], '.', {
+      return artifactClient.uploadArtifact(bundleName, [config.bundle], '.', {
         continueOnError: false
       })
     })
