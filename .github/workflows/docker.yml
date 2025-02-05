@@ -8,10 +8,18 @@ name: Docker images
 jobs:
   build-images:
     name: Build & push Docker images
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-${{ matrix.config.run-version }}
 
     strategy:
       matrix:
+        config:
+          - arch: x86_64
+            run-version: 24.04
+            platform: linux/amd64
+          - arch: aarch64
+            run-version: 24.04-arm
+            platform: linux/arm/v8
+
         runtime:
           - name: freedesktop-20.08
             packages: org.freedesktop.Platform//20.08 org.freedesktop.Sdk//20.08
@@ -144,9 +152,9 @@ jobs:
         uses: actions/cache@v3.2.0
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-${{ matrix.config.arch }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-${{ matrix.config.arch }}-buildx-
 
       - name: Build & push the Fedora base image to local registry
         uses: docker/build-push-action@v3.2.0
@@ -181,3 +189,4 @@ jobs:
           file: ${{ matrix.runtime.name }}.Dockerfile
           push: true
           tags: bilelmoussaoui/flatpak-github-actions:${{ matrix.runtime.name }}
+          platforms: ${{ matrix.config.platform }}
