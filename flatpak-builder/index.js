@@ -1,6 +1,6 @@
 const core = require('@actions/core')
 const exec = require('@actions/exec')
-const artifact = require('@actions/artifact')
+const { DefaultArtifactClient } = require('@actions/artifact')
 const cache = require('@actions/cache')
 const path = require('path')
 const fs = require('fs').promises
@@ -391,7 +391,7 @@ const run = async (config) => {
         return
       }
 
-      const artifactClient = artifact.create()
+      const artifactClient = new DefaultArtifactClient()
       core.info('Uploading artifact...')
       // Append the arch to the bundle name to prevent conflicts in multi-arch jobs
       const bundleName = config.bundle.replace('.flatpak', '') + `-${config.arch}`
