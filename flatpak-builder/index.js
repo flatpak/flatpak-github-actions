@@ -60,6 +60,8 @@ class Configuration {
     this.verbose = core.getBooleanInput('verbose')
     // Upload the artifact
     this.uploadArtifact = core.getBooleanInput('upload-artifact')
+    //  Upload the artifact to a GitHub tag 
+    this.gitHubTag = core.getInput('github-tag')
   }
 
   async cacheKey () {
@@ -252,6 +254,31 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     ).catch((reason) => {
       core.error(`Failed to save cache: ${reason}`)
     })
+  }
+
+  if ((config.gitHubTag !== "") && config.buildBundle) {
+    core.info(`Uploading ${config.bundle} to GitHub tag ${config.gitHubTag}...`)
+    let retUploadToGithub = ''
+    const ghArgs = [
+      'release',
+      'upload',
+      config.gitHubTag,
+      config.bundle,
+      '--repo',
+      '$GITHUB_REPOSITORY'
+    ]
+
+    const exitCodeUploadToGithub = await exec.exec('gh', ghArgs, {
+      listeners: {
+        stdout: (data) => {
+          retUploadToGithub += data.toString().trim()
+          core.info(retUploadToGithub)
+        }
+      }
+    })
+    if (exitCodeUploadToGithub !== 0) {
+      throw Error('Failed to upload to GitHub')
+    }
   }
 
   if (config.buildBundle && !config.stopAtModule) {

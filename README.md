@@ -58,6 +58,7 @@ jobs:
 | `gpg-sign` | The key to sign the package | Optional | - |
 | `verbose` | Enable verbosity | Optional | `false` |
 | `upload-artifact` | Whether to upload the resulting bundle or not as an artifact | Optional | `true` |
+| `github-tag` | If this value is set, the flatpak bundle will be uploaded to this tag of current GitHub repository | Optional | "" |
 
 #### Building for multiple CPU architectures
 
@@ -102,6 +103,8 @@ jobs:
         manifest-path: org.gnome.zbrown.Palette.yml
         cache-key: flatpak-builder-${{ github.sha }}
         arch: ${{ matrix.arch }}
+        # if you want to upload Flatpak bundle to a release tag e.g. 1.2.3
+        github-tag: 1.2.3
 ```
 
 #### Building for Automated Tests
