@@ -1,0 +1,8 @@
+name: "Update Binfmts"
+description: "Enable QEMU architecture emulation for flatpak-builder"
+branding:
+  icon: "package"
+  color: "blue"
+runs:
+  using: "node20"
+  main: "dist/index.js"

@@ -1,0 +1,82 @@
+on:
+  push:
+    paths:
+      - '.github/workflows/bst-push-image.yml'
+      - 'buildstream/**'
+    branches:
+      - master
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+name: BuildStream Push Image
+env:
+  bst-filename: oci/tooling-ghcr-${{ github.repository_owner }}.bst
+jobs:
+  buildstream:
+    name: Build and Push
+    runs-on: ubuntu-22.04
+
+    steps:
+      # This action maximize the space provided by the runner which makes it more viable for BuildStream
+      # As a volume mounted to the GitHub workspace directory
+      - uses: easimon/maximize-build-space@v10
+        with:
+          remove-dotnet: true
+          remove-android: true
+          remove-haskell: true
+          remove-codeql: true
+          remove-docker-images: true
+          # Keep 10 GiB rather than 1 to allow Podman to store an image
+          root-reserve-mb: 10240
+
+      - name: Install BuildStream
+        run: |
+          mkdir ~/.local/bin
+          wget https://gitlab.com/BuildGrid/buildbox/buildbox-integration/-/releases/1.1.0/downloads/buildbox-x86_64-linux-gnu.tgz
+          tar -xvzf buildbox-x86_64-linux-gnu.tgz -C ~/.local/bin
+          rm -rf buildbox-x86_64-linux-gnu.tgz
+
+          sudo apt-get install bubblewrap fuse3 git lzip patch python3
+          sudo apt-get install g++ python3-dev python3-pip
+
+          sudo apt-get install python3-{arpy,dulwich,requests,tomli}
+
+          pip3 install --user BuildStream==2.1.0
+
+      - name: Write BuildStream config
+        # Make BuildStream use the workspace volume
+        run: |
+          mkdir -p ~/.config
+          cat >> ~/.config/buildstream2.conf << EOF
+          sourcedir: ${GITHUB_WORKSPACE}/.bst/sources
+          cachedir: ${GITHUB_WORKSPACE}/.bst
+          logdir: ${GITHUB_WORKSPACE}/.bst/logs
+          EOF
+
+      - uses: actions/checkout@v4
+
+      - name: Create ${{ env.bst-filename }} if not present
+        working-directory: ./buildstream/elements
+        run: |
+          if [[ ! -f ${{ env.bst-filename }} ]]; then
+            cp oci/tooling-ghcr-flatpak.bst ${{ env.bst-filename }}
+
+            sed -i 's|ghcr.io/flatpak|ghcr.io/${{ github.repository_owner }}|g' ${{ env.bst-filename }}
+          fi
+
+      - name: Build Image
+        working-directory: ./buildstream
+        run: |
+          bst --on-error continue build ${{ env.bst-filename }}
+          bst --on-error continue artifact checkout ${{ env.bst-filename }} --tar image.tar
+          podman load -i image.tar
+
+      - name: Push To Registry
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: flatpak-github-actions
+          tags: base-x86_64
+          registry: ghcr.io/${{ github.repository_owner }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
