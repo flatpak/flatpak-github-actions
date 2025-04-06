@@ -125,6 +125,10 @@ jobs:
             packages: io.elementary.BaseApp//juno-20.08 org.gnome.Platform//3.38 org.gnome.Sdk//3.38
             remote: flathub
 
+          - name: elementary-circe-24.08
+            packages: io.elementary.BaseApp//circe-24.08 org.gnome.Platform//47 org.gnome.Sdk//47
+            remote: flathub
+
     services:
       registry:
         image: registry:latest

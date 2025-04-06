@@ -231,3 +231,4 @@ You can specify the specific runtime you need to use through the image tags:
 | KDE             | 6.7     | `kde-6.7`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.7`          |
 | KDE             | 6.8     | `kde-6.8`          | `image: bilelmoussaoui/flatpak-github-actions:kde-6.8`          |
 | elementary BaseApp             | juno    | `juno`          | `image: bilelmoussaoui/flatpak-github-actions:elementary-juno`          |
+| elementary BaseApp             | circe 24.08    | `circe-24.08`          | `image: bilelmoussaoui/flatpak-github-actions:elementary-circe-24.08`          |
