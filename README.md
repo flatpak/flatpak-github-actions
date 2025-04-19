@@ -61,7 +61,7 @@ jobs:
 
 #### Building for multiple CPU architectures
 
-To build for CPU architectures other than `x86_64`, the GitHub Actions workflow has to either natively be running on that architecture (e.g. on an `cch64` self-hosted GitHub Actions runner), or the container used must be configured to emulate the requested architecture (e.g. with QEMU).
+To build for CPU architectures other than `x86_64`, the GitHub Actions workflow has to either natively be running on that architecture (e.g. on an `aarch64` self-hosted GitHub Actions runner), or the container used must be configured to emulate the requested architecture (e.g. with QEMU).
 
 For example, to build a Flatpak for both `x86_64` and `aarch64` using emulation, use the following workflow as a guide:
 
@@ -105,6 +105,44 @@ jobs:
         manifest-path: org.gnome.zbrown.Palette.yml
         cache-key: flatpak-builder-${{ matrix.arch }}-${{ github.sha }}
         arch: ${{ matrix.arch }}
+```
+
+#### Multi arch build using public ARM64 runners
+
+Since, January 2025, [GitHub offers public ARM64 runners](https://github.blog/changelog/2025-01-16-linux-arm64-hosted-runners-now-available-for-free-in-public-repositories-public-preview/).
+So a multi-arch build can be performed using that.
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  flatpak:
+    name: "Flatpak"
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+    strategy:
+      matrix:
+        variant:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.variant.runner }}
+    steps:
+      - uses: actions/checkout@<commit hash>
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: palette.flatpak
+          manifest-path: org.gnome.zbrown.Palette.yml
+          cache-key: flatpak-builder-${{ github.sha }}
+          arch: ${{ matrix.variant.arch }}
+          verbose: true
 ```
 
 #### Building for Automated Tests
