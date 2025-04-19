@@ -52,7 +52,7 @@ jobs:
 | `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
 | `restore-cache` | Enable/Disable cache restoring. If caching is enabled. | Optional | `true` |
-| `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${sha256(manifestPath)}` |
+| `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${arch}-${sha256(manifestPath)}` |
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
 | `gpg-sign` | The key to sign the package | Optional | - |
@@ -61,7 +61,7 @@ jobs:
 
 #### Building for multiple CPU architectures
 
-To build for CPU architectures other than `x86_64`, the GitHub Actions workflow has to either natively be running on that architecture (e.g. on an `aarch64` self-hosted GitHub Actions runner), or the container used must be configured to emulate the requested architecture (e.g. with QEMU).
+To build for CPU architectures other than `x86_64`, the GitHub Actions workflow has to either natively be running on that architecture (e.g. on an `cch64` self-hosted GitHub Actions runner), or the container used must be configured to emulate the requested architecture (e.g. with QEMU).
 
 For example, to build a Flatpak for both `x86_64` and `aarch64` using emulation, use the following workflow as a guide:
 
@@ -103,7 +103,7 @@ jobs:
       with:
         bundle: palette.flatpak
         manifest-path: org.gnome.zbrown.Palette.yml
-        cache-key: flatpak-builder-${{ github.sha }}
+        cache-key: flatpak-builder-${{ matrix.arch }}-${{ github.sha }}
         arch: ${{ matrix.arch }}
 ```
 

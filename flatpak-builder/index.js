@@ -66,7 +66,7 @@ class Configuration {
     if (!this._cacheKey) {
       try {
         if (!this._manifestHash) { this._manifestHash = (await computeHash(this.manifestPath)).substring(0, 20) }
-        return `flatpak-builder-${this._manifestHash}-${this.arch}`
+        return `flatpak-builder-${this.arch}-${this._manifestHash}`
       } catch (err) {
         core.setFailed(`Fail to create create cache key based on manifest hash: ${err}`)
       }
@@ -328,8 +328,7 @@ const prepareBuild = async (config) => {
       CACHE_PATH,
       `${cacheKey}`,
       [
-        'flatpak-builder-',
-        'flatpak-'
+        `flatpak-builder-${this.arch}`
       ]
     )
     if (cacheHitKey !== undefined) {
