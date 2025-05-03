@@ -236,4 +236,4 @@ jobs:
 
 ### Container Images
 
-You can use the generated images by Flathub at <https://github.com/flathub-infra/flatpak-github-actions/pkgs/container/flatpak-github-actions/versions?filters%5Bversion_type%5D=tagged> to avoid re-installing the SDKs for every build.
+You can use the generated images by Flathub at <https://github.com/flathub-infra/actions-images> to avoid re-installing the SDKs for every build.
