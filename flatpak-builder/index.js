@@ -60,6 +60,8 @@ class Configuration {
     this.verbose = core.getBooleanInput('verbose')
     // Upload the artifact
     this.uploadArtifact = core.getBooleanInput('upload-artifact')
+    // Bundle sources
+    this.bundleSources = core.getBooleanInput('bundle-sources')
   }
 
   async cacheKey () {
@@ -226,6 +228,9 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     `--default-branch=${branch}`,
     `--arch=${config.arch}`
   ]
+  if (config.arch === 'x86_64' && config.bundleSources !== false) {
+    args.push('--bundle-sources')
+  }
   if (config.cacheBuildDir) {
     args.push('--ccache')
   }

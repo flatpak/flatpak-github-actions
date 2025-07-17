@@ -83,6 +83,11 @@ inputs:
       "Whether to upload the resulting bundle or not as an artifact"
     required: false
     default: "true"
+  bundle-sources:
+    description: >
+      "Bundle sources extension in exported repo"
+    required: false
+    default: "true"
 runs:
   using: "node20"
   main: "dist/index.js"

@@ -58,6 +58,7 @@ jobs:
 | `gpg-sign` | The key to sign the package | Optional | - |
 | `verbose` | Enable verbosity | Optional | `false` |
 | `upload-artifact` | Whether to upload the resulting bundle or not as an artifact | Optional | `true` |
+| `bundle-sources` | Bundle sources extension in exported repo (x86_64 only)| Optional | `true` |
 
 #### Building for multiple CPU architectures
 
