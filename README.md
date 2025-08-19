@@ -59,6 +59,7 @@ jobs:
 | `build-dir` | The directory to build the application in. | Optional | `flatpak_app` |
 | `repo-dir` | The directory of the flatpak repository. | Optional | `repo` |
 | `state-dir` | The directory to store the build state/cache in. | Optional | `.flatpak-builder` |
+| `keep-build-dirs` | Keep build directories after the build finishes (passes `--keep-build-dirs` to flatpak-builder). Useful for debugging intermediate files. | Optional | `false` |
 | `verbose` | Enable verbosity | Optional | `false` |
 | `upload-artifact` | Whether to upload the resulting bundle or not as an artifact | Optional | `true` |
 
