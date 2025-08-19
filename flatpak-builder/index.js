@@ -45,6 +45,8 @@ class Configuration {
     this.mirrorScreenshotsUrl = core.getInput('mirror-screenshots-url')
     // The key to sign the package
     this.gpgSign = core.getInput('gpg-sign')
+    // Keep build directories after the build (pass --keep-build-dirs)
+    this.keepBuildDirs = core.getBooleanInput('keep-build-dirs')
     // Modified manifest path
     this.modifiedManifestPath = path.join(
       path.dirname(this.manifestPath),
@@ -226,6 +228,9 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     `--default-branch=${branch}`,
     `--arch=${config.arch}`
   ]
+  if (config.keepBuildDirs) {
+    args.push('--keep-build-dirs')
+  }
   if (config.cacheBuildDir) {
     args.push('--ccache')
   }
