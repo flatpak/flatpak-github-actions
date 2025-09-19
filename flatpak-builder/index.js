@@ -231,6 +231,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   }
   if (config.mirrorScreenshotsUrl) {
     args.push(`--mirror-screenshots-url=${config.mirrorScreenshotsUrl}`)
+    args.push('--compose-url-policy=full')
   }
   if (config.gpgSign) {
     args.push(`--gpg-sign=${config.gpgSign}`)
