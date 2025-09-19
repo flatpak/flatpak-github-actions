@@ -329,7 +329,7 @@ const prepareBuild = async (config) => {
       CACHE_PATH,
       `${cacheKey}`,
       [
-        `flatpak-builder-${this.arch}`
+        `flatpak-builder-${config.arch}`
       ]
     )
     if (cacheHitKey !== undefined) {
