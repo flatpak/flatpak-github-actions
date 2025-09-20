@@ -56,6 +56,13 @@ inputs:
       Defines the cache-key to use.
       Defaults to flatpak-builder-${arch}-${sha256(manifestPath)}
     required: false
+  keep-build-dirs:
+    description: >
+      Keep build directories after the build finishes, passing `--keep-build-dirs` flag
+      to flatpak-builder. 
+      Possible values: true, enabled, yes, y. Defaults to false.
+    required: false
+    default: "false"
   branch:
     description: The flatpak branch.
     default: "master"
