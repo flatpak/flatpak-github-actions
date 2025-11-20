@@ -217,11 +217,13 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   if (config.cacheBuildDir) { cacheKey = await config.cacheKey() }
 
   core.info('Building the flatpak...')
+  const subject = `Built from ${process.env.GITHUB_SHA || 'unknown'}`
 
   const args = [
     `--repo=${config.localRepoName}`,
     '--disable-rofiles-fuse',
     `--install-deps-from=${config.repositoryName}`,
+    `--subject=${subject}`,
     '--force-clean',
     `--default-branch=${branch}`,
     `--arch=${config.arch}`
