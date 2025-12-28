@@ -86,6 +86,24 @@ jobs:
           cache-key: flatpak-builder-${{ github.sha }}-no-cache-restored
           verbose: true
 
+  flatpak-builder-dedicated-path-params:
+    name: Flatpak Builder with Dedicated Path Params
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+      volumes:
+        - /mnt/flatpak_workflow:/mnt/flatpak_workflow
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./flatpak-builder
+        with:
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          build-dir: /mnt/flatpak_workflow/build-dir
+          repo-name: /mnt/flatpak_workflow/repo
+          state-dir: /mnt/flatpak_workflow/.flatpak-builder
+          verbose: true
+
   tests:
     name: Tests
     runs-on: ubuntu-latest
