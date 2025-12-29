@@ -103,6 +103,16 @@ jobs:
           repo-name: /mnt/flatpak_workflow/repo
           state-dir: /mnt/flatpak_workflow/.flatpak-builder
           verbose: true
+      - name: Verify created directories
+        shell: bash
+        run: |
+          for d in \
+            /mnt/flatpak_workflow/build-dir \
+            /mnt/flatpak_workflow/repo \
+            /mnt/flatpak_workflow/.flatpak-builder
+          do
+            [ -d "$d" ] || { echo "::error::Directory $d does not exist"; exit 1; }
+          done
 
   tests:
     name: Tests
