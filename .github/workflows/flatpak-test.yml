@@ -100,7 +100,7 @@ jobs:
         with:
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
           build-dir: /mnt/flatpak_workflow/build-dir
-          repo-name: /mnt/flatpak_workflow/repo
+          repo-dir: /mnt/flatpak_workflow/repo
           state-dir: /mnt/flatpak_workflow/.flatpak-builder
           verbose: true
       - name: Verify created directories
