@@ -56,7 +56,7 @@ class Configuration {
     // Where to build the application
     this.buildDir = core.getInput('build-dir') || 'flatpak_app'
     // The flatpak repository path
-    this.localRepoName = core.getInput('repo-name') || 'repo'
+    this.localRepoDir = core.getInput('repo-dir') || 'repo'
     // Verbosity
     this.verbose = core.getBooleanInput('verbose')
     // Upload the artifact
@@ -221,7 +221,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   const subject = `Built from ${process.env.GITHUB_SHA || 'unknown'}`
 
   const args = [
-    `--repo=${config.localRepoName}`,
+    `--repo=${config.localRepoDir}`,
     '--disable-rofiles-fuse',
     `--install-deps-from=${config.repositoryName}`,
     `--subject=${subject}`,
@@ -263,7 +263,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     core.info('Creating a bundle...')
     const args = [
       'build-bundle',
-      config.localRepoName,
+      config.localRepoDir,
       config.bundle,
       `--runtime-repo=${config.repositoryUrl}`,
       `--arch=${config.arch}`,
@@ -284,7 +284,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 
     const ostreeArgs = [
       'commit',
-      `--repo=${config.localRepoName}`,
+      `--repo=${config.localRepoDir}`,
       '--canonical-permissions',
       `--branch=screenshots/${config.arch}`,
       `${config.buildDir}/files/share/app-info/media`

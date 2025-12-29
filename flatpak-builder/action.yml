@@ -77,7 +77,7 @@ inputs:
     description: >
       The directory to build the application in.
     required: false
-  repo-name:
+  repo-dir:
     description: >
       The name of the flatpak repository.
     required: false

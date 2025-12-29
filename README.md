@@ -57,12 +57,12 @@ jobs:
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |
 | `gpg-sign` | The key to sign the package | Optional | - |
 | `build-dir` | The directory to build the application in. | Optional | `flatpak_app` |
-| `repo-name` | The directory of the flatpak repository. | Optional | `repo` |
+| `repo-dir` | The directory of the flatpak repository. | Optional | `repo` |
 | `state-dir` | The directory to store the build state/cache in. | Optional | `.flatpak-builder` |
 | `verbose` | Enable verbosity | Optional | `false` |
 | `upload-artifact` | Whether to upload the resulting bundle or not as an artifact | Optional | `true` |
 
-**Note**: `repo-name` and `state-dir` must be under the same partition.
+**Note**: `repo-dir` and `state-dir` must be under the same partition.
 
 
 #### Building for multiple CPU architectures
