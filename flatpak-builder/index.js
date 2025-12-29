@@ -10,7 +10,8 @@ const { spawn } = require('child_process')
 
 // The various paths to cache
 const CACHE_PATH = [
-  '.flatpak-builder'
+  // If the state-dir input is provided, use it as the cache path
+  (core.getInput('state-dir') || '.flatpak-builder')
 ]
 
 /**
@@ -53,9 +54,9 @@ class Configuration {
     // Computed manifest hash
     this._manifestHash = null
     // Where to build the application
-    this.buildDir = 'flatpak_app'
-    // The flatpak repository name
-    this.localRepoName = 'repo'
+    this.buildDir = core.getInput('build-dir') || 'flatpak_app'
+    // The flatpak repository path
+    this.localRepoDir = core.getInput('repo-dir') || 'repo'
     // Verbosity
     this.verbose = core.getBooleanInput('verbose')
     // Upload the artifact
@@ -220,7 +221,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   const subject = `Built from ${process.env.GITHUB_SHA || 'unknown'}`
 
   const args = [
-    `--repo=${config.localRepoName}`,
+    `--repo=${config.localRepoDir}`,
     '--disable-rofiles-fuse',
     `--install-deps-from=${config.repositoryName}`,
     `--subject=${subject}`,
@@ -244,6 +245,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
   if (config.verbose) {
     args.push('--verbose')
   }
+  args.push('--state-dir', CACHE_PATH[0])
   args.push(config.buildDir, manifestPath)
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
@@ -261,7 +263,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
     core.info('Creating a bundle...')
     const args = [
       'build-bundle',
-      config.localRepoName,
+      config.localRepoDir,
       config.bundle,
       `--runtime-repo=${config.repositoryUrl}`,
       `--arch=${config.arch}`,
@@ -282,7 +284,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 
     const ostreeArgs = [
       'commit',
-      `--repo=${config.localRepoName}`,
+      `--repo=${config.localRepoDir}`,
       '--canonical-permissions',
       `--branch=screenshots/${config.arch}`,
       `${config.buildDir}/files/share/app-info/media`

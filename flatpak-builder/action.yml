@@ -73,6 +73,18 @@ inputs:
     description: >
       The key to sign the package.
     required: false
+  build-dir:
+    description: >
+      The directory to build the application in.
+    required: false
+  repo-dir:
+    description: >
+      The name of the flatpak repository.
+    required: false
+  state-dir:
+    description: >
+      The directory to store the build state/cache in.
+    required: false
   verbose:
     description: >
       "Enable verbosity"
