@@ -20,3 +20,10 @@ Once you have modified the `index.js` of either `flatpak-builder` or `flat-manag
 ncc build ./flatpak-builder/index.js -o ./flatpak-builder/dist/
 ncc build ./flat-manager/index.js -o ./flat-manager/dist/
 ```
+
+## Linting
+
+```shell
+yarn --cwd flatpak-builder install --also=dev && yarn --cwd flat-manager install --also=dev
+yarn --cwd flatpak-builder run eslint . --fix && yarn --cwd flat-manager run eslint . --fix
+```
