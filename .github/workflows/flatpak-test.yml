@@ -119,7 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [24.x, 25.x]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -136,10 +136,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 18
+      - name: Use Node.js 24
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "24"
       - run: yarn install --also=dev
         working-directory: flatpak-builder
       - run: yarn run eslint .
