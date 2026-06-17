@@ -25,18 +25,18 @@ jobs:
           - cache: no-cache
             restore: cache-restored
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       # Docker is required by the docker/setup-qemu-action which enables emulation
       - name: Install deps
         if: ${{ matrix.arch != 'x86_64' }}
         run: |
-          # Use the static binaries because it's unable to use a package manager 
+          # Use the static binaries because it's unable to use a package manager
           curl https://download.docker.com/linux/static/stable/x86_64/docker-26.0.0.tgz --output ./docker.tgz
           tar xzvf docker.tgz
           mv docker/* /usr/bin
       - name: Set up QEMU
         if: ${{ matrix.arch != 'x86_64' }}
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         with:
           platforms: arm64
       - uses: ./flatpak-builder
@@ -62,7 +62,7 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./flatpak-builder
         with:
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
@@ -78,7 +78,7 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./flatpak-builder
         with:
           bundle: org.example.MyApp.Devel-cache-hit.flatpak
@@ -95,7 +95,7 @@ jobs:
       volumes:
         - /mnt/flatpak_workflow:/mnt/flatpak_workflow
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./flatpak-builder
         with:
           manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
@@ -121,9 +121,9 @@ jobs:
       matrix:
         node-version: [24.x, 25.x]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --also=dev
@@ -135,9 +135,9 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Use Node.js 24
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: "24"
       - run: yarn install --also=dev
