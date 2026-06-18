@@ -114,6 +114,23 @@ jobs:
             [ -d "$d" ] || { echo "::error::Directory $d does not exist"; exit 1; }
           done
 
+  flatpak-builder-debug-bundle:
+    name: Flatpak Builder Debug Bundle
+    runs-on: ubuntu-latest
+    needs: flatpak-builder
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./flatpak-builder
+        with:
+          bundle: org.example.MyApp.Devel-debug-bundle.flatpak
+          build-debug-bundle: true
+          manifest-path: ./flatpak-builder/tests/test-project/org.example.MyApp.yaml
+          cache-key: flatpak-builder-${{ github.sha }}-debug-bundle
+          verbose: true
+
   tests:
     name: Tests
     runs-on: ubuntu-latest
