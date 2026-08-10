@@ -55,6 +55,12 @@ inputs:
       Possible values: true, enabled, yes, y. Or something else to disable it.
     default: "true"
     required: false
+  save-cache:
+    description: >
+      Toggles saving the cache.
+      Possible values: true, enabled, yes, y. Or something else to disable it.
+    default: "true"
+    required: false
   cache-key:
     description: >
       Defines the cache-key to use.

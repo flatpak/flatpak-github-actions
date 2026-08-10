@@ -53,6 +53,7 @@ jobs:
 | `branch` | The default flatpak branch  | Optional | `master` |
 | `cache` | Enable/Disable caching `.flatpak-builder` directory | Optional | `true` |
 | `restore-cache` | Enable/Disable cache restoring. If caching is enabled. | Optional | `true` |
+| `save-cache` | Enable/Disable cache uploading. If caching is enabled. | Optional | `true` |
 | `cache-key` | Specifies the cache key. CPU arch is automatically added, so there is no need to add it to the cache key. | Optional | `flatpak-builder-${arch}-${sha256(manifestPath)}` |
 | `arch` | Specifies the CPU architecture to build for | Optional | `x86_64` |
 | `mirror-screenshots-url` | Specifies the URL to mirror screenshots | Optional | - |

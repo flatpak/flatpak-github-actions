@@ -41,6 +41,8 @@ class Configuration {
     this.debugBundle = this.bundle.replace('.flatpak', '') + '-debug.flatpak'
     // Whether to restore the cache or not
     this.restoreCache = core.getBooleanInput('restore-cache')
+    // Whether to save the cache or not
+    this.saveCache = core.getBooleanInput('save-cache')
     // Whether to enable caching the build directory
     this.cacheBuildDir = core.getBooleanInput('cache')
     // The repository used to install the runtime from
@@ -269,7 +271,7 @@ const build = async (manifest, manifestPath, cacheHitKey, config) => {
 
   await exec.exec('xvfb-run --auto-servernum flatpak-builder', args)
 
-  if (config.cacheBuildDir && (cacheKey !== cacheHitKey)) {
+  if (config.cacheBuildDir && config.saveCache && (cacheKey !== cacheHitKey)) {
     await cache.saveCache(
       CACHE_PATH,
       cacheKey
