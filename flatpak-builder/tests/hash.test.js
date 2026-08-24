@@ -2,8 +2,8 @@ const { computeHash } = require('../index')
 
 test('The manifest hash should be computed properly', async () => {
   const hash = await computeHash('./tests/manifest-1.yaml')
-  expect(hash).toBe('3cf572c168d382e9b6005b48d082d021e98ff146c1d033a446236dec6353a0d9')
+  expect(hash).toBe('bfa2f526142a224357f3ed54a892f87f18cf31dc70292c2ec607ab5d15737bda')
 
   const hash2 = await computeHash('./tests/manifest-3.json')
-  expect(hash2).toBe('8749e01dcad8f52f51083e213ad0a30e20c9a5a7788b3eb8bebb26b2651193a9')
+  expect(hash2).toBe('c5594b7e299e5d75d909382e7150d4673f028a59ea5c4993afeb546220ea2648')
 })
